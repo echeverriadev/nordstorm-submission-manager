@@ -11,7 +11,7 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
-import PrimarySearchAppBar from '../../components/shared/PrimarySearchAppBar';
+import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
 
 // import { createMuiTheme } from '@material-ui/core/styles';
 import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
@@ -19,8 +19,10 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 // import { createMuiTheme } from '@material-ui/core/styles';
 import { theme } from '../../../theme/muitheme'
 
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+
+import Dashboard from '../../components/dashboard';
 
 
 
@@ -61,9 +63,9 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <PrimarySearchAppBar />
+          <PrimaryAppBar />
           <Typography variant="subtitle1" gutterBottom>
-            CONTENT HERE
+            <Dashboard></Dashboard>
           </Typography>
         </div>
       </MuiThemeProvider>
@@ -75,4 +77,4 @@ class App extends Component {
 export default App;
 
 
-// <PrimarySearchAppBar />
+// <PrimaryAppBar />
