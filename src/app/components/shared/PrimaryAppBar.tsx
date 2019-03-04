@@ -92,7 +92,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-  
+
 
 export interface Props extends WithStyles<typeof styles> {}
 
@@ -101,7 +101,7 @@ interface State {
   mobileMoreAnchorEl: null | HTMLElement;
 }
 
-class PrimarySearchAppBar extends React.Component<Props, State> {
+class PrimaryAppBar extends React.Component<Props, State> {
   state: State = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
@@ -183,7 +183,7 @@ class PrimarySearchAppBar extends React.Component<Props, State> {
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
               {/* <MenuIcon /> */}
               <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                FIT 
+                FIT
              </Typography>
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
@@ -234,8 +234,8 @@ class PrimarySearchAppBar extends React.Component<Props, State> {
   }
 }
 
-(PrimarySearchAppBar as React.ComponentClass<Props>).propTypes = {
+(PrimaryAppBar as React.ComponentClass<Props>).propTypes = {
   classes: PropTypes.object.isRequired,
 } as any;
 
-export default withStyles(styles)(PrimarySearchAppBar);
+export default withStyles(styles)(PrimaryAppBar);
