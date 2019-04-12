@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Grid, TextField, MenuItem} from '@material-ui/core';
 import {getCyclesApi, getDivisionsApi} from '../../../api';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -10,21 +12,24 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
   }
 });
 
 class Filter extends Component {
-    
+
     state = {
         cycles: [],
         divisions: []
     }
-    
+
     componentWillMount = () => {
         this.fetchCyclesApi()
         this.fetchDivisionsApi()
     }
-    
+
     fetchCyclesApi = () => {
       getCyclesApi().then(response => {
         if (response.status === 200)
@@ -33,7 +38,7 @@ class Filter extends Component {
         console.log(err)
       })
     }
-    
+
     fetchDivisionsApi = () => {
       getDivisionsApi().then(response => {
         if (response.status === 200)
@@ -42,11 +47,11 @@ class Filter extends Component {
         console.log(err)
       })
     }
-    
-    
+
+
     render = () => {
         const { cycles, divisions } = this.state
-        const { filter, onChangeFilter } = this.props
+        const { classes, filter, onChangeFilter } = this.props
 
       return (
           <Grid container spacing={32}>
@@ -87,10 +92,16 @@ class Filter extends Component {
                 ))}
               </TextField>
             </Grid>
+            <Grid item md={2}>
+              <Button variant="contained" color="primary" className={classes.button}>
+                <Icon className={classes.rightIcon}>send</Icon>
+                import
+              </Button>
+            </Grid>
           </Grid>
       );
     }
-  
+
 }
 
 Filter.propTypes = {

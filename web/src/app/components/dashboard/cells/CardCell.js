@@ -10,6 +10,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Accordion from './Accordion';
@@ -74,6 +77,11 @@ const styles = theme => ({
 class CardCell extends React.Component {
   state = { expanded: false, isOpen: false };
 
+  duplicate = (close) => {
+    alert("Hola Mundo");
+    close();
+  }
+
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
@@ -87,10 +95,10 @@ class CardCell extends React.Component {
 
           <Grid container>
             <Grid item md={1}>
-                <img 
-                  className={classes.img} 
-                  alt="complex" 
-                  src={item.image} 
+                <img
+                  className={classes.img}
+                  alt="complex"
+                  src={item.image}
                   onClick={() => this.setState({ isOpen: true })}
                 />
                 {this.state.isOpen && (
@@ -99,7 +107,7 @@ class CardCell extends React.Component {
                   onCloseRequest={() => this.setState({ isOpen: false })}
                 />
               )}
-                
+
             </Grid>
             <Grid item md={11}>
               <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
@@ -219,9 +227,20 @@ class CardCell extends React.Component {
                     />
                   </Grid>
                   <Grid item md={1}>
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                      {popupState => (
+                        <React.Fragment>
+                          <IconButton variant="contained" {...bindTrigger(popupState)}>
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu {...bindMenu(popupState)}>
+                            <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
+                            <MenuItem onClick={popupState.close}>Delete</MenuItem>
+                          </Menu>
+                        </React.Fragment>
+                      )}
+                    </PopupState>
+
                   </Grid>
               </Grid>
               <Grid container>
