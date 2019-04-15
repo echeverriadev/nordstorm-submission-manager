@@ -2,8 +2,8 @@
 const dbConnection = require('../../config/mysql');
 const ItemTransformer = require('../transformers/ItemTrasformer');
 const {hasEmptyField} = require('../Utils');
-const fs = require('fs');
-const xlsxj = require("xlsx-to-json");
+const xlstojson = require("xls-to-json-lc");
+const xlsxtojson = require("xlsx-to-json-lc");
 
 class ItemController {
     constructor(){
@@ -43,8 +43,35 @@ class ItemController {
     }
 
     async import(req, res, next){
-        console.log(req.file)
-        res.json({message: "paso"})
+        let exceltojson;
+
+        if(!req.file){
+            return res.json({
+                code: 404,
+                message: "file not found"
+            });
+        }
+
+        if(req.file.originalname.split('.')[req.file.originalname.split('.').length-1] === 'xlsx'){
+            exceltojson = xlsxtojson;
+        } else {
+            exceltojson = xlstojson;
+        }
+
+        try {
+            exceltojson({
+                input: req.file.path,
+                output: null, //since we don't need output.json
+                lowerCaseHeaders:true
+            }, function(err,result){
+                if(err) {
+                    return res.json({code: 400, message: err});
+                }
+                res.json({code: 200, data: result});
+            });
+        } catch (e){
+            return res.json({code: 400, message:"Corupted excel file"});
+        }
     }
 
     async updatePatch(req, res, next){
