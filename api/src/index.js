@@ -16,7 +16,7 @@ app.use(logRequest);
 app = RouteLoader.load(app)
 
 app.listen(port, () => {
-    console.log('server on')
+    console.log(`Server running on port ${port}`)
 });
 
 module.exports = app;

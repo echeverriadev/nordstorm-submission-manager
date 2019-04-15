@@ -2,6 +2,8 @@
 const dbConnection = require('../../config/mysql');
 const ItemTransformer = require('../transformers/ItemTrasformer');
 const {hasEmptyField} = require('../Utils');
+const xlstojson = require("xls-to-json-lc");
+const xlsxtojson = require("xlsx-to-json-lc");
 
 class ItemController {
     constructor(){
@@ -9,6 +11,7 @@ class ItemController {
         this._itemTransformer = ItemTransformer;
         this.index = this.index.bind(this);
         this.updatePatch = this.updatePatch.bind(this);
+        this.import = this.import.bind(this);
     }
     //This method must be paged
     async index(req, res, next){
@@ -24,12 +27,12 @@ class ItemController {
         this.connection.query(
             `SELECT * FROM item_editorial LIMIT ?, ?;
             SELECT COUNT( __pk_item ) as total FROM item_editorial;`,
-            [start, limit], 
+            [start, limit],
             (err, result) => {
                 if(err){
                     return res.status(500).json({error: err})
                 }
-    
+
                 res.status(200).json({
                     status: 200,
                     massage: "Items Found",
@@ -38,20 +41,52 @@ class ItemController {
                 })
         })
     }
-    
+
+    async import(req, res, next){
+        let exceltojson;
+
+        if(!req.file){
+            return res.json({
+                code: 404,
+                message: "file not found"
+            });
+        }
+
+        if(req.file.originalname.split('.')[req.file.originalname.split('.').length-1] === 'xlsx'){
+            exceltojson = xlsxtojson;
+        } else {
+            exceltojson = xlstojson;
+        }
+
+        try {
+            exceltojson({
+                input: req.file.path,
+                output: null, //since we don't need output.json
+                lowerCaseHeaders:true
+            }, function(err,result){
+                if(err) {
+                    return res.json({code: 400, message: err});
+                }
+                res.json({code: 200, data: result});
+            });
+        } catch (e){
+            return res.json({code: 400, message:"Corupted excel file"});
+        }
+    }
+
     async updatePatch(req, res, next){
         const {id} = req.params
         const {field, value} = req.body
         const escaping = [field, value, id]
         if(hasEmptyField(escaping))
             return res.status(400).json({status: 400, massage: "Bad Request"})
-            
+
         this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
             if(err){
                 console.log(err)
                 return res.status(500).json({error: err})
             }
-            
+
             if(result.affectedRows)
                 res.status(200).json({
                     status: 200,
