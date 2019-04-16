@@ -12,6 +12,7 @@ class ItemController {
         this.index = this.index.bind(this);
         this.updatePatch = this.updatePatch.bind(this);
         this.import = this.import.bind(this);
+        this.uploadImage = this.uploadImage.bind(this);
     }
     //This method must be paged
     async index(req, res, next){
@@ -72,6 +73,23 @@ class ItemController {
         } catch (e){
             return res.json({code: 400, message:"Corupted excel file"});
         }
+    }
+
+    async uploadImage(req, res, next){
+        if(!req.file){
+            return res.json({
+                code: 404,
+                message: "file not found"
+            });
+        }
+
+        return res.json({
+            code: 200,
+            message: "Image uploaded",
+            data: {
+                url: req.file.path
+            }
+        });
     }
 
     async updatePatch(req, res, next){

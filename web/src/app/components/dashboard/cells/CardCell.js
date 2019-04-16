@@ -19,6 +19,8 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 
+import { uploadImageApi } from '../../../../api/index';
+
 const styles = theme => ({
   card: {
     width: "100%"
@@ -84,6 +86,15 @@ class CardCell extends React.Component {
 
   onDrop = (files) => {
     this.setState({preview: files[0]})
+
+    uploadImageApi(files[0]).then(response => {
+        if(response.status === 200){
+          console.log(response)
+          this.props.onChange(this.props.index, 'image', response.data.url)
+        }
+      }, err => {
+          console.log(err)
+      })
   }
 
   handleExpandClick = () => {
