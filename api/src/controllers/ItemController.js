@@ -76,8 +76,9 @@ class ItemController {
     }
 
     async uploadImage(req, res, next){
+        console.log(req)
         if(!req.file){
-            return res.json({
+            return res.status(404).json({
                 code: 404,
                 message: "file not found"
             });

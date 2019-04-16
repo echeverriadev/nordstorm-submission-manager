@@ -87,7 +87,11 @@ class CardCell extends React.Component {
   onDrop = (files) => {
     this.setState({preview: files[0]})
 
-    uploadImageApi(files[0]).then(response => {
+    const formData = new FormData();
+
+    formData.append('image', files[0]);
+
+    uploadImageApi(formData).then(response => {
         if(response.status === 200){
           console.log(response)
           this.props.onChange(this.props.index, 'image', response.data.url)
