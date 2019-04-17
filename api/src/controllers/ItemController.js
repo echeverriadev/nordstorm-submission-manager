@@ -68,7 +68,31 @@ class ItemController {
                 if(err) {
                     return res.json({code: 400, message: err});
                 }
-                res.json({code: 200, data: result});
+
+                const data = []
+
+                for (let i in result){
+                    const element = result[i];
+
+                    const row = {
+                        'is_priority': element['priority'] || "",
+                        'department_number': element['dept. no'] || "",
+                        'vpn': element['vpn'] || "",
+                        'brand': element['brand'] || "",
+                        'color': element['color'] || "",
+                        'size': element['size'] || "",
+                        'description': element['description'] || ""
+                    };
+
+                    dbConnection().query('INSERT INTO item_editorial SET ?', row, function (error,        results, fields) {
+                        if (error) throw error;
+                        console.log(results)
+                      });
+
+                    data.push(row);
+                }
+
+                res.json({code: 200, data});
             });
         } catch (e){
             return res.json({code: 400, message:"Corupted excel file"});
