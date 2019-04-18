@@ -10,7 +10,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,6 +17,9 @@ import Select from '@material-ui/core/Select';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import Dropzone from "react-dropzone";
+
+import { uploadImageApi } from '../../../../api/index';
 
 const styles = theme => ({
   card: {
@@ -75,11 +77,28 @@ const styles = theme => ({
 });
 
 class CardCell extends React.Component {
-  state = { expanded: false, isOpen: false };
+  state = { expanded: false, isOpen: false, preview: null };
 
   duplicate = (close) => {
     alert("Hola Mundo");
     close();
+  }
+
+  onDrop = (files) => {
+    this.setState({preview: files[0]})
+
+    const formData = new FormData();
+
+    formData.append('file', files[0]);
+
+    uploadImageApi(formData).then(response => {
+        if(response.status === 200){
+          console.log(response)
+          this.props.onChange(this.props.index, 'image', response.data.url)
+        }
+      }, err => {
+          console.log(err)
+      })
   }
 
   handleExpandClick = () => {
@@ -95,18 +114,42 @@ class CardCell extends React.Component {
 
           <Grid container>
             <Grid item md={1}>
-                <img
-                  className={classes.img}
-                  alt="complex"
-                  src={item.image}
-                  onClick={() => this.setState({ isOpen: true })}
-                />
-                {this.state.isOpen && (
-                <Lightbox
-                  mainSrc={item.image}
-                  onCloseRequest={() => this.setState({ isOpen: false })}
-                />
-              )}
+                {
+                  !this.state.expanded ?
+
+                  this.state.isOpen ? (
+                      <Lightbox
+                        mainSrc={item.image}
+                        onCloseRequest={() => this.setState({ isOpen: false })}
+                      />
+                    )
+                    :
+                    (<img
+                      className={classes.img}
+                      alt="complex"
+                      src={item.image}
+                      onClick={() => this.setState({ isOpen: true })}
+                    />)
+                  :
+                  <Dropzone
+                    onDrop={this.onDrop}
+                  >
+                    {({getRootProps, getInputProps}) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <img
+                            className={classes.img}
+                            alt="complex"
+                            src={this.state.preview ? URL.createObjectURL(this.state.preview) : item.image}
+                          />
+                        </div>
+                      </section>
+                    )}
+
+                  </Dropzone>
+                }
+
 
             </Grid>
             <Grid item md={11}>
