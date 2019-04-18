@@ -89,7 +89,7 @@ class CardCell extends React.Component {
 
     const formData = new FormData();
 
-    formData.append('image', files[0]);
+    formData.append('file', files[0]);
 
     uploadImageApi(formData).then(response => {
         if(response.status === 200){

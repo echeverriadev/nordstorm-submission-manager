@@ -70,13 +70,14 @@ class ItemController {
                 }
                 res.json({code: 200, data: result});
             });
-        } catch (e){
+        } catch (e){24
             return res.json({code: 400, message:"Corupted excel file"});
         }
     }
 
     async uploadImage(req, res, next){
-        console.log(req)
+        console.log(req.file)
+        console.log(req.body)
         if(!req.file){
             return res.status(404).json({
                 code: 404,
