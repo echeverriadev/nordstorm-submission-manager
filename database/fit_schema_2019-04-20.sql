@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4541
+# Version 4096
 #
 # http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
+# http://code.google.com/p/sequel-pro/
 #
-# Host: fit-api.cbi6hxpwehi6.us-west-2.rds.amazonaws.com (MySQL 5.7.19-log)
-# Database: fit
-# Generation Time: 2019-04-18 15:20:43 +0000
+# Host: 127.0.0.1 (MySQL 5.5.51)
+# Database: test5
+# Generation Time: 2019-04-18 23:39:07 +0000
 # ************************************************************
 
 
@@ -493,6 +493,10 @@ CREATE TABLE `item_editorial` (
   `request_rtv_date` date DEFAULT NULL,
   `rtv_approval` tinyint(4) DEFAULT NULL,
   `rtv_approval_notes` varchar(255) NOT NULL DEFAULT '',
+  `tagged_encore` tinyint(1) DEFAULT NULL,
+  `tagged_extended` tinyint(1) DEFAULT NULL,
+  `tagged_missy` tinyint(1) DEFAULT NULL,
+  `tagged_petite` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`__pk_item`),
   KEY `shot_fk` (`_fk_shot`),
   KEY `item_parent` (`item_parent`),
