@@ -5,17 +5,28 @@ import {Grid, TextField, MenuItem} from '@material-ui/core';
 import {getCyclesApi, getDivisionsApi} from '../../../api';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
+import Search from './Search'
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    marginBottom: theme.spacing.unit,
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
-  }
+  },
+  paper: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: '50%',
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+  },
 });
 
 class Filter extends Component {
@@ -51,10 +62,11 @@ class Filter extends Component {
 
     render = () => {
         const { cycles, divisions } = this.state
-        const { classes, filter, onChangeFilter } = this.props
+        const { classes, filter, onChangeFilter,
+        cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = this.props
 
       return (
-          <Grid container spacing={32}>
+          <Grid className={classes.root} container spacing={32}>
             <Grid item md={1}/>
             <Grid item md={2}>
               <TextField
@@ -65,7 +77,6 @@ class Filter extends Component {
                 value={filter.cycleId}
                 onChange={onChangeFilter}
                 fullWidth
-                margin="normal"
               >
                 {cycles.map(option => (
                   <MenuItem key={option.id} value={option.id}>
@@ -83,7 +94,6 @@ class Filter extends Component {
                 value={filter.divisionId}
                 fullWidth
                 onChange={onChangeFilter}
-                margin="normal"
               >
                 {divisions.map((option,index) => (
                   <MenuItem key={index} value={option.id}>
@@ -98,6 +108,14 @@ class Filter extends Component {
                 import
               </Button>
             </Grid>
+            <Grid item md>
+              <Search
+                cannedFilters={cannedFilters}
+                onAddCannedFilter={onAddCannedFilter}
+                onRemoveCannedFilter={onRemoveCannedFilter}
+              />
+            </Grid>
+            <Grid item md={1}/>
           </Grid>
       );
     }

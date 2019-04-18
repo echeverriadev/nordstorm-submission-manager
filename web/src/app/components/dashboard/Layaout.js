@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {Grid} from '@material-ui/core';
+import {Grid, Chip} from '@material-ui/core';
 
 import Head from './cells/Head';
 import CardCell from './cells/CardCell';
@@ -18,20 +18,38 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
-  }
+  },
+   chip: {
+    margin: theme.spacing.unit / 2,
+    backgroundColor: '#4daff2'
+  },
 });
 
 const Layaout = (props) => {
   const { classes, onChange, items, onChangeFilter,
-    total, offset, filter, onChangePagination } = props;
+    total, offset, filter, onChangePagination,
+    cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = props;
 
   return (
     <div className={classes.root}>
       <Filter
         filter={filter}
+        cannedFilters={cannedFilters}
         onChangeFilter={onChangeFilter}
+        onAddCannedFilter={onAddCannedFilter}
+        onRemoveCannedFilter={onRemoveCannedFilter}
       />
       <Grid container spacing={0}>
+        {cannedFilters.map((filter, i) =>
+          <Chip
+            key={i}
+            label={filter.label}
+            color="primary"
+            onDelete={() => onRemoveCannedFilter(i)}
+            className={classes.chip}
+          />
+        )}
+
         <Head/>
         {
           items.map((item, index) => (
@@ -52,7 +70,7 @@ const Layaout = (props) => {
     </div>
   );
 }
-  
+
 
 Layaout.propTypes = {
   classes: PropTypes.object.isRequired,
