@@ -34,7 +34,7 @@ const upload = multer({
 
 const uploadImage = multer({
     storage: storage2
-}).single('image');
+}).single('file');
 
 const router = express.Router();
 
