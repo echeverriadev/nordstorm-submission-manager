@@ -1,5 +1,6 @@
 'use strict'
 const dbConnection = require('../../config/mysql');
+const mysql = require('mysql');
 const ItemTransformer = require('../transformers/ItemTrasformer');
 const {hasEmptyField} = require('../Utils');
 const xlstojson = require("xls-to-json-lc");
@@ -13,23 +14,52 @@ class ItemController {
         this.updatePatch = this.updatePatch.bind(this);
         this.import = this.import.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
+        this.buildWhere = this.buildWhere.bind(this);
     }
-    //This method must be paged
-    async index(req, res, next){
-        const range = req.query.range
-        let start, end
-        try{
-            [start, end] = JSON.parse(range)
-        }catch(err){
-            [start, end] = [0,9]
+    
+    buildWhere(filter = {}){
+        let conditions = []
+        let values = []
+        /* DISABLED AT THE MOMENT, THE FIELDS ARE EMPTY ON DB
+        if(filter.hasOwnProperty('divisionId')){
+            conditions.push("_fk_division = ?")
+            values.push(filter.divisionId)
         }
+        if(filter.hasOwnProperty('cycleId')){
+            conditions.push("_fk_cycle = ?")
+            values.push(filter.cycleId)
+        }*/
+                
+        if(filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
+            conditions = conditions.concat(filter.parseCannedFilters)
+        
+        return {
+            where: conditions.length ? conditions.join(' AND ') : 1,
+            values
+        }
+        
+        
+    }
+    
+    async index(req, res, next){
+        let { filter } = req.query
+        const range = req.query.range || '[0,9]'
+        const [start, end] = JSON.parse(range)
+        try{
+            filter = JSON.parse(filter)
+        }catch(err){
+            filter = {}
+        }
+        const {where, values} = this.buildWhere(filter)
         const limit = end - start + 1
-        const {divisionId, cycleId} = req.query
-        this.connection.query(
-            `SELECT * FROM item_editorial LIMIT ?, ?;
-            SELECT COUNT( __pk_item ) as total FROM item_editorial;`,
-            [start, limit],
-            (err, result) => {
+        let sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
+        sqlCount = mysql.format(sqlCount, values);
+        const allValues = [...values, start, limit]
+        let sqlItems = `SELECT * FROM item_editorial WHERE ${where} LIMIT ?, ?`
+        sqlItems = mysql.format(sqlItems, allValues);
+        console.log(sqlItems)
+        console.log(sqlCount)
+        this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
                 if(err){
                     return res.status(500).json({error: err})
                 }
