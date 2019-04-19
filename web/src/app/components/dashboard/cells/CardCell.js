@@ -19,8 +19,6 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 
-import { uploadImageApi } from '../../../../api/index';
-
 const styles = theme => ({
   card: {
     width: "100%"
@@ -85,20 +83,30 @@ class CardCell extends React.Component {
   }
 
   onDrop = (files) => {
-    this.setState({preview: files[0]})
+    const file = files[0]
+    if(file.type.split('/')[0]==="image"){
+      const formData = new FormData();
 
-    const formData = new FormData();
+      formData.append('file', file);
 
-    formData.append('file', files[0]);
+      this.setState({preview: URL.createObjectURL(files[0])});
 
-    uploadImageApi(formData).then(response => {
-        if(response.status === 200){
-          console.log(response)
-          this.props.onChange(this.props.index, 'image', response.data.url)
-        }
-      }, err => {
-          console.log(err)
+      fetch(`${process.env.REACT_APP_API_URL}/items/upload`, {
+        method: 'POST',
+        body: formData
       })
+      .then(res => res.json())
+      .then(res => {
+        if(res.code === 200){
+          this.props.onChange(this.props.index, "image", res.data.url);
+        }else{
+          console.error(res)
+            alert(res.message || 'oops a problem has occurred')
+        }
+      })
+    }else{
+      alert('Invalid Format');
+    }
   }
 
   handleExpandClick = () => {
@@ -141,7 +149,7 @@ class CardCell extends React.Component {
                           <img
                             className={classes.img}
                             alt="complex"
-                            src={this.state.preview ? URL.createObjectURL(this.state.preview) : item.image}
+                            src={this.state.preview ? this.state.preview : item.image}
                           />
                         </div>
                       </section>

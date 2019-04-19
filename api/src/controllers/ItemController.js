@@ -100,8 +100,6 @@ class ItemController {
     }
 
     async uploadImage(req, res, next){
-        console.log(req.file)
-        console.log(req.body)
         if(!req.file){
             return res.status(404).json({
                 code: 404,
@@ -109,11 +107,13 @@ class ItemController {
             });
         }
 
+        const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
+
         return res.json({
             code: 200,
             message: "Image uploaded",
             data: {
-                url: req.file.path
+                url
             }
         });
     }
