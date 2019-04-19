@@ -27,6 +27,9 @@ const styles = theme => ({
   iconButton: {
     padding: 10,
   },
+  inputButton: {
+    display: 'none',
+  },
 });
 
 class Filter extends Component {
@@ -59,6 +62,35 @@ class Filter extends Component {
       })
     }
 
+    onClick = () => {
+      this.refs.buttonFile.click();
+    }
+
+    onSubmit = (e) => {
+      const file = Array.from(e.target.files)[0]
+
+      if (['xls', 'xlsx'].indexOf(file.name.split('.')[file.name.split('.').length-1]) === -1) {
+        alert('Invalid format, use xls or xlsx instead');
+      }else{
+        const formData = new FormData()
+
+        formData.append('file', file)
+
+        fetch(`${process.env.REACT_APP_API_URL}/items/import`, {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(res.code === 200){
+            alert('Items imported successfully')
+          }else{
+            console.error(res)
+            alert(res.message || 'oops a problem has occurred')
+          }
+        })
+      }
+    }
 
     render = () => {
         const { cycles, divisions } = this.state
@@ -103,10 +135,11 @@ class Filter extends Component {
               </TextField>
             </Grid>
             <Grid item md={2}>
-              <Button variant="contained" color="primary" className={classes.button}>
-                <Icon className={classes.rightIcon}>send</Icon>
-                import
-              </Button>
+              <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
+                <Button htmlFor="icon-button-file" variant="contained" color="primary" className={classes.button} onClick={this.onClick}>
+                  <Icon className={classes.rightIcon}>send</Icon>
+                  import
+                </Button>
             </Grid>
             <Grid item md>
               <Search

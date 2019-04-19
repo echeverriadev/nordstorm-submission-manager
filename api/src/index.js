@@ -11,6 +11,7 @@ const port = process.env.PORT || 8081;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
 app.use(logRequest);
 app = RouteLoader.load(app)

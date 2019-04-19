@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import { API_URL_BACKEND } from './index';
 import queryString from 'query-string';
 
 export function apiFetch(endpoint, options = {}, query = false) {
@@ -33,7 +32,7 @@ export function apiEndpoint(endpoint, qs) {
     query = `?${qs}`;
   }
 
-  return `${API_URL_BACKEND}${endpoint}${query}`;
+  return `${process.env.REACT_APP_API_URL}${endpoint}${query}`;
 }
 
 export function apiOptions(options = {}) {
@@ -44,7 +43,7 @@ export function apiOptions(options = {}) {
     },
     body = false
   } = options;
-  
+
   const newOptions = {
     method,
     headers
