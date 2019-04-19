@@ -1,55 +1,68 @@
 export const cannedFiltersAll = [
     {
         label: "Incomplete",
-        field: "field1",
+        where: "(COALESCE(_fk_department_t, '') = '' OR COALESCE(vpn, '')  = '' OR COALESCE(brand, '')  = '')",
         id: 1
-    },{
+    },
+    {
         label: "Missing SGN",
-        field: "field2",
+        where: "COALESCE(style_group_number, '')  = ''",
         id: 2
-    },{
+    },
+    {
         label: "Missing VPN",
-        field: "field3",
+        where: "COALESCE(vpn, '') = ''",
         id: 3
-    },{
+    },
+    {
         label: "Available in Canada",
-        field: "field4",
+        where: "available_in_canada = 1",
         id: 4
-    },{
+    },
+    /*{
         label: "NMG Priority 1",
-        field: "field5",
+        where: "nmg_priority = 1",
         id: 5
-    },{
+    },
+    {
         label: "NMG Priority 2",
-        field: "field6",
+        where: "nmg_priority = 2",
         id: 6
-    },{
+    },*/
+    {
         label: "Requested Extension",
-        field: "field7",
+        where: "request_extension = 1",
         id: 7
-    },{
+    },
+    {
         label: "Requested Cancellation",
-        field: "field8",
+        where: "request_cancellation = 1",
         id: 8
-    },{
+    },
+    /*{
         label: "Tagged Missy",
-        field: "field9",
+        where: "tagged_missy = 1",
         id: 9
-    },{
+    },
+    {
         label: "Tagged Encore",
-        field: "field10",
+        where: "tagged_encore = 1",
         id: 10
-    },{
+    },
+    {
         label: "Tagged Petite",
-        field: "field11",
+        where: "tagged_petite = 1",
         id: 11
-    },{
+    },
+    {
         label: "Tagged Extended",
-        field: "field12",
+        where: "tagged_extended = 1",
         id: 12
-    },{
+    },*/
+    {
         label: "No Image",
-        field: "field13",
+        where: "COALESCE(image, '') = ''",
         id: 13
     },
+    
 ]

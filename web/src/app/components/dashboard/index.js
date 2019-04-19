@@ -86,14 +86,13 @@ class Dashboard extends Component {
       if(divisionId && cycleId){
         const limit = 10
         const end = (limit - 1) + offset
-        const parseCannedFilters = this.parseCannedFilters(9)
+        const parseCannedFilters = this.parseCannedFilters()
         const parsedFilter = {
-          ...filter,
-          ...parseCannedFilters
+          ...filter, //object
+          parseCannedFilters //array of string
         }
-        console.log(parseCannedFilters)
-        console.log(parsedFilter)
         getItemsApi(offset, end, parsedFilter).then(response => {
+          console.log(response)
           if (response.status === 200)
             this.setState({
               rows: response.data,
@@ -106,18 +105,14 @@ class Dashboard extends Component {
     }
 
 
-    /*Parse array of cannedFilters to an object like this:
-      {
-        field1: value1,
-        field2: value2,
-        .
-      }
+    /*Parse array of cannedFilters to an array of strings like this:
+        [where1, where2, where3,...]
     */
     parseCannedFilters = () => {
       const { cannedFilters } = this.state
-      let parsedFilters = {}
+      let parsedFilters = []
       for(let filter of cannedFilters)
-        parsedFilters[filter.field] = true
+        parsedFilters.push(filter.where)
       return parsedFilters
     }
 

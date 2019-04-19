@@ -187,6 +187,8 @@ class CardCell extends React.Component {
                       margin="normal"
                       value={item.department_number}
                       onChange={e => onChange(index, "department_number", e.target.value)}
+                      required
+                      error={!item.department_number}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -197,6 +199,8 @@ class CardCell extends React.Component {
                       margin="normal"
                       value={item.vpn}
                       onChange={e => onChange(index, "vpn", e.target.value)}
+                      required
+                      error={!item.vpn}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -217,6 +221,8 @@ class CardCell extends React.Component {
                       margin="normal"
                       value={item.brand}
                       onChange={e => onChange(index, "brand", e.target.value)}
+                      required
+                      error={!item.brand}
                     />
                   </Grid>
                   <Grid item md={1}>
