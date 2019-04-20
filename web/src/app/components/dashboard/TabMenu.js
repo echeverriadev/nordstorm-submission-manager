@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   tabsRoot: {
     borderBottom: '1px solid #e8e8e8',
+    backgroundColor: "#fafafa",
   },
   tabsIndicator: {
     backgroundColor: '#1890ff',
