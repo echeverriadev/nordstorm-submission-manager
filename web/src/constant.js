@@ -19,7 +19,7 @@ export const cannedFiltersAll = [
         where: "available_in_canada = 1",
         id: 4
     },
-    /*{
+    {
         label: "NMG Priority 1",
         where: "nmg_priority = 1",
         id: 5
@@ -28,7 +28,7 @@ export const cannedFiltersAll = [
         label: "NMG Priority 2",
         where: "nmg_priority = 2",
         id: 6
-    },*/
+    },
     {
         label: "Requested Extension",
         where: "request_extension = 1",
@@ -39,7 +39,7 @@ export const cannedFiltersAll = [
         where: "request_cancellation = 1",
         id: 8
     },
-    /*{
+    {
         label: "Tagged Missy",
         where: "tagged_missy = 1",
         id: 9
@@ -58,7 +58,7 @@ export const cannedFiltersAll = [
         label: "Tagged Extended",
         where: "tagged_extended = 1",
         id: 12
-    },*/
+    },
     {
         label: "No Image",
         where: "COALESCE(image, '') = ''",

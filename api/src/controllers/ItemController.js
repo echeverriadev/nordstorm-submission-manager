@@ -57,8 +57,6 @@ class ItemController {
         const allValues = [...values, start, limit]
         let sqlItems = `SELECT * FROM item_editorial WHERE ${where} LIMIT ?, ?`
         sqlItems = mysql.format(sqlItems, allValues);
-        console.log(sqlItems)
-        console.log(sqlCount)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
                 if(err){
                     return res.status(500).json({error: err})
