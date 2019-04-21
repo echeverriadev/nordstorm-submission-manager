@@ -9,26 +9,33 @@ import Search from './Search'
 
 const styles = theme => ({
   root: {
-    marginBottom: theme.spacing.unit,
+    display: 'flex',
+    marginLeft: 30,
+  },
+  selectFilter: {
+    width: 150,
+    marginRight: '30px'
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
   },
-  paper: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
-    width: '50%',
-  },
   input: {
     marginLeft: 8,
     flex: 1,
+  },
+  button:{
+    borderRadius: 1,
+    color: "#FFFFFF",
+    backgroundColor:"#00838c",
+    marginTop: 15,
+    width:150,
   },
   iconButton: {
     padding: 10,
   },
   inputButton: {
     display: 'none',
+    color: "#FFF",
   },
 });
 
@@ -98,46 +105,45 @@ class Filter extends Component {
         cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = this.props
 
       return (
-          <Grid className={classes.root} container spacing={32}>
-            <Grid item md={1}/>
-            <Grid item md={2}>
-              <TextField
-                id="cycleId"
-                name="cycleId"
-                select
-                label="Cycle / Month"
-                value={filter.cycleId}
-                onChange={onChangeFilter}
-                fullWidth
-              >
-                {cycles.map(option => (
-                  <MenuItem key={option.id} value={option.id}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item md={2}>
-              <TextField
-                id="divisionId"
-                name="divisionId"
-                select
-                label="Division"
-                value={filter.divisionId}
-                fullWidth
-                onChange={onChangeFilter}
-              >
-                {divisions.map((option,index) => (
-                  <MenuItem key={index} value={option.id}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item md={2}>
+          <Grid className={classes.root} spacing={0}>
+              <Grid item >
+                <TextField
+                  className={classes.selectFilter}
+                  id="cycleId"
+                  name="cycleId"
+                  select
+                  label="Cycle / Month"
+                  value={filter.cycleId}
+                  onChange={onChangeFilter}
+                >
+                  {cycles.map(option => (
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item>
+                <TextField
+                  className={classes.selectFilter}
+                  id="divisionId"
+                  name="divisionId"
+                  select
+                  label="Division"
+                  value={filter.divisionId}
+                  onChange={onChangeFilter}
+                >
+                  {divisions.map((option,index) => (
+                    <MenuItem key={index} value={option.id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item>
               <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
-                <Button htmlFor="icon-button-file" variant="contained" color="primary" className={classes.button} onClick={this.onClick}>
-                  <Icon className={classes.rightIcon}>send</Icon>
+                <Button htmlFor="icon-button-file" variant="contained" className={classes.button} onClick={this.onClick}>
+                  <Icon className={classes.rightIcon}>save_alt</Icon>
                   import
                 </Button>
             </Grid>
@@ -148,7 +154,6 @@ class Filter extends Component {
                 onRemoveCannedFilter={onRemoveCannedFilter}
               />
             </Grid>
-            <Grid item md={1}/>
           </Grid>
       );
     }

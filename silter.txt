@@ -1,0 +1,52 @@
+<Grid className={classes.root} container spacing={32}>
+            
+            <Grid item md={2}>
+              <TextField
+                id="cycleId"
+                name="cycleId"
+                select
+                label="Cycle / Month"
+                value={filter.cycleId}
+                onChange={onChangeFilter}
+                fullWidth
+              >
+                {cycles.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item md={2}>
+              <TextField
+                id="divisionId"
+                name="divisionId"
+                select
+                label="Division"
+                value={filter.divisionId}
+                fullWidth
+                onChange={onChangeFilter}
+              >
+                {divisions.map((option,index) => (
+                  <MenuItem key={index} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item md={2}>
+              <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
+                <Button htmlFor="icon-button-file" variant="contained" className={classes.button} onClick={this.onClick}>
+                  <Icon className={classes.rightIcon}>save_alt</Icon>
+                  import
+                </Button>
+            </Grid>
+            <Grid item md>
+              <Search
+                cannedFilters={cannedFilters}
+                onAddCannedFilter={onAddCannedFilter}
+                onRemoveCannedFilter={onRemoveCannedFilter}
+              />
+            </Grid>
+            <Grid item md={1}/>
+          </Grid>

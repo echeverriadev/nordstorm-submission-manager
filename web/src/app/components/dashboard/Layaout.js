@@ -15,8 +15,8 @@ const theme = createMuiTheme();
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: 0,
+    margin: 10,
     overflowX: 'auto',
   },
    chip: {
@@ -57,7 +57,7 @@ const Layaout = (props) => {
           ))
         }
       </Grid>
-      <MuiThemeProvider theme={theme}>
+       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <Pagination
           limit={10}

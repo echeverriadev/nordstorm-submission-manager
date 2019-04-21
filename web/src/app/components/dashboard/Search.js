@@ -9,9 +9,11 @@ import {cannedFiltersAll} from '../../../constant'
 const styles = theme => ({
   paper: {
     padding: '2px 4px',
+    marginTop: 13,
     display: 'flex',
     alignItems: 'center',
-    width: '50%',
+    height: '30px',
+    width: '30%',
   },
   input: {
     marginLeft: 8,
