@@ -40,6 +40,7 @@ const router = express.Router();
 
 router.get('', ItemController.index);
 router.patch('/:id', ItemController.updatePatch);
+router.post('', ItemController.store);
 router.post('/import', upload, ItemController.import);
 router.post('/upload', uploadImage, ItemController.uploadImage);
 

@@ -16,7 +16,7 @@ class ItemController {
         this.uploadImage = this.uploadImage.bind(this);
         this.buildWhere = this.buildWhere.bind(this);
     }
-    
+
     buildWhere(filter = {}){
         let conditions = []
         let values = []
@@ -29,18 +29,18 @@ class ItemController {
             conditions.push("_fk_cycle = ?")
             values.push(filter.cycleId)
         }*/
-                
+
         if(filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
-        
+
         return {
             where: conditions.length ? conditions.join(' AND ') : 1,
             values
         }
-        
-        
+
+
     }
-    
+
     async index(req, res, next){
         let { filter } = req.query
         const range = req.query.range || '[0,9]'
@@ -69,6 +69,35 @@ class ItemController {
                     total: result[1][0].total
                 })
         })
+    }
+
+    async store(req, res, next){
+        const data = {
+            'is_priority': req.body.is_priority || "",
+            'department_number': req.body.department_number || "",
+            'vpn': req.body.vpn || "",
+            'brand': req.body.brand || "",
+            'color': req.body.color || "",
+            'size': req.body.size || "",
+            'description': req.body.description || "",
+            'image': req.body.image,
+            'style_group_number': req.body.style_group_number,
+            'in_stock_week': req.body.in_stock_week,
+            'sale_price': req.body.price
+        }
+
+        dbConnection().query('INSERT INTO item_editorial SET ?', data, function (error,        results, fields) {
+            if (error) throw error;
+
+            res.json({
+                code: 200,
+                message: "Item save",
+                data: {
+                    id: results.insertId,
+                    ...data
+                }
+            })
+          });
     }
 
     async import(req, res, next){
