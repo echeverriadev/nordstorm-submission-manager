@@ -5,6 +5,7 @@ import {Grid, Chip} from '@material-ui/core';
 
 import Head from './cells/Head';
 import CardCell from './cells/CardCell';
+import AddCell from './cells/AddCell';
 import Filter from './Filter';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
@@ -26,7 +27,7 @@ const styles = theme => ({
 });
 
 const Layaout = (props) => {
-  const { classes, onChange, items, onChangeFilter,
+  const { classes, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
     total, offset, filter, onChangePagination,
     cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = props;
 
@@ -55,6 +56,11 @@ const Layaout = (props) => {
           items.map((item, index) => (
             <CardCell key={index} index={index} item={item} onChange={onChange}/>
           ))
+        }
+        {
+          (filter.cycleId === "" || filter.divisionId === "") ?
+           null:
+           <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit}/>
         }
       </Grid>
        <MuiThemeProvider theme={theme}>

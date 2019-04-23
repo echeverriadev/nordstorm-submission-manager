@@ -19,6 +19,33 @@ class Dashboard extends Component {
         this.state = {
             value: 0,
             rows: [],
+            addItem: {
+              is_priority: 0,
+              department_number: "",
+              vpn: "",
+              brand: "",
+              color: "",
+              size: "",
+              description: "",
+              image: null,
+              style_group_number: "",
+              in_stock_week: "",
+              price: "",
+              //EXTRA
+              category: ['category: example1', 'category: example2'],
+              cycle: 1,
+              annSalePrice: 123,
+              productPriority: "normal",
+              availableInCanada: true,
+              canadaPrice: 123,
+              countryOrigin: "USA",
+              specifyCountry: "USA",
+              requestExtension: true,
+              extensionReason: "sample",
+              requestCancelation: false,
+              cancelationReason: "",
+              departament: "Via C"
+            },
             total: 0,
             offset: 0,
             filter: {
@@ -32,6 +59,17 @@ class Dashboard extends Component {
 
     handleTabChange = (event, value) => {
       this.setState({ value });
+    }
+
+    onAddChange = (key, value) => {
+      this.setState({
+        ...this.state.addItem,
+        [key]: value
+      })
+    }
+
+    onSubmit = () => {
+      console.log(this.state.addItem)
     }
 
     onChange = (index, key, value) => {
@@ -119,7 +157,7 @@ class Dashboard extends Component {
 
 
     render() {
-        const { value, rows, total, offset, filter, cannedFilters } = this.state;
+        const { value, rows, addItem, total, offset, filter, cannedFilters } = this.state;
         const { classes } = this.props;
 
         return (
@@ -128,11 +166,14 @@ class Dashboard extends Component {
                 {value === 0 &&
                   <Layaout
                     items={rows}
+                    addItem={addItem}
                     total={total}
                     offset={offset}
                     cannedFilters={cannedFilters}
                     filter={filter}
                     onChange={this.onChange}
+                    onAddChange={this.onAddChange}
+                    onSubmit={this.onSubmit}
                     onChangePagination = {this.changePagination}
                     onChangeFilter = {this.changeFilter}
                     onAddCannedFilter = {this.addCannedFilter}
