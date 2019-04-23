@@ -152,6 +152,8 @@ class Filter extends Component {
                 cannedFilters={cannedFilters}
                 onAddCannedFilter={onAddCannedFilter}
                 onRemoveCannedFilter={onRemoveCannedFilter}
+                onChangeFilter={onChangeFilter}
+                search={filter.search}
               />
             </Grid>
           </Grid>

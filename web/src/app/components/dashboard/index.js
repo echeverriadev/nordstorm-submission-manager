@@ -23,7 +23,8 @@ class Dashboard extends Component {
             offset: 0,
             filter: {
               cycleId: "",
-              divisionId: ""
+              divisionId: "",
+              search: "",
             },
             cannedFilters: []
         };
