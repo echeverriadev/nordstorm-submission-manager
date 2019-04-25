@@ -17,12 +17,19 @@ const styles = theme => ({
     flexGrow: 1,
     marginTop: 0,
     margin: 10,
-    overflowX: 'auto',
   },
    chip: {
     margin: theme.spacing.unit / 2,
     backgroundColor: '#4daff2'
   },
+  head:{
+    position: 'sticky',
+    top:'0px',
+    zIndex: '100',
+    backgroundColor: 'white',
+    width: '100%',
+  },
+
 });
 
 const Layaout = (props) => {
@@ -32,41 +39,54 @@ const Layaout = (props) => {
 
   return (
     <div className={classes.root}>
-      <Filter
-        filter={filter}
-        cannedFilters={cannedFilters}
-        onChangeFilter={onChangeFilter}
-        onAddCannedFilter={onAddCannedFilter}
-        onRemoveCannedFilter={onRemoveCannedFilter}
-      />
-      <Grid container spacing={0}>
-        {cannedFilters.map((filter, i) =>
-          <Chip
-            key={i}
-            label={filter.label}
-            color="primary"
-            onDelete={() => onRemoveCannedFilter(i)}
-            className={classes.chip}
-          />
-        )}
-
-        <Head/>
-        {
-          items.map((item, index) => (
-            <CardCell key={index} index={index} item={item} onChange={onChange}/>
-          ))
-        }
-      </Grid>
-       <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <Pagination
-          limit={10}
-          offset={offset}
-          total={total}
-          onClick={(e, offset) => onChangePagination(offset)}
-          size="large"
+    
+    
+    
+      <div className={classes.head}>
+        <Filter
+          filter={filter}
+          cannedFilters={cannedFilters}
+          onChangeFilter={onChangeFilter}
+          onAddCannedFilter={onAddCannedFilter}
+          onRemoveCannedFilter={onRemoveCannedFilter}
         />
-    </MuiThemeProvider>
+        <Grid container spacing={0}>
+          {cannedFilters.map((filter, i) =>
+            <Chip
+              key={i}
+              label={filter.label}
+              color="primary"
+              onDelete={() => onRemoveCannedFilter(i)}
+              className={classes.chip}
+            />
+          )}
+          <Head/>
+        </Grid>
+      </div>
+      
+      
+      
+      <div className={classes.body}>
+        <Grid>
+          
+            {
+              items.map((item, index) => (
+                <CardCell key={index} index={index} item={item} onChange={onChange}/>
+              ))
+            }
+            <Pagination
+            limit={10}
+            offset={offset}
+            total={total}
+            onClick={(e, offset) => onChangePagination(offset)}
+            size="large"
+            />
+        </Grid>
+         <MuiThemeProvider theme={theme}>
+          <CssBaseline />
+          
+        </MuiThemeProvider>
+      </div>
     </div>
   );
 }

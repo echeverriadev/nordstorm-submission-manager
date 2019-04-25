@@ -5,7 +5,6 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { theme } from '../../../theme/muitheme'
 import Typography from '@material-ui/core/Typography';
 import createStyles from '@material-ui/core/styles/createStyles';
-import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
 import Dashboard from '../../components/dashboard';
 import './App.css';
 
@@ -48,7 +47,6 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <PrimaryAppBar />
           <Typography  gutterBottom>
             <Dashboard></Dashboard>
           </Typography>
