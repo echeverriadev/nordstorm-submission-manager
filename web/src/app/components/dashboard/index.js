@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import TabMenu from './TabMenu';
 import Layaout from './Layaout';
-import { getItemsApi, patchItemApi } from '../../../api';
+import { getItemsApi, patchItemApi, storeItemApi } from '../../../api';
 
 const styles = theme => ({
   root: {
@@ -32,19 +32,19 @@ class Dashboard extends Component {
               in_stock_week: "",
               price: "",
               //EXTRA
-              category: ['category: example1', 'category: example2'],
+              category: [],
               cycle: 1,
-              annSalePrice: 123,
-              productPriority: "normal",
-              availableInCanada: true,
-              canadaPrice: 123,
-              countryOrigin: "USA",
-              specifyCountry: "USA",
-              requestExtension: true,
-              extensionReason: "sample",
+              annSalePrice: "",
+              productPriority: "",
+              availableInCanada: false,
+              canadaPrice: "",
+              countryOrigin: "",
+              specifyCountry: "",
+              requestExtension: false,
+              extensionReason: "",
               requestCancelation: false,
               cancelationReason: "",
-              departament: "Via C"
+              departament: ""
             },
             total: 0,
             offset: 0,
@@ -63,13 +63,56 @@ class Dashboard extends Component {
 
     onAddChange = (key, value) => {
       this.setState({
-        ...this.state.addItem,
-        [key]: value
+        addItem: {
+          ...this.state.addItem,
+          [key]: value
+        }
       })
     }
 
-    onSubmit = () => {
-      console.log(this.state.addItem)
+    onSubmit = (key) => {
+      if(key.toUpperCase() === "ENTER"){
+        storeItemApi(this.state.addItem).then(response => {
+          if(response.code === 200){
+            this.setState({
+              addItem: {
+                is_priority: 0,
+                department_number: "",
+                vpn: "",
+                brand: "",
+                color: "",
+                size: "",
+                description: "",
+                image: null,
+                style_group_number: "",
+                in_stock_week: "",
+                price: "",
+                //EXTRA
+                category: [],
+                cycle: 1,
+                annSalePrice: "",
+                productPriority: "",
+                availableInCanada: false,
+                canadaPrice: "",
+                countryOrigin: "",
+                specifyCountry: "",
+                requestExtension: false,
+                extensionReason: "",
+                requestCancelation: false,
+                cancelationReason: "",
+                departament: ""
+              }
+            });
+
+            alert(response.message);
+          }else{
+            console.error(response.message)
+          }
+          console.log(response)
+        }, err => {
+          console.error(err)
+        } )
+      }
     }
 
     onChange = (index, key, value) => {
