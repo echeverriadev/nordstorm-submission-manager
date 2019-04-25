@@ -2,12 +2,12 @@
 const dbConnection = require('../../config/mysql');
 const mysql = require('mysql');
 const ItemTransformer = require('../transformers/ItemTrasformer');
-const {hasEmptyField} = require('../Utils');
+const { hasEmptyField } = require('../Utils');
 const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 
 class ItemController {
-    constructor(){
+    constructor() {
         this.connection = dbConnection()
         this._itemTransformer = ItemTransformer;
         this.index = this.index.bind(this);
@@ -17,9 +17,18 @@ class ItemController {
         this.buildWhere = this.buildWhere.bind(this);
     }
 
+<<<<<<< HEAD
     buildWhere(filter = {}){
+=======
+
+
+    buildWhere(filter = {}) {
+        //const fieldsForSearch =  ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "story", "shot", "product_priority", "country_of_origin", "specify_country", "extension_reason", "cancelation_reason"]
+        const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
+>>>>>>> master
         let conditions = []
         let values = []
+
         /* DISABLED AT THE MOMENT, THE FIELDS ARE EMPTY ON DB
         if(filter.hasOwnProperty('divisionId')){
             conditions.push("_fk_division = ?")
@@ -30,8 +39,27 @@ class ItemController {
             values.push(filter.cycleId)
         }*/
 
-        if(filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
+        if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
+
+        if (filter.hasOwnProperty('search')) {
+            const searchText = filter.search
+            const pattern = /([\w\s]+)\:?\s?([\w\s]*)/g
+            /* searchText could be like this: "text to search in many fields" or "field: text to search in field"
+                On first case, field will be the whole text
+                On second case, field: "field" and value: "text to search in field"
+            */
+            searchText.replace(pattern, (_, field, value) => {
+                if (value){ //second case
+                    if(fieldsForSearch.includes(field)) //and field really exist
+                        conditions.push(`${field} LIKE ${this.connection.escape('%'+value+'%')}`)
+                }
+                else { //first case
+                    const conditionLikeString = fieldsForSearch.join(',')
+                    conditions.push(`(CONCAT_WS(${conditionLikeString}) LIKE ${this.connection.escape('%'+field+'%')})`)
+                }
+            })
+        }
 
         return {
             where: conditions.length ? conditions.join(' AND ') : 1,
@@ -41,36 +69,43 @@ class ItemController {
 
     }
 
+<<<<<<< HEAD
     async index(req, res, next){
+=======
+    async index(req, res, next) {
+>>>>>>> master
         let { filter } = req.query
         const range = req.query.range || '[0,9]'
         const [start, end] = JSON.parse(range)
-        try{
+        try {
             filter = JSON.parse(filter)
-        }catch(err){
+        }
+        catch (err) {
             filter = {}
         }
-        const {where, values} = this.buildWhere(filter)
+        const { where, values } = this.buildWhere(filter)
         const limit = end - start + 1
         let sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
         sqlCount = mysql.format(sqlCount, values);
         const allValues = [...values, start, limit]
         let sqlItems = `SELECT * FROM item_editorial WHERE ${where} LIMIT ?, ?`
         sqlItems = mysql.format(sqlItems, allValues);
+        console.log(sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
-                if(err){
-                    return res.status(500).json({error: err})
-                }
+            if (err) {
+                return res.status(500).json({ error: err })
+            }
 
-                res.status(200).json({
-                    status: 200,
-                    massage: "Items Found",
-                    data: this._itemTransformer.transform(result[0]),
-                    total: result[1][0].total
-                })
+            res.status(200).json({
+                status: 200,
+                massage: "Items Found",
+                data: this._itemTransformer.transform(result[0]),
+                total: result[1][0].total
+            })
         })
     }
 
+<<<<<<< HEAD
     async store(req, res, next){
         const data = {
             'is_priority': req.body.is_priority || "",
@@ -101,18 +136,22 @@ class ItemController {
     }
 
     async import(req, res, next){
+=======
+    async import (req, res, next) {
+>>>>>>> master
         let exceltojson;
 
-        if(!req.file){
+        if (!req.file) {
             return res.json({
                 code: 404,
                 message: "file not found"
             });
         }
 
-        if(req.file.originalname.split('.')[req.file.originalname.split('.').length-1] === 'xlsx'){
+        if (req.file.originalname.split('.')[req.file.originalname.split('.').length - 1] === 'xlsx') {
             exceltojson = xlsxtojson;
-        } else {
+        }
+        else {
             exceltojson = xlstojson;
         }
 
@@ -120,15 +159,15 @@ class ItemController {
             exceltojson({
                 input: req.file.path,
                 output: null, //since we don't need output.json
-                lowerCaseHeaders:true
-            }, function(err,result){
-                if(err) {
-                    return res.json({code: 400, message: err});
+                lowerCaseHeaders: true
+            }, function(err, result) {
+                if (err) {
+                    return res.json({ code: 400, message: err });
                 }
 
                 const data = []
 
-                for (let i in result){
+                for (let i in result) {
                     const element = result[i];
 
                     const row = {
@@ -141,23 +180,25 @@ class ItemController {
                         'description': element['description'] || ""
                     };
 
-                    dbConnection().query('INSERT INTO item_editorial SET ?', row, function (error,        results, fields) {
+                    dbConnection().query('INSERT INTO item_editorial SET ?', row, function(error, results, fields) {
                         if (error) throw error;
                         console.log(results)
-                      });
+                    });
 
                     data.push(row);
                 }
 
-                res.json({code: 200, data});
+                res.json({ code: 200, data });
             });
-        } catch (e){24
-            return res.json({code: 400, message:"Corupted excel file"});
+        }
+        catch (e) {
+            24
+            return res.json({ code: 400, message: "Corupted excel file" });
         }
     }
 
-    async uploadImage(req, res, next){
-        if(!req.file){
+    async uploadImage(req, res, next) {
+        if (!req.file) {
             return res.status(404).json({
                 code: 404,
                 message: "file not found"
@@ -175,20 +216,20 @@ class ItemController {
         });
     }
 
-    async updatePatch(req, res, next){
-        const {id} = req.params
-        const {field, value} = req.body
+    async updatePatch(req, res, next) {
+        const { id } = req.params
+        const { field, value } = req.body
         const escaping = [field, value, id]
-        if(hasEmptyField(escaping))
-            return res.status(400).json({status: 400, massage: "Bad Request"})
+        if (hasEmptyField(escaping))
+            return res.status(400).json({ status: 400, massage: "Bad Request" })
 
         this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
-            if(err){
+            if (err) {
                 console.log(err)
-                return res.status(500).json({error: err})
+                return res.status(500).json({ error: err })
             }
 
-            if(result.affectedRows)
+            if (result.affectedRows)
                 res.status(200).json({
                     status: 200,
                     massage: "Item update",

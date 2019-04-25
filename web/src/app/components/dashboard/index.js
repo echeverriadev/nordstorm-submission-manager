@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-
+import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
 import TabMenu from './TabMenu';
 import Layaout from './Layaout';
 import { getItemsApi, patchItemApi, storeItemApi } from '../../../api';
@@ -9,7 +9,7 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-  }
+  },
 });
 
 class Dashboard extends Component {
@@ -50,7 +50,8 @@ class Dashboard extends Component {
             offset: 0,
             filter: {
               cycleId: "",
-              divisionId: ""
+              divisionId: "",
+              search: "",
             },
             cannedFilters: []
         };
@@ -205,7 +206,8 @@ class Dashboard extends Component {
 
         return (
             <div className={classes.root}>
-                 <TabMenu value={value} handleChange={this.handleTabChange}/>
+              <PrimaryAppBar />
+              <TabMenu value={value} handleChange={this.handleTabChange}/>
                 {value === 0 &&
                   <Layaout
                     items={rows}
@@ -225,7 +227,6 @@ class Dashboard extends Component {
                 }
                 {value === 1 && <h1>SAMPLE</h1>}
             </div>
-
         );
     }
 }

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Grid, MenuItem, IconButton, Paper, InputBase, Menu, Checkbox, ListItemText} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import {cannedFiltersAll} from '../../../constant'
 
 const styles = theme => ({
@@ -51,7 +50,7 @@ class Search extends Component {
 
 
     render = () => {
-        const { classes, cannedFilters } = this.props
+        const { classes, cannedFilters, search, onChangeFilter } = this.props
         const { anchorEl } = this.state
         const open = Boolean(anchorEl);
 
@@ -65,10 +64,13 @@ class Search extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <InputBase className={classes.input} placeholder="Search" />
-            <IconButton className={classes.iconButton} aria-label="Search">
-              <SearchIcon />
-            </IconButton>
+            <InputBase 
+              name="search"
+              className={classes.input} 
+              value={search} 
+              onChange={onChangeFilter}
+              placeholder="Search"
+            />
           </Paper>
           <Menu
             id="long-menu"
