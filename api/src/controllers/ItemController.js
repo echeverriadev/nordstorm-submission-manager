@@ -17,15 +17,11 @@ class ItemController {
         this.buildWhere = this.buildWhere.bind(this);
     }
 
-<<<<<<< HEAD
-    buildWhere(filter = {}){
-=======
 
 
     buildWhere(filter = {}) {
         //const fieldsForSearch =  ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "story", "shot", "product_priority", "country_of_origin", "specify_country", "extension_reason", "cancelation_reason"]
         const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
->>>>>>> master
         let conditions = []
         let values = []
 
@@ -69,11 +65,7 @@ class ItemController {
 
     }
 
-<<<<<<< HEAD
-    async index(req, res, next){
-=======
     async index(req, res, next) {
->>>>>>> master
         let { filter } = req.query
         const range = req.query.range || '[0,9]'
         const [start, end] = JSON.parse(range)
@@ -105,7 +97,6 @@ class ItemController {
         })
     }
 
-<<<<<<< HEAD
     async store(req, res, next){
         const data = {
             'is_priority': req.body.is_priority || "",
@@ -136,9 +127,6 @@ class ItemController {
     }
 
     async import(req, res, next){
-=======
-    async import (req, res, next) {
->>>>>>> master
         let exceltojson;
 
         if (!req.file) {

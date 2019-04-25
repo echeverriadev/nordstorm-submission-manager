@@ -40,47 +40,6 @@ const Layaout = (props) => {
 
   return (
     <div className={classes.root}>
-      <Filter
-        filter={filter}
-        cannedFilters={cannedFilters}
-        onChangeFilter={onChangeFilter}
-        onAddCannedFilter={onAddCannedFilter}
-        onRemoveCannedFilter={onRemoveCannedFilter}
-      />
-      <Grid container spacing={0}>
-        {cannedFilters.map((filter, i) =>
-          <Chip
-            key={i}
-            label={filter.label}
-            color="primary"
-            onDelete={() => onRemoveCannedFilter(i)}
-            className={classes.chip}
-          />
-        )}
-
-        <Head/>
-        {
-          items.map((item, index) => (
-            <CardCell key={index} index={index} item={item} onChange={onChange}/>
-          ))
-        }
-        {
-          (filter.cycleId === "" || filter.divisionId === "") ?
-           null:
-           <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit}/>
-        }
-      </Grid>
-       <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <Pagination
-          limit={10}
-          offset={offset}
-          total={total}
-          onClick={(e, offset) => onChangePagination(offset)}
-          size="large"
-
-
-
       <div className={classes.head}>
         <Filter
           filter={filter}
@@ -102,17 +61,18 @@ const Layaout = (props) => {
           <Head/>
         </Grid>
       </div>
-
-
-
       <div className={classes.body}>
         <Grid>
-
-            {
-              items.map((item, index) => (
-                <CardCell key={index} index={index} item={item} onChange={onChange}/>
-              ))
-            }
+              {
+                items.map((item, index) => (
+                  <CardCell key={index} index={index} item={item} onChange={onChange}/>
+                ))
+              }
+              {
+                (filter.cycleId === "" || filter.divisionId === "") ?
+                null:
+                <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit}/>
+              }
             <Pagination
             limit={10}
             offset={offset}
@@ -123,7 +83,6 @@ const Layaout = (props) => {
         </Grid>
          <MuiThemeProvider theme={theme}>
           <CssBaseline />
-
         </MuiThemeProvider>
       </div>
     </div>
