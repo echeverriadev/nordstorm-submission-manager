@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {Grid, TextField, MenuItem} from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
 import Search from './Search'
 
 const styles = theme => ({
@@ -76,39 +77,46 @@ class Filter extends Component {
         const { classes, cycles, divisions, filter, onChangeFilter,
         cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = this.props
 
+        console.log(filter)
       return (
           <Grid className={classes.root} spacing={0}>
               <Grid item >
-                <TextField
+                <Select
                   className={classes.selectFilter}
                   id="cycleId"
                   name="cycleId"
-                  select
                   value={filter.cycleId}
                   onChange={onChangeFilter}
+                  displayEmpty={true}
                 >
+                  <MenuItem value="" disabled>
+                      Cycle / Month
+                  </MenuItem>
                   {cycles.map(option => (
                     <MenuItem key={option.id} value={option.id}>
                       {option.name}
                     </MenuItem>
                   ))}
-                </TextField>
+                </Select>
               </Grid>
               <Grid item>
-                <TextField
+                <Select
                   className={classes.selectFilter}
                   id="divisionId"
                   name="divisionId"
-                  select
                   value={filter.divisionId}
                   onChange={onChangeFilter}
+                  displayEmpty={true}
                 >
+                  <MenuItem value="" disabled>
+                      Division
+                  </MenuItem>
                   {divisions.map((option,index) => (
                     <MenuItem key={index} value={option.id}>
                       {option.name}
                     </MenuItem>
                   ))}
-                </TextField>
+                </Select>
               </Grid>
               <Grid item>
                 <Button color="primary" variant="contained" className={classes.button} onClick={this.onClick}>
