@@ -23,9 +23,11 @@ const styles = theme => ({
     flex: 1,
   },
   button:{
-    borderRadius: 1,
-    color: "#FFFFFF",
     backgroundColor:"#00838c",
+    '&:hover': {
+      backgroundColor: "#01777F",
+    },
+    borderRadius: 1,
     marginTop: 15,
     width:150,
   },
@@ -33,8 +35,7 @@ const styles = theme => ({
     padding: 10,
   },
   inputButton: {
-    display: 'none',
-    color: "#FFF",
+    display: 'none'
   },
 });
 
@@ -111,11 +112,11 @@ class Filter extends Component {
                 </TextField>
               </Grid>
               <Grid item>
-              <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
-                <Button htmlFor="icon-button-file" variant="contained" className={classes.button} onClick={this.onClick}>
+                <Button color="primary" variant="contained" className={classes.button} onClick={this.onClick}>
                   <Icon className={classes.rightIcon}>save_alt</Icon>
                   import
                 </Button>
+                <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
             </Grid>
             <Grid item md>
               <Search
