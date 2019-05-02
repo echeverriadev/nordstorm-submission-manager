@@ -112,7 +112,7 @@ class AddCell extends React.Component {
   };
 
   render() {
-    const { classes, item, onChange, onSubmit } = this.props;
+    const { classes, item, onChange, onSubmit, cycles } = this.props;
 
     return (
       <Card onKeyPress={e => onSubmit(e.key)} className={classes.card}>
@@ -149,13 +149,14 @@ class AddCell extends React.Component {
                         name="Priority"
                         displayEmpty
                       >
-                        <MenuItem value="" disabled>
+                        <MenuItem value={0} disabled>
                           Priority
                         </MenuItem>
-                        <MenuItem value={0}>Demo 0</MenuItem>
-                        <MenuItem value={1}>Demo 1</MenuItem>
-                        <MenuItem value={2}>Demo 2</MenuItem>
-                        <MenuItem value={3}>Demo 3</MenuItem>
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                        <MenuItem value={4}>4</MenuItem>
+                        <MenuItem value={5}>5</MenuItem>
                       </Select>
                     </Grid>
                     <Grid item md={1}>
@@ -244,12 +245,16 @@ class AddCell extends React.Component {
                           name="in_stock_week"
                           displayEmpty
                         >
-                          <MenuItem value="" disabled>
-                            in Stock Week
+                          <MenuItem value={""} disabled>
+                            In Stock Week
                           </MenuItem>
-                          <MenuItem value={1}>Demo 1</MenuItem>
-                          <MenuItem value={2}>Demo 2</MenuItem>
-                          <MenuItem value={3}>Demo 3</MenuItem>
+                          <MenuItem value={0}>0</MenuItem>
+                          <MenuItem value={1}>1</MenuItem>
+                          <MenuItem value={2}>2</MenuItem>
+                          <MenuItem value={3}>3</MenuItem>
+                          <MenuItem value={4}>4</MenuItem>
+                          <MenuItem value={5}>5</MenuItem>
+                          <MenuItem value={6}>6</MenuItem>
                       </Select>
                     </Grid>
                     <Grid item md={1}>
@@ -311,7 +316,7 @@ class AddCell extends React.Component {
 
           </CardContent>
           <Collapse className={classes.collapse} in={this.state.expanded} timeout="auto" unmountOnExit>
-            <AddAccordion item={item} onChange={onChange}/>
+            <AddAccordion item={item} onChange={onChange} cycles={cycles}/>
           </Collapse>
       </Card>
     );

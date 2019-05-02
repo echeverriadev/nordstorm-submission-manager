@@ -3,7 +3,13 @@ import { withStyles } from '@material-ui/core/styles';
 import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
 import TabMenu from './TabMenu';
 import Layaout from './Layaout';
-import { getItemsApi, patchItemApi, storeItemApi } from '../../../api';
+import {
+  getItemsApi,
+  patchItemApi,
+  storeItemApi,
+  getCyclesApi,
+  getDivisionsApi
+} from '../../../api';
 
 const styles = theme => ({
   root: {
@@ -18,6 +24,8 @@ class Dashboard extends Component {
 
         this.state = {
             value: 0,
+            cycles: [],
+            divisions: [],
             rows: [],
             addItem: {
               is_priority: 0,
@@ -56,6 +64,11 @@ class Dashboard extends Component {
             cannedFilters: []
         };
 
+    }
+
+    componentWillMount = () => {
+      this.fetchCyclesApi()
+      this.fetchDivisionsApi()
     }
 
     handleTabChange = (event, value) => {
@@ -198,10 +211,26 @@ class Dashboard extends Component {
       return parsedFilters
     }
 
+    fetchCyclesApi = () => {
+      getCyclesApi().then(response => {
+        if (response.status === 200)
+          this.setState({cycles: response.data})
+      }, err => {
+        console.log(err)
+      })
+    }
 
+    fetchDivisionsApi = () => {
+      getDivisionsApi().then(response => {
+        if (response.status === 200)
+          this.setState({divisions: response.data})
+      }, err => {
+        console.log(err)
+      })
+    }
 
     render() {
-        const { value, rows, addItem, total, offset, filter, cannedFilters } = this.state;
+        const { value, cycles, divisions, rows, addItem, total, offset, filter, cannedFilters } = this.state;
         const { classes } = this.props;
 
         return (
@@ -211,6 +240,8 @@ class Dashboard extends Component {
                 {value === 0 &&
                   <Layaout
                     items={rows}
+                    cycles={cycles}
+                    divisions={divisions}
                     addItem={addItem}
                     total={total}
                     offset={offset}

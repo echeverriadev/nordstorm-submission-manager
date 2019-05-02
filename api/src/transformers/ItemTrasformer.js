@@ -15,7 +15,7 @@ const format = (data) => {
 
         //EXTRA TODO: Borrar
         category: ['category: example1', 'category: example2'],
-        cycle: 1,
+        cycle: -1,
         annSalePrice: 123,
         productPriority: "normal",
         availableInCanada: true,

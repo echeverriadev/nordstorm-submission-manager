@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Grid, TextField, MenuItem} from '@material-ui/core';
-import {getCyclesApi, getDivisionsApi} from '../../../api';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
 import Search from './Search'
@@ -41,34 +40,6 @@ const styles = theme => ({
 
 class Filter extends Component {
 
-    state = {
-        cycles: [],
-        divisions: []
-    }
-
-    componentWillMount = () => {
-        this.fetchCyclesApi()
-        this.fetchDivisionsApi()
-    }
-
-    fetchCyclesApi = () => {
-      getCyclesApi().then(response => {
-        if (response.status === 200)
-          this.setState({cycles: response.data})
-      }, err => {
-        console.log(err)
-      })
-    }
-
-    fetchDivisionsApi = () => {
-      getDivisionsApi().then(response => {
-        if (response.status === 200)
-          this.setState({divisions: response.data})
-      }, err => {
-        console.log(err)
-      })
-    }
-
     onClick = () => {
       this.refs.buttonFile.click();
     }
@@ -100,8 +71,7 @@ class Filter extends Component {
     }
 
     render = () => {
-        const { cycles, divisions } = this.state
-        const { classes, filter, onChangeFilter,
+        const { classes, cycles, divisions, filter, onChangeFilter,
         cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = this.props
 
       return (

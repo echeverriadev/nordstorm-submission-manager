@@ -36,12 +36,14 @@ const styles = theme => ({
 const Layaout = (props) => {
   const { classes, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
     total, offset, filter, onChangePagination,
-    cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = props;
+    cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions } = props;
 
   return (
     <div className={classes.root}>
       <div className={classes.head}>
         <Filter
+          cycles={cycles}
+          divisions={divisions}
           filter={filter}
           cannedFilters={cannedFilters}
           onChangeFilter={onChangeFilter}
@@ -65,13 +67,13 @@ const Layaout = (props) => {
         <Grid>
               {
                 items.map((item, index) => (
-                  <CardCell key={index} index={index} item={item} onChange={onChange}/>
+                  <CardCell key={index} index={index} item={item} onChange={onChange} cycles={cycles}/>
                 ))
               }
               {
                 (filter.cycleId === "" || filter.divisionId === "") ?
                 null:
-                <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit}/>
+                <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit} cycles={cycles}/>
               }
             <Pagination
             limit={10}

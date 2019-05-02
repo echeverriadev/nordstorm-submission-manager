@@ -57,7 +57,7 @@ const styles = theme => ({
 
 
 const Accordion = (props) => {
-  const { classes, item, index, onChange } = props;
+  const { classes, item, index, onChange, cycles } = props;
 
   return (
     <CardContent className={classes.root}>
@@ -75,12 +75,16 @@ const Accordion = (props) => {
                             value={item.cycle}
                             onChange={e => onChange(index, "cycle", e.target.value)}
                         >
-                            <MenuItem value="" disabled>
+                            <MenuItem value={-1} disabled>
                                 Cycles
                             </MenuItem>
-                            <MenuItem value={1}>Demo 1</MenuItem>
-                            <MenuItem value={2}>Demo 2</MenuItem>
-                            <MenuItem value={3}>Demo 3</MenuItem>
+                            {
+                                cycles.map(option => (
+                                    <MenuItem key={option.id} value={option.id}>
+                                    {option.name}
+                                    </MenuItem>
+                                ))
+                            }
                         </Select>
                     </Grid>
                     <Grid item md={3}>
