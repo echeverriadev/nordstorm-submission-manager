@@ -12,8 +12,9 @@ const styles = theme => ({
     marginLeft: 30,
   },
   selectFilter: {
+    marginTop: 10,
     width: 150,
-    marginRight: '30px'
+    marginRight: 30
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
@@ -28,7 +29,7 @@ const styles = theme => ({
       backgroundColor: "#01777F",
     },
     borderRadius: 1,
-    marginTop: 15,
+    marginTop: 10,
     width:150,
   },
   iconButton: {
@@ -83,7 +84,6 @@ class Filter extends Component {
                   id="cycleId"
                   name="cycleId"
                   select
-                  label="Cycle / Month"
                   value={filter.cycleId}
                   onChange={onChangeFilter}
                 >
@@ -100,7 +100,6 @@ class Filter extends Component {
                   id="divisionId"
                   name="divisionId"
                   select
-                  label="Division"
                   value={filter.divisionId}
                   onChange={onChangeFilter}
                 >
