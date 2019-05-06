@@ -24,8 +24,8 @@ class ItemController {
         const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
         let conditions = []
         let values = []
-
-        /* DISABLED AT THE MOMENT, THE FIELDS ARE EMPTY ON DB
+        
+        /* AHORA ESTAN VACIOS LOS CAMPOS PERO AQUI VA*/
         if(filter.hasOwnProperty('divisionId')){
             conditions.push("_fk_division = ?")
             values.push(filter.divisionId)
@@ -33,7 +33,9 @@ class ItemController {
         if(filter.hasOwnProperty('cycleId')){
             conditions.push("_fk_cycle = ?")
             values.push(filter.cycleId)
-        }*/
+        }
+
+        /* HASTA AQUI*/
 
         if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
