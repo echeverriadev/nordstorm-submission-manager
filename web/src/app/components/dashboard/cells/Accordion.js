@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import Typography from '@material-ui/core/Typography';
+import { onlyNumber } from '../../../../helpers/validation';
 
 const styles = theme => ({
   root: {
@@ -93,7 +94,7 @@ const Accordion = (props) => {
                             label="Ann. sale price"
                             margin="none"
                             value={item.retail_price}
-                            onChange={e => onChange(index, "retail_price", e.target.value)}
+                            onChange={e => onChange(index, "retail_price", onlyNumber(e.target.value))}
                         />
                     </Grid>
                     <Grid item md={3}>
@@ -130,7 +131,7 @@ const Accordion = (props) => {
                             label="Canada Price"
                             margin="none"
                             value={item.price_cad}
-                            onChange={e => onChange(index, "price_cad", e.target.value)}
+                            onChange={e => onChange(index, "price_cad", onlyNumber(e.target.value))}
                         />
                     </Grid>
                     <Grid item md={3}>

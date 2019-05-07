@@ -18,6 +18,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import AddAccordion from './AddAccordion';
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
+import { onlyNumber } from '../../../../helpers/validation';
 
 const styles = theme => ({
   card: {
@@ -264,7 +265,7 @@ class AddCell extends React.Component {
                         className={classes.textField}
                         margin="normal"
                         value={item.sale_price}
-                        onChange={e => onChange("sale_price", e.target.value)}
+                        onChange={e => onChange("sale_price", onlyNumber(e.target.value))}
                       />
                     </Grid>
                     <Grid item md={1}>

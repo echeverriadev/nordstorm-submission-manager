@@ -19,6 +19,7 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 import { uploadImageApi } from '../../../../api';
+import { onlyNumber } from '../../../../helpers/validation';
 
 import ItemLogModal from '../ItemLogModal';
 
@@ -287,7 +288,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.sale_price}
-                      onChange={e => onChange(index, "sale_price", e.target.value)}
+                      onChange={e => onChange(index, "sale_price", onlyNumber(e.target.value))}
                     />
                   </Grid>
                   <Grid item md={1}>
