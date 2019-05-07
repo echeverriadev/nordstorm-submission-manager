@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {Grid, TextField, MenuItem} from '@material-ui/core';
+import {Grid, MenuItem} from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import Search from './Search'
+import { uploadExcelApi } from '../../../api';
 
 const styles = theme => ({
   root: {
@@ -53,16 +54,11 @@ class Filter extends Component {
       if (['xls', 'xlsx'].indexOf(file.name.split('.')[file.name.split('.').length-1]) === -1) {
         alert('Invalid format, use xls or xlsx instead');
       }else{
+        
         const formData = new FormData()
 
         formData.append('file', file)
-
-        fetch(`${process.env.REACT_APP_API_URL}/items/import`, {
-          method: 'POST',
-          body: formData
-        })
-        .then(res => res.json())
-        .then(res => {
+        uploadExcelApi(formData).then(res => {
           if(res.code === 200){
             alert('Items imported successfully')
           }else{
@@ -119,10 +115,11 @@ class Filter extends Component {
                 </Select>
               </Grid>
               <Grid item>
+                {filter.cycleId !== "" && filter.divisionId !== "" && 
                 <Button color="primary" variant="contained" className={classes.button} onClick={this.onClick}>
                   <Icon className={classes.rightIcon}>save_alt</Icon>
                   import
-                </Button>
+                </Button>}
                 <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
             </Grid>
             <Grid item md>

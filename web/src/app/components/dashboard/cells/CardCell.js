@@ -18,6 +18,10 @@ import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
+import { uploadImageApi } from '../../../../api';
+
+import ItemLogModal from '../ItemLogModal';
+
 
 const styles = theme => ({
   card: {
@@ -90,17 +94,11 @@ class CardCell extends React.Component {
       formData.append('file', file);
 
       this.setState({preview: URL.createObjectURL(files[0])});
-
-      fetch(`${process.env.REACT_APP_API_URL}/items/upload`, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(res => {
-        if(res.code === 200){
+      uploadImageApi(formData).then().then(res => {
+        if(res.code === 200)
           this.props.onChange(this.props.index, "image", res.data.url);
-        }else{
-          console.error(res)
+        else{
+            console.error(res)
             alert(res.message || 'oops a problem has occurred')
         }
       })
@@ -132,12 +130,16 @@ class CardCell extends React.Component {
                       />
                     )
                     :
-                    (<img
+                    (
+                    <img
                       className={classes.img}
-                      alt="complex"
+                      alt="complex1"
                       src={item.image}
                       onClick={() => this.setState({ isOpen: true })}
-                    />)
+                    />
+                    // <MyModal/>
+                    // <SimpleModal/>
+                    )
                   :
                   <Dropzone
                     onDrop={this.onDrop}
@@ -145,7 +147,7 @@ class CardCell extends React.Component {
                     {({getRootProps, getInputProps}) => (
                       <section>
                         <div {...getRootProps()}>
-                          <input {...getInputProps()} />
+                          <input {...getInputProps()} />                          
                           <img
                             className={classes.img}
                             alt="complex"
@@ -297,6 +299,7 @@ class CardCell extends React.Component {
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
+                            <ItemLogModal />
                             <MenuItem onClick={popupState.close}>Delete</MenuItem>
                           </Menu>
                         </React.Fragment>
