@@ -19,6 +19,9 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 
+import ItemLogModal from '../ItemLogModal';
+
+
 const styles = theme => ({
   card: {
     width: "100%"
@@ -132,12 +135,16 @@ class CardCell extends React.Component {
                       />
                     )
                     :
-                    (<img
+                    (
+                    <img
                       className={classes.img}
-                      alt="complex"
+                      alt="complex1"
                       src={item.image}
                       onClick={() => this.setState({ isOpen: true })}
-                    />)
+                    />
+                    // <MyModal/>
+                    // <SimpleModal/>
+                    )
                   :
                   <Dropzone
                     onDrop={this.onDrop}
@@ -145,7 +152,7 @@ class CardCell extends React.Component {
                     {({getRootProps, getInputProps}) => (
                       <section>
                         <div {...getRootProps()}>
-                          <input {...getInputProps()} />
+                          <input {...getInputProps()} />                          
                           <img
                             className={classes.img}
                             alt="complex"
@@ -297,6 +304,7 @@ class CardCell extends React.Component {
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
+                            <ItemLogModal />
                             <MenuItem onClick={popupState.close}>Delete</MenuItem>
                           </Menu>
                         </React.Fragment>
