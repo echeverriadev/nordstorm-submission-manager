@@ -195,7 +195,7 @@ class ItemController {
             });
         }
 
-        const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
+        const url = `${process.env.API_URL}:${process.env.PORT}/uploads/images/${req.file.filename}`
 
         return res.json({
             code: 200,
