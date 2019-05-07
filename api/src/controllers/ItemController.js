@@ -18,7 +18,7 @@ class ItemController {
         this.buildOrder = this.buildOrder.bind(this);
         this.escapeSansQuotes = this.escapeSansQuotes.bind(this);
     }
-    
+
     escapeSansQuotes(criterion) {
       return this.connection.escape(criterion).match(/^'(\w+)'$/)[1];
     }
@@ -30,7 +30,7 @@ class ItemController {
         const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
         let conditions = []
         let values = []
-        
+
         /* AHORA ESTAN VACIOS LOS CAMPOS PERO AQUI VA*/
         /*if(filter.hasOwnProperty('divisionId')){
             conditions.push("_fk_division = ?")
@@ -70,7 +70,7 @@ class ItemController {
             values
         }
     }
-    
+
     buildOrder(query){
         let order = []
         let orderByEscaping = []
@@ -79,8 +79,8 @@ class ItemController {
         }
 		for(let i = 0; i < order.length -1 ; i+=2)
 		    orderByEscaping.push(this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
-		
-		
+
+
 		return orderByEscaping.length ? "ORDER BY " + orderByEscaping.join(', ') : ''
     }
 
@@ -215,7 +215,7 @@ class ItemController {
             });
         }
 
-        const url = `${process.env.API_URL}:${process.env.PORT}/uploads/images/${req.file.filename}`
+        const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
 
         return res.json({
             code: 200,
