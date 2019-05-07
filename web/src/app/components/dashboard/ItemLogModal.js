@@ -47,7 +47,7 @@ class ItemLogModal extends React.Component {
 
     return (
       <div>
-        <MenuItem onClick={this.handleOpen}>Item Log</MenuItem>
+        <MenuItem onClick={this.handleOpen}>Log</MenuItem>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
