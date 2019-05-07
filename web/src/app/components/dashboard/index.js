@@ -18,6 +18,34 @@ const styles = theme => ({
   },
 });
 
+const initialNewItem = {
+  is_priority: 0,
+  department_number: "",
+  vpn: "",
+  brand: "",
+  color: "",
+  size: "",
+  description: "",
+  image: null,
+  style_group_number: "",
+  in_stock_week: "",
+  price: "",
+  //EXTRA
+  category: [],
+  cycle: 1,
+  annSalePrice: "",
+  productPriority: "",
+  availableInCanada: false,
+  canadaPrice: "",
+  countryOrigin: "",
+  specifyCountry: "",
+  requestExtension: false,
+  extensionReason: "",
+  requestCancelation: false,
+  cancelationReason: "",
+  departament: ""
+}
+
 class Dashboard extends Component {
     constructor(props){
         super(props);
@@ -27,33 +55,7 @@ class Dashboard extends Component {
             cycles: [],
             divisions: [],
             rows: [],
-            addItem: {
-              is_priority: 0,
-              department_number: "",
-              vpn: "",
-              brand: "",
-              color: "",
-              size: "",
-              description: "",
-              image: null,
-              style_group_number: "",
-              in_stock_week: "",
-              price: "",
-              //EXTRA
-              category: [],
-              cycle: 1,
-              annSalePrice: "",
-              productPriority: "",
-              availableInCanada: false,
-              canadaPrice: "",
-              countryOrigin: "",
-              specifyCountry: "",
-              requestExtension: false,
-              extensionReason: "",
-              requestCancelation: false,
-              cancelationReason: "",
-              departament: ""
-            },
+            addItem: initialNewItem,
             total: 0,
             offset: 0,
             filter: {
@@ -61,7 +63,11 @@ class Dashboard extends Component {
               divisionId: "",
               search: "",
             },
-            cannedFilters: []
+            cannedFilters: [],
+            order: {
+              field: '',
+              criterion: ''
+            }
         };
 
     }
@@ -89,35 +95,8 @@ class Dashboard extends Component {
         storeItemApi(this.state.addItem).then(response => {
           if(response.code === 200){
             this.setState({
-              addItem: {
-                is_priority: 0,
-                department_number: "",
-                vpn: "",
-                brand: "",
-                color: "",
-                size: "",
-                description: "",
-                image: null,
-                style_group_number: "",
-                in_stock_week: "",
-                price: "",
-                //EXTRA
-                category: [],
-                cycle: 1,
-                annSalePrice: "",
-                productPriority: "",
-                availableInCanada: false,
-                canadaPrice: "",
-                countryOrigin: "",
-                specifyCountry: "",
-                requestExtension: false,
-                extensionReason: "",
-                requestCancelation: false,
-                cancelationReason: "",
-                departament: ""
-              }
+              addItem: initialNewItem
             });
-
             alert(response.message);
           }else{
             console.error(response.message)
@@ -128,7 +107,7 @@ class Dashboard extends Component {
         } )
       }
     }
-
+    
     onChange = (index, key, value) => {
         const rows = this.state.rows
         const row = rows[index]
@@ -158,6 +137,17 @@ class Dashboard extends Component {
         filter
       }, this.fetchItemsApi)
     }
+    
+    changeOrder = (fieldClicked) => {
+      const { order } = this.state
+      if(order.field === fieldClicked)
+        order.criterion = order.criterion === "ASC" ? "DESC" : "ASC"
+      else{
+        order.criterion = "ASC"
+        order.field = fieldClicked
+      }
+      this.setState({order}, this.fetchItemsApi)
+    }
 
     addCannedFilter = (value) => {
       let cannedFilters = [...this.state.cannedFilters]
@@ -176,8 +166,12 @@ class Dashboard extends Component {
     }
 
     fetchItemsApi = () => {
-      const {offset, filter} = this.state
+      const {offset, filter, order} = this.state
       const {divisionId, cycleId} = filter
+      let orderString = ""
+      if(order.field && order.criterion) //If they aren't empty
+        orderString = Object.values(order).toString()
+      console.log(orderString)
       if(divisionId && cycleId){
         const limit = 10
         const end = (limit - 1) + offset
@@ -186,7 +180,7 @@ class Dashboard extends Component {
           ...filter, //object
           parseCannedFilters //array of string
         }
-        getItemsApi(offset, end, parsedFilter).then(response => {
+        getItemsApi(offset, end, parsedFilter, orderString).then(response => {
           console.log(response)
           if (response.status === 200)
             this.setState({
@@ -230,7 +224,8 @@ class Dashboard extends Component {
     }
 
     render() {
-        const { value, cycles, divisions, rows, addItem, total, offset, filter, cannedFilters } = this.state;
+        const { value, cycles, divisions, rows, addItem, 
+              total, offset, filter, cannedFilters, order } = this.state;
         const { classes } = this.props;
 
         return (
@@ -247,11 +242,13 @@ class Dashboard extends Component {
                     offset={offset}
                     cannedFilters={cannedFilters}
                     filter={filter}
+                    order={order}
                     onChange={this.onChange}
                     onAddChange={this.onAddChange}
                     onSubmit={this.onSubmit}
                     onChangePagination = {this.changePagination}
                     onChangeFilter = {this.changeFilter}
+                    onChangeOrder = {this.changeOrder}
                     onAddCannedFilter = {this.addCannedFilter}
                     onRemoveCannedFilter = {this.removeCannedFilter}
                   />

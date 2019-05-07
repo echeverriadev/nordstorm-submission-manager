@@ -15,6 +15,12 @@ class ItemController {
         this.import = this.import.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
         this.buildWhere = this.buildWhere.bind(this);
+        this.buildOrder = this.buildOrder.bind(this);
+        this.escapeSansQuotes = this.escapeSansQuotes.bind(this);
+    }
+    
+    escapeSansQuotes(criterion) {
+      return this.connection.escape(criterion).match(/^'(\w+)'$/)[1];
     }
 
 
@@ -26,14 +32,14 @@ class ItemController {
         let values = []
         
         /* AHORA ESTAN VACIOS LOS CAMPOS PERO AQUI VA*/
-        if(filter.hasOwnProperty('divisionId')){
+        /*if(filter.hasOwnProperty('divisionId')){
             conditions.push("_fk_division = ?")
             values.push(filter.divisionId)
         }
         if(filter.hasOwnProperty('cycleId')){
             conditions.push("_fk_cycle = ?")
             values.push(filter.cycleId)
-        }
+        }*/
 
         /* HASTA AQUI*/
 
@@ -63,13 +69,24 @@ class ItemController {
             where: conditions.length ? conditions.join(' AND ') : 1,
             values
         }
-
-
+    }
+    
+    buildOrder(query){
+        let order = []
+        let orderByEscaping = []
+        if(query.hasOwnProperty('order') && query.order.length){
+			order = query.order.split(','); //[field1, ASC, field2, DESC...]
+        }
+		for(let i = 0; i < order.length -1 ; i+=2)
+		    orderByEscaping.push(this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
+		
+		
+		return orderByEscaping.length ? "ORDER BY " + orderByEscaping.join(', ') : ''
     }
 
     async index(req, res, next) {
         let { filter } = req.query
-        const range = req.query.range || '[0,9]'
+        const range = req.query.range || "[0,9]"
         const [start, end] = JSON.parse(range)
         try {
             filter = JSON.parse(filter)
@@ -78,11 +95,13 @@ class ItemController {
             filter = {}
         }
         const { where, values } = this.buildWhere(filter)
+        const orderBy = this.buildOrder(req.query)
+        console.log(orderBy)
         const limit = end - start + 1
         let sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
         sqlCount = mysql.format(sqlCount, values);
         const allValues = [...values, start, limit]
-        let sqlItems = `SELECT * FROM item_editorial WHERE ${where} LIMIT ?, ?`
+        let sqlItems = `SELECT * FROM item_editorial WHERE ${where} ${orderBy} LIMIT ?, ?`
         sqlItems = mysql.format(sqlItems, allValues);
         console.log(sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
@@ -130,6 +149,7 @@ class ItemController {
 
     async import(req, res, next){
         let exceltojson;
+        console.log(req.file)
 
         if (!req.file) {
             return res.json({

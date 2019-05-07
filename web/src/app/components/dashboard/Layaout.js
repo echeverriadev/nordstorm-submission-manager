@@ -35,7 +35,7 @@ const styles = theme => ({
 
 const Layaout = (props) => {
   const { classes, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
-    total, offset, filter, onChangePagination,
+    total, offset, filter, onChangePagination, order, onChangeOrder,
     cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions } = props;
 
   return (
@@ -60,7 +60,10 @@ const Layaout = (props) => {
               className={classes.chip}
             />
           )}
-          <Head/>
+          <Head
+            order={order}
+            onChangeOrder={onChangeOrder}
+          />
         </Grid>
       </div>
       <div className={classes.body}>
