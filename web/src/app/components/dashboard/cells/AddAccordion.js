@@ -56,7 +56,7 @@ const styles = theme => ({
 });
 
 
-const AddAccordion = (props) => {
+const Accordion = (props) => {
   const { classes, item, onChange, cycles } = props;
 
   return (
@@ -72,10 +72,10 @@ const AddAccordion = (props) => {
                         <Select
                             className={classes.select}
                             name="Cycles"
-                            value={item.cycle}
-                            onChange={e => onChange("cycle", e.target.value)}
+                            value={item._fk_cycle}
+                            onChange={e => onChange("_fk_cycle", e.target.value)}
                         >
-                            <MenuItem value="" disabled>
+                            <MenuItem value={-1} disabled>
                                 Cycles
                             </MenuItem>
                             {
@@ -92,8 +92,8 @@ const AddAccordion = (props) => {
                             id="asp"
                             label="Ann. sale price"
                             margin="none"
-                            value={item.annSalePrice}
-                            onChange={e => onChange("annSalePrice", e.target.value)}
+                            value={item.retail_price}
+                            onChange={e => onChange("retail_price", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
@@ -101,8 +101,8 @@ const AddAccordion = (props) => {
                             id="pp"
                             label="Product Priority"
                             margin="none"
-                            value={item.productPriority}
-                            onChange={e => onChange("productPriority", e.target.value)}
+                            value={item.is_priority}
+                            onChange={e => onChange("is_priority", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -112,10 +112,10 @@ const AddAccordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.availableInCanada}
+                                    value={item.available_in_canada === 1 ? true : false}
                                     color="primary"
-                                    checked={item.availableInCanada}
-                                    onChange={e => onChange("availableInCanada", e.target.checked)}
+                                    checked={item.available_in_canada === 1 ? true : false}
+                                    onChange={e => onChange("available_in_canada", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -126,31 +126,29 @@ const AddAccordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="canadaprice"
-                            disabled={!item.availableInCanada}
+                            disabled={!(item.available_in_canada === 1)}
                             label="Canada Price"
                             margin="none"
-                            value={item.canadaPrice}
-                            onChange={e => onChange("canadaPrice", e.target.value)}
+                            value={item.price_cad}
+                            onChange={e => onChange("price_cad", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
                         <TextField
                             id="countryorigin"
-                            disabled={!item.availableInCanada}
                             label="Country of origin"
                             margin="none"
-                            value={item.countryOrigin}
-                            onChange={e => onChange("countryOrigin", e.target.value)}
+                            value={item.country_of_origin}
+                            onChange={e => onChange("country_of_origin", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
                         <TextField
                             id="specifycountry"
-                            disabled={!item.availableInCanada}
                             label="Specify Country"
                             margin="none"
-                            value={item.specifyCountry}
-                            onChange={e => onChange("specifyCountry", e.target.value)}
+                            value={item.country_of_origin_other}
+                            onChange={e => onChange("country_of_origin_other", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -160,10 +158,10 @@ const AddAccordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.requestExtension}
+                                    value={item.request_extension === 1 ? true : false}
                                     color="primary"
-                                    checked={item.requestExtension}
-                                    onChange={e => onChange("requestExtension", e.target.checked)}
+                                    checked={item.request_extension === 1 ? true : false}
+                                    onChange={e => onChange("request_extension", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -174,11 +172,11 @@ const AddAccordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="extensionreason"
-                            disabled={!item.requestExtension}
+                            disabled={!(item.request_extension === 1)}
                             label="Extension Reason"
                             margin="none"
-                            value={item.extensionReason}
-                            onChange={e => onChange("extensionReason", e.target.value)}
+                            value={item.request_extension_note}
+                            onChange={e => onChange("request_extension_note", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -188,10 +186,10 @@ const AddAccordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.requestCancelation}
+                                    value={item.request_cancellation === 1 ? true : false}
                                     color="primary"
-                                    checked={item.requestCancelation}
-                                    onChange={e => onChange("requestCancelation", e.target.checked)}
+                                    checked={item.request_cancellation === 1 ? true : false}
+                                    onChange={e => onChange("request_cancellation", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -202,11 +200,11 @@ const AddAccordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="cancelationreason"
-                            disabled={!item.requestCancelation}
+                            disabled={!(item.request_cancellation === 1)}
                             label="Cancelation Reason"
                             margin="none"
-                            value={item.cancelationReason}
-                            onChange={e => onChange("cancelationReason", e.target.value)}
+                            value={item.request_cancellation_notes}
+                            onChange={e => onChange("request_cancellation_notes", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -251,8 +249,8 @@ const AddAccordion = (props) => {
   );
 }
 
-AddAccordion.propTypes = {
+Accordion.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AddAccordion);
+export default withStyles(styles)(Accordion);

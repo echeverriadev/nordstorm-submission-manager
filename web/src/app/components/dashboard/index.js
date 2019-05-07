@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 const initialNewItem = {
-  is_priority: 0,
+  nmg_priority: 0,
   department_number: "",
   vpn: "",
   brand: "",
@@ -29,21 +29,21 @@ const initialNewItem = {
   image: null,
   style_group_number: "",
   in_stock_week: "",
-  price: "",
+  sale_price: "",
   //EXTRA
   category: [],
-  cycle: 1,
-  annSalePrice: "",
-  productPriority: "",
-  availableInCanada: false,
-  canadaPrice: "",
-  countryOrigin: "",
-  specifyCountry: "",
-  requestExtension: false,
-  extensionReason: "",
-  requestCancelation: false,
-  cancelationReason: "",
-  departament: ""
+  _fk_cycle: null,
+  retail_price: 0,
+  is_priority: null,
+  available_in_canada: null,
+  price_cad: 0,
+  country_of_origin: "",
+  country_of_origin_other: "",
+  request_extension: null,
+  request_extension_note: "",
+  request_cancellation: null,
+  request_cancellation_notes: "",
+  departament_number: ""
 }
 
 class Dashboard extends Component {
@@ -107,7 +107,7 @@ class Dashboard extends Component {
         } )
       }
     }
-    
+
     onChange = (index, key, value) => {
         const rows = this.state.rows
         const row = rows[index]
@@ -137,7 +137,7 @@ class Dashboard extends Component {
         filter
       }, this.fetchItemsApi)
     }
-    
+
     changeOrder = (fieldClicked) => {
       const { order } = this.state
       if(order.field === fieldClicked)
@@ -224,7 +224,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const { value, cycles, divisions, rows, addItem, 
+        const { value, cycles, divisions, rows, addItem,
               total, offset, filter, cannedFilters, order } = this.state;
         const { classes } = this.props;
 

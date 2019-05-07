@@ -72,8 +72,8 @@ const Accordion = (props) => {
                         <Select
                             className={classes.select}
                             name="Cycles"
-                            value={item.cycle}
-                            onChange={e => onChange(index, "cycle", e.target.value)}
+                            value={item._fk_cycle}
+                            onChange={e => onChange(index, "_fk_cycle", e.target.value)}
                         >
                             <MenuItem value={-1} disabled>
                                 Cycles
@@ -92,8 +92,8 @@ const Accordion = (props) => {
                             id="asp"
                             label="Ann. sale price"
                             margin="none"
-                            value={item.annSalePrice}
-                            onChange={e => onChange(index, "annSalePrice", e.target.value)}
+                            value={item.retail_price}
+                            onChange={e => onChange(index, "retail_price", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
@@ -101,8 +101,8 @@ const Accordion = (props) => {
                             id="pp"
                             label="Product Priority"
                             margin="none"
-                            value={item.productPriority}
-                            onChange={e => onChange(index, "productPriority", e.target.value)}
+                            value={item.is_priority}
+                            onChange={e => onChange(index, "is_priority", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -112,10 +112,10 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.availableInCanada}
+                                    value={item.available_in_canada === 1 ? true : false}
                                     color="primary"
-                                    checked={item.availableInCanada}
-                                    onChange={e => onChange(index, "availableInCanada", e.target.checked)}
+                                    checked={item.available_in_canada === 1 ? true : false}
+                                    onChange={e => onChange(index, "available_in_canada", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -126,31 +126,29 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="canadaprice"
-                            disabled={!item.availableInCanada}
+                            disabled={!(item.available_in_canada === 1)}
                             label="Canada Price"
                             margin="none"
-                            value={item.canadaPrice}
-                            onChange={e => onChange(index, "canadaPrice", e.target.value)}
+                            value={item.price_cad}
+                            onChange={e => onChange(index, "price_cad", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
                         <TextField
                             id="countryorigin"
-                            disabled={!item.availableInCanada}
                             label="Country of origin"
                             margin="none"
-                            value={item.countryOrigin}
-                            onChange={e => onChange(index, "countryOrigin", e.target.value)}
+                            value={item.country_of_origin}
+                            onChange={e => onChange(index, "country_of_origin", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
                         <TextField
                             id="specifycountry"
-                            disabled={!item.availableInCanada}
                             label="Specify Country"
                             margin="none"
-                            value={item.specifyCountry}
-                            onChange={e => onChange(index, "specifyCountry", e.target.value)}
+                            value={item.country_of_origin_other}
+                            onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -160,10 +158,10 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.requestExtension}
+                                    value={item.request_extension === 1 ? true : false}
                                     color="primary"
-                                    checked={item.requestExtension}
-                                    onChange={e => onChange(index, "requestExtension", e.target.checked)}
+                                    checked={item.request_extension === 1 ? true : false}
+                                    onChange={e => onChange(index, "request_extension", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -174,11 +172,11 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="extensionreason"
-                            disabled={!item.requestExtension}
+                            disabled={!(item.request_extension === 1)}
                             label="Extension Reason"
                             margin="none"
-                            value={item.extensionReason}
-                            onChange={e => onChange(index, "extensionReason", e.target.value)}
+                            value={item.request_extension_note}
+                            onChange={e => onChange(index, "request_extension_note", e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -188,10 +186,10 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.requestCancelation}
+                                    value={item.request_cancellation === 1 ? true : false}
                                     color="primary"
-                                    checked={item.requestCancelation}
-                                    onChange={e => onChange(index, "requestCancelation", e.target.checked)}
+                                    checked={item.request_cancellation === 1 ? true : false}
+                                    onChange={e => onChange(index, "request_cancellation", e.target.checked ? 1 : 0)}
                                 />
                             }
                             className={classes.switch}
@@ -202,11 +200,11 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="cancelationreason"
-                            disabled={!item.requestCancelation}
+                            disabled={!(item.request_cancellation === 1)}
                             label="Cancelation Reason"
                             margin="none"
-                            value={item.cancelationReason}
-                            onChange={e => onChange(index, "cancelationReason", e.target.value)}
+                            value={item.request_cancellation_notes}
+                            onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
                         />
                     </Grid>
                 </Grid>

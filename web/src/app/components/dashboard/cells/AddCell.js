@@ -144,8 +144,8 @@ class AddCell extends React.Component {
                     <Grid item md={1}>
                       <Select
                         className={classes.select}
-                        value={item.is_priority}
-                        onChange={e => onChange("is_priority", e.target.value)}
+                        value={item.nmg_priority}
+                        onChange={e => onChange("nmg_priority", e.target.value)}
                         name="Priority"
                         displayEmpty
                       >
@@ -263,8 +263,8 @@ class AddCell extends React.Component {
                         label="Price"
                         className={classes.textField}
                         margin="normal"
-                        value={item.price}
-                        onChange={e => onChange("price", e.target.value)}
+                        value={item.sale_price}
+                        onChange={e => onChange("sale_price", e.target.value)}
                       />
                     </Grid>
                     <Grid item md={1}>

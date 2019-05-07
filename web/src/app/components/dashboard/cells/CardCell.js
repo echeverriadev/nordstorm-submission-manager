@@ -147,7 +147,7 @@ class CardCell extends React.Component {
                     {({getRootProps, getInputProps}) => (
                       <section>
                         <div {...getRootProps()}>
-                          <input {...getInputProps()} />                          
+                          <input {...getInputProps()} />
                           <img
                             className={classes.img}
                             alt="complex"
@@ -167,8 +167,8 @@ class CardCell extends React.Component {
                   <Grid item md={1}>
                     <Select
                       className={classes.select}
-                      value={item.is_priority}
-                      onChange={e => onChange(index, "is_priority", e.target.value)}
+                      value={item.nmg_priority}
+                      onChange={e => onChange(index, "nmg_priority", e.target.value)}
                       name="Priority"
                       displayEmpty
                     >
@@ -286,8 +286,8 @@ class CardCell extends React.Component {
                       label="Price"
                       className={classes.textField}
                       margin="normal"
-                      value={item.price}
-                      onChange={e => onChange(index, "price", e.target.value)}
+                      value={item.sale_price}
+                      onChange={e => onChange(index, "sale_price", e.target.value)}
                     />
                   </Grid>
                   <Grid item md={1}>

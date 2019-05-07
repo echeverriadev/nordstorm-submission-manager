@@ -120,17 +120,28 @@ class ItemController {
 
     async store(req, res, next){
         const data = {
-            'is_priority': req.body.is_priority || "",
-            'department_number': req.body.department_number || "",
-            'vpn': req.body.vpn || "",
-            'brand': req.body.brand || "",
-            'color': req.body.color || "",
-            'size': req.body.size || "",
-            'description': req.body.description || "",
-            'image': req.body.image,
-            'style_group_number': req.body.style_group_number,
-            'in_stock_week': req.body.in_stock_week,
-            'sale_price': req.body.price
+            nmg_priority: req.body.nmg_priority || "",
+            department_number: req.body.department_number || "",
+            vpn: req.body.vpn || "",
+            brand: req.body.brand || "",
+            color: req.body.color || "",
+            size: req.body.size || "",
+            description: req.body.description || "",
+            image: req.body.image || null,
+            style_group_number: req.body.style_group_number || null,
+            in_stock_week: req.body.in_stock_week || null,
+            sale_price: req.body.sale_price || 0,
+            _fk_cycle: req.body._fk_cycle || null,
+            retail_price: req.body.retail_price || 0,
+            is_priority: req.body.is_priority || null,
+            available_in_canada: req.body.available_in_canada || null,
+            price_cad: req.body.price_cad || 0,
+            country_of_origin: req.body.country_of_origin || "",
+            country_of_origin_other: req.body.country_of_origin_other || "",
+            request_extension: req.body.request_extension || null,
+            request_extension_note: req.body.request_extension_notes || "",
+            request_cancellation: req.body.request_cancellation || null,
+            request_cancellation_notes: req.body.request_cancellation_notes || ""
         }
 
         dbConnection().query('INSERT INTO item_editorial SET ?', data, function (error,        results, fields) {

@@ -2,7 +2,7 @@ const format = (data) => {
     return {
         id: data.__pk_item || null,
         image: data.image || "https://www.knittedhome.com/communities/5/004/012/872/235/images/4628207884.jpg",
-        is_priority: data.is_priority || 0,
+        nmg_priority: data.nmg_priority || 0,
         department_number: data.department_number || "",
         vpn: data.vpn || "",
         style_group_number: data.style_group_number || "",
@@ -11,22 +11,23 @@ const format = (data) => {
         size: data.size || "",
         description: data.description || "",
         in_stock_week: data.in_stock_week || "",
-        price: data.price || "",
+        sale_price: data.sale_price || "",
 
         //EXTRA TODO: Borrar
-        category: ['category: example1', 'category: example2'],
-        cycle: -1,
-        annSalePrice: 123,
-        productPriority: "normal",
-        availableInCanada: true,
-        canadaPrice: 123,
-        countryOrigin: "USA",
-        specifyCountry: "USA",
-        requestExtension: true,
-        extensionReason: "sample",
-        requestCancelation: false,
-        cancelationReason: "",
-        departament: "Via C"
+        category: [],
+
+        _fk_cycle: data._fk_cycle || null,
+        retail_price: data.retail_price || 0,
+        is_priority: data.is_priority || null,
+        available_in_canada: data.available_in_canada || null,
+        price_cad: data.price_cad || 0,
+        country_of_origin: data.country_of_origin || "",
+        country_of_origin_other: data.country_of_origin_other || "",
+        request_extension: data.request_extension || null,
+        request_extension_note: data.request_extension_notes || "",
+        request_cancellation: data.request_cancellation || null,
+        request_cancellation_notes: data.request_cancellation_notes || "",
+        departament_number: data.department_number || ""
     };
 };
 
