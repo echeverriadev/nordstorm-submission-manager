@@ -6,3 +6,4 @@ export const getItemsApi = (start, end, filter) => apiFetch(`/items?range=[${sta
 export const patchItemApi = (id, field, value) => apiFetch(`/items/${id}`,{method: 'PATCH', body:{field, value}})
 export const storeItemApi = (body) => apiFetch(`/items`,{ method: 'POST', body })
 export const uploadImageApi = (body) => apiFetch(`/items/upload`,{ method: 'POST', body, headers: {} }) //Let empty the content-type
+export const uploadExcelApi = (body) => apiFetch(`/items/import`,{ method: 'POST', body, headers: {} }) //Let empty the content-type
