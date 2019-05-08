@@ -1,11 +1,13 @@
 const ItemRouter = require('./ItemRouter');
 const DivisionRouter = require('./DivisionRouter');
 const CycleRouter = require('./CycleRouter');
+const ItemLogRouter = require('./ItemLogRouter');
 
 exports.load = (app) => {
-    app.use('/items', ItemRouter)
-    app.use('/divisions', DivisionRouter)
-    app.use('/cycles', CycleRouter)
+    app.use('/api/items', ItemRouter)
+    app.use('/api/divisions', DivisionRouter)
+    app.use('/api/cycles', CycleRouter)
+    app.use('/api/itemlogs', ItemLogRouter)
 
     return app
 };

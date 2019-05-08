@@ -17,9 +17,9 @@
 /docs/priv
 
 #public data
-/api/public
-/api/public/images
-/api/public/*
+/api/public/
+#/api/public/images
+#/api/public/*
 
 # misc
 .DS_Store
