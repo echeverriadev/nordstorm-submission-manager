@@ -39,6 +39,10 @@ const styles = theme => ({
   select: {
     width: "95%"
   },
+  selectCountry: {
+    paddingTop: 16,
+    width: "95%"
+  },
   switch: {
     fontSize: 18,
     margin: 0,
@@ -158,13 +162,21 @@ const Accordion = (props) => {
                         />
                     </Grid>
                     <Grid item md={3}>
-                        <TextField
-                            id="countryorigin"
-                            label="Country of origin"
-                            margin="none"
+                        <Select
+                            className={classes.selectCountry}
                             value={item.country_of_origin}
                             onChange={e => onChange("country_of_origin", e.target.value)}
-                        />
+                            name="Country of origin"
+                            displayEmpty
+                        >
+                            <MenuItem value={""} disabled>
+                                Country of Origin
+                            </MenuItem>
+                            <MenuItem value={"USA"}>USA</MenuItem>
+                            <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
+                            <MenuItem value={"imported of America Materials"}>imported of America Materials</MenuItem>
+                            <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
+                        </Select>
                     </Grid>
                     <Grid item md={3}>
                         <TextField
