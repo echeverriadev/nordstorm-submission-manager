@@ -287,8 +287,8 @@ class CardCell extends React.Component {
                       label="Price"
                       className={classes.textField}
                       margin="normal"
-                      value={item.sale_price}
-                      onChange={e => onChange(index, "sale_price", onlyNumber(e.target.value))}
+                      value={item.retail_price}
+                      onChange={e => onChange(index, "retail_price", onlyNumber(e.target.value))}
                     />
                   </Grid>
                   <Grid item md={1}>

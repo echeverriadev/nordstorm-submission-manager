@@ -11,11 +11,8 @@ const format = (data) => {
         size: data.size || "",
         description: data.description || "",
         in_stock_week: data.in_stock_week || "",
-        sale_price: data.sale_price || "",
-
-        //EXTRA TODO: Borrar
+        sale_price: data.sale_price || 0,
         category: [],
-
         _fk_cycle: data._fk_cycle || null,
         retail_price: data.retail_price || 0,
         is_priority: data.is_priority || null,
@@ -27,7 +24,11 @@ const format = (data) => {
         request_extension_note: data.request_extension_notes || "",
         request_cancellation: data.request_cancellation || null,
         request_cancellation_notes: data.request_cancellation_notes || "",
-        departament_number: data.department_number || ""
+        departament_number: data.department_number || "",
+        tagged_missy: data.tagged_missy || 0,
+        tagged_encore: data.tagged_encore ||0,
+        tagged_petite: data.tagged_petite || 0,
+        tagged_extended: data.tagged_extended || 0
     };
 };
 

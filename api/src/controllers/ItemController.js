@@ -141,7 +141,11 @@ class ItemController {
             request_extension: req.body.request_extension || null,
             request_extension_note: req.body.request_extension_notes || "",
             request_cancellation: req.body.request_cancellation || null,
-            request_cancellation_notes: req.body.request_cancellation_notes || ""
+            request_cancellation_notes: req.body.request_cancellation_notes || "",
+            tagged_missy: req.body.tagged_missy || 0,
+            tagged_encore: req.body.tagged_encore ||0,
+            tagged_petite: req.body.tagged_petite || 0,
+            tagged_extended: req.body.tagged_extended || 0
         }
 
         dbConnection().query('INSERT INTO item_editorial SET ?', data, function (error,        results, fields) {

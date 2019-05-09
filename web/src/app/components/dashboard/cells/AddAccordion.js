@@ -51,8 +51,31 @@ const styles = theme => ({
     width: "100%",
     textAlign: "left"
   },
-  tagItem: {
-    marginTop: theme.spacing.unit
+  tagItemOn: {
+    marginTop: theme.spacing.unit,
+    color: '#fff',
+    fontWeight: 'bold',
+    '&:hover': {
+        backgroundColor: "#00B2BD",
+    },
+    backgroundColor: '#02CDDA'
+  },
+  tagAvatarOn: {
+    color: '#fff',
+    backgroundColor: '#03858D'
+  },
+  tagItemOff: {
+    marginTop: theme.spacing.unit,
+    color: '#fff',
+    fontWeight: 'bold',
+    '&:hover': {
+        backgroundColor: "#B8B8B8",
+    },
+    backgroundColor: '#C5C5C5'
+  },
+  tagAvatarOff: {
+    color: '#fff',
+    backgroundColor: '#757575'
   }
 });
 
@@ -93,8 +116,8 @@ const Accordion = (props) => {
                             id="asp"
                             label="Ann. sale price"
                             margin="none"
-                            value={item.retail_price}
-                            onChange={e => onChange("retail_price", onlyNumber(e.target.value))}
+                            value={item.sale_price}
+                            onChange={e => onChange("sale_price", onlyNumber(e.target.value))}
                         />
                     </Grid>
                     <Grid item md={3}>
@@ -218,30 +241,86 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
                         <Typography className={classes.tagItem} variant="caption">Tags</Typography>
-                        <Chip
-                            avatar={<Avatar>C</Avatar>}
-                            label="Category"
-                            clickable
-                            className={classes.tagItem}
-                            color="primary"
-                            deleteIcon={<DoneIcon />}
-                        />
-                        <Chip
-                            avatar={<Avatar>C</Avatar>}
-                            label="Category"
-                            clickable
-                            className={classes.tagItem}
-                            color="primary"
-                            deleteIcon={<DoneIcon />}
-                        />
-                        <Chip
-                            avatar={<Avatar>C</Avatar>}
-                            label="Category"
-                            clickable
-                            className={classes.tagItem}
-                            color="primary"
-                            deleteIcon={<DoneIcon />}
-                        />
+                        {
+                            item.tagged_missy === 1 ?
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
+                                    label="Missy"
+                                    clickable
+                                    className={classes.tagItemOn}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_missy", 0)}
+                                />
+                            :
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
+                                    label="Missy"
+                                    clickable
+                                    className={classes.tagItemOff}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_missy", 1)}
+                                />
+                        }
+                        {
+                            item.tagged_encore === 1 ?
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
+                                    label="Encore"
+                                    clickable
+                                    className={classes.tagItemOn}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_encore", 0)}
+                                />
+                            :
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
+                                    label="Encore"
+                                    clickable
+                                    className={classes.tagItemOff}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_encore", 1)}
+                                />
+                        }
+                        {
+                            item.tagged_petite === 1 ?
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOn}>P</Avatar>}
+                                    label="Petite"
+                                    clickable
+                                    className={classes.tagItemOn}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_petite", 0)}
+                                />
+                            :
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOff}>P</Avatar>}
+                                    label="Petite"
+                                    clickable
+                                    className={classes.tagItemOff}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_petite", 1)}
+                                />
+                        }
+                        {
+                            item.tagged_extended === 1 ?
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
+                                    label="Extended"
+                                    clickable
+                                    className={classes.tagItemOn}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_extended", 0)}
+                                />
+                            :
+                                <Chip
+                                    avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
+                                    label="Extended"
+                                    clickable
+                                    className={classes.tagItemOff}
+                                    deleteIcon={<DoneIcon />}
+                                    onDelete={() => onChange("tagged_extended", 1)}
+                                />
+                        }
                     </Grid>
                 </Grid>
             </Grid>

@@ -43,7 +43,11 @@ const initialNewItem = {
   request_extension_note: "",
   request_cancellation: null,
   request_cancellation_notes: "",
-  departament_number: ""
+  departament_number: "",
+  tagged_missy: 0,
+  tagged_encore: 0,
+  tagged_petite: 0,
+  tagged_extended: 0
 }
 
 class Dashboard extends Component {

@@ -90,7 +90,7 @@ class AddCell extends React.Component {
 
       this.setState({preview: URL.createObjectURL(files[0])});
 
-      fetch(`${process.env.REACT_APP_API_URL}/items/upload`, {
+      fetch(`${process.env.REACT_APP_API_URL}/api/items/upload`, {
         method: 'POST',
         body: formData
       })
@@ -264,8 +264,8 @@ class AddCell extends React.Component {
                         label="Price"
                         className={classes.textField}
                         margin="normal"
-                        value={item.sale_price}
-                        onChange={e => onChange("sale_price", onlyNumber(e.target.value))}
+                        value={item.retail_price}
+                        onChange={e => onChange("retail_price", onlyNumber(e.target.value))}
                       />
                     </Grid>
                     <Grid item md={1}>
