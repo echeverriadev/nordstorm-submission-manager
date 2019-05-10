@@ -14,7 +14,8 @@ const styles = theme => ({
   tabRoot: {
     textTransform: 'initial',
     minWidth: 72,
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: '500',
+    fontSize: '13.9px',
     marginRight: theme.spacing.unit * 4,
     fontFamily: [
       '-apple-system',
