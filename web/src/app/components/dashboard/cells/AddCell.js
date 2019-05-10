@@ -7,17 +7,15 @@ import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import AddAccordion from './AddAccordion';
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
+import { uploadImageApi } from '../../../../api';
 
 const styles = theme => ({
   card: {
@@ -88,22 +86,28 @@ class AddCell extends React.Component {
       formData.append('file', file);
 
       this.setState({preview: URL.createObjectURL(files[0])});
-
-      fetch(`${process.env.REACT_APP_API_URL}/items/upload`, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(res => {
-        if(res.code === 200){
+      
+      uploadImageApi(formData).then().then(res => {
+        if(res.code === 200)
           this.props.onChange("image", res.data.url);
-        }else{
-          console.error(res)
+        else{
+            console.error(res)
             alert(res.message || 'oops a problem has occurred')
         }
       })
     }else{
       alert('Invalid Format');
+    }
+  }
+  
+  canSubmit = ({charCode}) => {
+    if(charCode === 13 || charCode === 10){
+      const {onSubmit, item} = this.props
+      const {department_number, vpn, brand} = item
+      if(department_number && vpn && brand)
+        onSubmit()
+      else
+        alert("Missing required fields")
     }
   }
 
@@ -112,10 +116,10 @@ class AddCell extends React.Component {
   };
 
   render() {
-    const { classes, item, onChange, onSubmit, cycles } = this.props;
+    const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={e => onSubmit(e.key)} className={classes.card}>
+      <Card onKeyPress={this.canSubmit} className={classes.card}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 
@@ -267,22 +271,7 @@ class AddCell extends React.Component {
                         onChange={e => onChange("price", e.target.value)}
                       />
                     </Grid>
-                    <Grid item md={1}>
-                      <PopupState variant="popover" popupId="demo-popup-menu">
-                        {popupState => (
-                          <React.Fragment>
-                            <IconButton variant="contained" {...bindTrigger(popupState)}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu {...bindMenu(popupState)}>
-                              <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
-                              <MenuItem onClick={popupState.close}>Delete</MenuItem>
-                            </Menu>
-                          </React.Fragment>
-                        )}
-                      </PopupState>
-
-                    </Grid>
+                    <Grid item md={1} />
                 </Grid>
                 <Grid container>
                   <Grid item md={11}>
