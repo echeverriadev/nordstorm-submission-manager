@@ -75,7 +75,7 @@ class Filter extends Component {
 
         console.log(filter)
       return (
-          <Grid className={classes.root} spacing={0}>
+          <Grid className={classes.root}>
               <Grid item >
                 <Select
                   className={classes.selectFilter}

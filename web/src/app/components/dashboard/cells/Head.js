@@ -90,8 +90,9 @@ const CenteredGrid = (props) => {
             <Grid item md={1}/>
             <Grid item md={11}>
               <Grid container>
-                  {fieldsHeader.map(field => 
+                  {fieldsHeader.map((field, i) => 
                     <Grid 
+                      key={i}
                       onClick={() => onChangeOrder(field.name)} 
                       item 
                       md={field.grids}
