@@ -25,7 +25,8 @@ import ItemLogModal from '../ItemLogModal';
 
 const styles = theme => ({
   card: {
-    width: "100%"
+    width: "100%",
+    marginBottom: "3px"
   },
   cardContent: {
     width: "100%",
