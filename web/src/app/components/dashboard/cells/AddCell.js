@@ -263,12 +263,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
-                        id="price"
+                        id="retail_price"
                         label="Price"
                         className={classes.textField}
                         margin="normal"
-                        value={item.price}
-                        onChange={e => onChange("price", e.target.value)}
+                        value={item.retail_price}
+                        onChange={e => onChange("retail_price", e.target.value)}
                       />
                     </Grid>
                     <Grid item md={1} />

@@ -52,6 +52,9 @@ const styles = theme => ({
   },
   tagItem: {
     marginTop: theme.spacing.unit
+  },
+  labelSwitch: {
+      fontWeight: "bold"
   }
 });
 
@@ -90,7 +93,7 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="asp"
-                            label="Ann. sale price"
+                            label="Ann. Sale Price"
                             margin="none"
                             value={item.annSalePrice}
                             onChange={e => onChange(index, "annSalePrice", e.target.value)}
@@ -119,6 +122,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Available in Canada"
                             labelPlacement="start"
                         />
@@ -137,7 +141,7 @@ const Accordion = (props) => {
                         <TextField
                             id="countryorigin"
                             disabled={!item.availableInCanada}
-                            label="Country of origin"
+                            label="Country of Origin"
                             margin="none"
                             value={item.countryOrigin}
                             onChange={e => onChange(index, "countryOrigin", e.target.value)}
@@ -167,6 +171,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Request Extension"
                             labelPlacement="start"
                         />
@@ -195,6 +200,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Request Cancelation"
                             labelPlacement="start"
                         />
@@ -213,12 +219,12 @@ const Accordion = (props) => {
             </Grid>
             <Grid item className={classes.column} md={2}>
                 <Grid container direction="column">
-                    <Grid item md={3}>
+                    <Grid item md>
                         <Typography variant="caption">Departament name</Typography>
-                        <Typography variant="body1">{item.departament}</Typography>
+                        <Typography variant="body1"><b>{item.departament}</b></Typography>
                     </Grid>
-                    <Grid className={classes.tagsList} item md={9}>
-                        <Typography className={classes.tagItem} variant="caption">Tags</Typography>
+                    <Grid className={classes.tagsList} item md>
+                        <Typography className={classes.tagItem} variant="body1"><b>Tags</b></Typography>
                         <Chip
                             avatar={<Avatar>C</Avatar>}
                             label="Category"

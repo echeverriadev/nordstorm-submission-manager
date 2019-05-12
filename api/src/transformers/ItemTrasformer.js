@@ -11,7 +11,7 @@ const format = (data) => {
         size: data.size || "",
         description: data.description || "",
         in_stock_week: data.in_stock_week || "",
-        price: data.price || "",
+        retail_price: data.retail_price || "",
 
         //EXTRA TODO: Borrar
         category: ['category: example1', 'category: example2'],

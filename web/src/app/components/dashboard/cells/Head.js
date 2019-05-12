@@ -75,7 +75,7 @@ const fieldsHeader = [
    grids: 1
   },{
    label: "Retail Price",
-   name: "price",
+   name: "retail_price",
    grids: 1
   },
 ]
