@@ -211,6 +211,7 @@ class CardCell extends React.Component {
                       id="style_group_number"
                       label="SG"
                       className={classes.textField}
+                      color="primary"
                       margin="normal"
                       value={item.style_group_number}
                       onChange={e => onChange(index, "style_group_number", e.target.value)}
