@@ -57,7 +57,7 @@ const styles = theme => ({
     width: "95%",
   },
   select: {
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
   tagLabel: {
     padding: 1,
@@ -256,15 +256,13 @@ class AddCell extends React.Component {
                           displayEmpty
                         >
                           <MenuItem value={""} disabled>
-                            In Stock Week
+                            In Stock
                           </MenuItem>
-                          <MenuItem value={0}>0</MenuItem>
                           <MenuItem value={1}>1</MenuItem>
                           <MenuItem value={2}>2</MenuItem>
                           <MenuItem value={3}>3</MenuItem>
                           <MenuItem value={4}>4</MenuItem>
                           <MenuItem value={5}>5</MenuItem>
-                          <MenuItem value={6}>6</MenuItem>
                       </Select>
                     </Grid>
                     <Grid item md={1}>
