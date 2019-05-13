@@ -47,9 +47,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <Typography  gutterBottom>
-            <Dashboard></Dashboard>
-          </Typography>
+          <Dashboard></Dashboard>
         </div>
       </MuiThemeProvider>
 

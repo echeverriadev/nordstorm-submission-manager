@@ -94,22 +94,20 @@ class Dashboard extends Component {
       })
     }
 
-    onSubmit = (key) => {
-      if(key.toUpperCase() === "ENTER"){
-        storeItemApi(this.state.addItem).then(response => {
-          if(response.code === 200){
-            this.setState({
-              addItem: initialNewItem
-            });
-            alert(response.message);
-          }else{
-            console.error(response.message)
-          }
-          console.log(response)
-        }, err => {
-          console.error(err)
-        } )
-      }
+    onSubmit = () => {
+      storeItemApi(this.state.addItem).then(response => {
+        if(response.code === 200){
+          this.setState({
+            addItem: initialNewItem
+          });
+          alert(response.message);
+        }else{
+          console.error(response.message)
+        }
+        console.log(response)
+      }, err => {
+        console.error(err)
+      } )
     }
 
     onChange = (index, key, value) => {

@@ -26,7 +26,8 @@ import ItemLogModal from '../ItemLogModal';
 
 const styles = theme => ({
   card: {
-    width: "100%"
+    width: "100%",
+    marginBottom: "2px"
   },
   cardContent: {
     width: "100%",
@@ -212,6 +213,7 @@ class CardCell extends React.Component {
                       id="style_group_number"
                       label="SG"
                       className={classes.textField}
+                      color="primary"
                       margin="normal"
                       value={item.style_group_number}
                       onChange={e => onChange(index, "style_group_number", e.target.value)}
@@ -283,7 +285,7 @@ class CardCell extends React.Component {
                   </Grid>
                   <Grid item md={1}>
                     <TextField
-                      id="price"
+                      id="retail_price"
                       label="Price"
                       className={classes.textField}
                       margin="normal"

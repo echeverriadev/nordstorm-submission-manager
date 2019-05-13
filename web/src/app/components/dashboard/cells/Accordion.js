@@ -80,6 +80,9 @@ const styles = theme => ({
   tagAvatarOff: {
     color: '#fff',
     backgroundColor: '#757575'
+  },
+  labelSwitch: {
+      fontWeight: "bold"
   }
 });
 
@@ -118,7 +121,7 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             id="asp"
-                            label="Ann. sale price"
+                            label="Ann. Sale Price"
                             margin="none"
                             value={item.sale_price}
                             onChange={e => onChange(index, "sale_price", onlyNumber(e.target.value))}
@@ -147,6 +150,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Available in Canada"
                             labelPlacement="start"
                         />
@@ -201,6 +205,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Request Extension"
                             labelPlacement="start"
                         />
@@ -229,6 +234,7 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
+                            classes={{label: classes.labelSwitch}}
                             label="Request Cancelation"
                             labelPlacement="start"
                         />
@@ -247,9 +253,9 @@ const Accordion = (props) => {
             </Grid>
             <Grid item className={classes.column} md={2}>
                 <Grid container direction="column">
-                    <Grid item md={3}>
+                    <Grid item md>
                         <Typography variant="caption">Departament name</Typography>
-                        <Typography variant="body1">{item.departament}</Typography>
+                        <Typography variant="body1"><b>{item.departament}</b></Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
                     <Typography className={classes.tagItem} variant="caption">Tags</Typography>

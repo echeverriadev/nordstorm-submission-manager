@@ -7,11 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -98,8 +95,9 @@ class AddCell extends React.Component {
       .then(res => {
         if(res.code === 200){
           this.props.onChange("image", res.data.url);
-        }else{
-          console.error(res)
+        }
+        else{
+            console.error(res)
             alert(res.message || 'oops a problem has occurred')
         }
       })
@@ -108,15 +106,26 @@ class AddCell extends React.Component {
     }
   }
 
+  canSubmit = ({charCode}) => {
+    if(charCode === 13 || charCode === 10){
+      const {onSubmit, item} = this.props
+      const {department_number, vpn, brand} = item
+      if(department_number && vpn && brand)
+        onSubmit()
+      else
+        alert("Missing required fields")
+    }
+  }
+
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
   render() {
-    const { classes, item, onChange, onSubmit, cycles } = this.props;
+    const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={e => onSubmit(e.key)} className={classes.card}>
+      <Card onKeyPress={this.canSubmit} className={classes.card}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 
@@ -260,7 +269,7 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
-                        id="price"
+                        id="retail_price"
                         label="Price"
                         className={classes.textField}
                         margin="normal"
@@ -268,22 +277,7 @@ class AddCell extends React.Component {
                         onChange={e => onChange("retail_price", onlyNumber(e.target.value))}
                       />
                     </Grid>
-                    <Grid item md={1}>
-                      <PopupState variant="popover" popupId="demo-popup-menu">
-                        {popupState => (
-                          <React.Fragment>
-                            <IconButton variant="contained" {...bindTrigger(popupState)}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu {...bindMenu(popupState)}>
-                              <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
-                              <MenuItem onClick={popupState.close}>Delete</MenuItem>
-                            </Menu>
-                          </React.Fragment>
-                        )}
-                      </PopupState>
-
-                    </Grid>
+                    <Grid item md={1} />
                 </Grid>
                 <Grid container>
                   <Grid item md={11}>

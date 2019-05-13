@@ -1,6 +1,6 @@
 const format = (data) => {
     return {
-        id: data.id,
+        id: data.__pk_division_t,
         number: data.division_number,
         name: data.name_display
     };

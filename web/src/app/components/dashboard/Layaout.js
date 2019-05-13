@@ -78,13 +78,13 @@ const Layaout = (props) => {
                 null:
                 <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit} cycles={cycles}/>
               }
-            <Pagination
-            limit={10}
-            offset={offset}
-            total={total}
-            onClick={(e, offset) => onChangePagination(offset)}
-            size="large"
-            />
+            {total > 0 && <Pagination
+              limit={10}
+              offset={offset}
+              total={total}
+              onClick={(e, offset) => onChangePagination(offset)}
+              size="large"
+            />}
         </Grid>
          <MuiThemeProvider theme={theme}>
           <CssBaseline />
