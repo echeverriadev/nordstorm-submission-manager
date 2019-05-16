@@ -179,13 +179,18 @@ const Accordion = (props) => {
                         </Select>
                     </Grid>
                     <Grid item md={3}>
-                        <TextField
-                            id="specifycountry"
-                            label="Specify Country"
-                            margin="none"
-                            value={item.country_of_origin_other}
-                            onChange={e => onChange("country_of_origin_other", e.target.value)}
-                        />
+                        {
+                            (item.country_of_origin === "Imported - Specify Country") ?
+                            <TextField
+                                id="specifycountry"
+                                label="Specify Country"
+                                margin="none"
+                                value={item.country_of_origin_other}
+                                onChange={e => onChange("country_of_origin_other", e.target.value)}
+                            />
+                            :
+                            null
+                        }
                     </Grid>
                 </Grid>
 
