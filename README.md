@@ -1,5 +1,5 @@
 # Submissions Manager
-Submissions Manager. 
+Submissions Manager.
 
 ## Prerequisites
 This guide assumes that you have the following:
@@ -23,7 +23,7 @@ The Submissions Manager use the bitbucket repository:
 
 ## Installation Guide
 
-### 1.- Install [NodeJs] 
+### 1.- Install [NodeJs]
 
 ```sh
 #curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
@@ -34,7 +34,7 @@ The Submissions Manager use the bitbucket repository:
 #### Steps for first time installation
 ```sh
 #cd /home
-#git clone https://dfortiz@bitbucket.org/rjakes/nord_submissions.git 
+#git clone https://dfortiz@bitbucket.org/rjakes/nord_submissions.git
 #cd /home/nord_submissions/web
 #npm install
 #cd /home/nord_submissions/api
@@ -96,7 +96,7 @@ REACT_APP_API_URL=https://ndsm.rjakes.com/api
 ##### Installation
 
 ```sh
-#apt install nginx 
+#apt install nginx
 ```
 ##### Settings
 ```sh
@@ -113,13 +113,13 @@ server {
 
 server {
     listen [::]:443 ssl ipv6only=on;
-    listen 443 ssl; 
+    listen 443 ssl;
     index index.html;
     server_name ndsm.rjakes.com;
-    ssl_certificate /etc/letsencrypt/live/ndsm.rjakes.com/fullchain.pem; 
+    ssl_certificate /etc/letsencrypt/live/ndsm.rjakes.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/ndsm.rjakes.com/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf; 
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; 
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
 
 location / {
@@ -143,8 +143,8 @@ location /api/ {
 ### 5.- Install [MySql] and settings
 ##### Installation and setup
 ```sh
-#apt install mysql 
-#mysql_secure_installation 
+#apt install mysql
+#mysql_secure_installation
 ```
 ##### Restore database
 **upload a database dump, for example: /root/database-dump-backup.sql**
@@ -159,11 +159,11 @@ cd /file/
 * run npm install
 * run npm initialize
 ##Running
- 
+
 run npm start
 
 ###Database
- 
+
 * schema /ROOT/database/fit_schema_XXXX-XX-XX.sql
 * sample data /ROOT/database/sample_data_XXXX-XX-XX.sql
 
