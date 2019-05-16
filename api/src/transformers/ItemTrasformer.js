@@ -21,7 +21,7 @@ const format = (data) => {
         country_of_origin: data.country_of_origin || "",
         country_of_origin_other: data.country_of_origin_other || "",
         request_extension: data.request_extension || null,
-        request_extension_note: data.request_extension_notes || "",
+        request_extension_note: data.request_extension_note || "",
         request_cancellation: data.request_cancellation || null,
         request_cancellation_notes: data.request_cancellation_notes || "",
         departament_number: data.department_number || "",
