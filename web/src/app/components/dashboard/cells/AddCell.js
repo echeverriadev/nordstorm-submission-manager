@@ -108,12 +108,7 @@ class AddCell extends React.Component {
 
   canSubmit = ({charCode}) => {
     if(charCode === 13 || charCode === 10){
-      const {onSubmit, item} = this.props
-      const {department_number, vpn, brand} = item
-      if(department_number && vpn && brand)
-        onSubmit()
-      else
-        alert("Missing required fields")
+      this.props.onSubmit()
     }
   }
 
