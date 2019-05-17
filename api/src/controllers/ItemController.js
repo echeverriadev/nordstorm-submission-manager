@@ -69,13 +69,18 @@ class ItemController {
     }
 
     buildOrder(query){
+        const numericFields = ["is_priority", "department_number", "style_group_number", "retail_price"]
         let order = []
         let orderByEscaping = []
         if(query.hasOwnProperty('order') && query.order.length){
 			order = query.order.split(','); //[field1, ASC, field2, DESC...]
         }
-		for(let i = 0; i < order.length -1 ; i+=2)
-		    orderByEscaping.push(this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
+		for(let i = 0; i < order.length -1 ; i+=2){
+		    if(numericFields.includes(order[i]))
+		        orderByEscaping.push(`CAST(${this.escapeSansQuotes(order[i])} AS unsigned) ${this.escapeSansQuotes(order[i+1])}`)
+		    else
+		        orderByEscaping.push(this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
+		}
 
 
 		return orderByEscaping.length ? "ORDER BY " + orderByEscaping.join(', ') : ''
