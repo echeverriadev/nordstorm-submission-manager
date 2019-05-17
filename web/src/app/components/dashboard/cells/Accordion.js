@@ -14,6 +14,7 @@ import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import Typography from '@material-ui/core/Typography';
 import { onlyNumber } from '../../../../helpers/validation';
+import classNames from 'classnames';
 
 const styles = theme => ({
   root: {
@@ -62,11 +63,11 @@ const styles = theme => ({
     '&:hover': {
         backgroundColor: "#00B2BD",
     },
-    backgroundColor: '#02CDDA'
+    backgroundColor: '#74a8da'
   },
   tagAvatarOn: {
     color: '#fff',
-    backgroundColor: '#03858D'
+    backgroundColor: '#4278a9'
   },
   tagItemOff: {
     marginTop: theme.spacing.unit,
@@ -86,6 +87,10 @@ const styles = theme => ({
   },
   tagItem: {
       fontWeight: "bold"
+  },
+  tagWith: {
+      width: '100%',
+      justifyContent: 'space-between'
   }
 });
 
@@ -273,8 +278,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
                                     label="Missy"
                                     clickable
-                                    className={classes.tagItemOn}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 0)}
                                 />
                             :
@@ -282,8 +287,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
                                     clickable
-                                    className={classes.tagItemOff}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOff,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 1)}
                                 />
                         }
@@ -293,8 +298,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
                                     label="Encore"
                                     clickable
-                                    className={classes.tagItemOn}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 0)}
                                 />
                             :
@@ -302,8 +307,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
                                     label="Encore"
                                     clickable
-                                    className={classes.tagItemOff}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOff,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 1)}
                                 />
                         }
@@ -313,8 +318,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOn}>P</Avatar>}
                                     label="Petite"
                                     clickable
-                                    className={classes.tagItemOn}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 0)}
                                 />
                             :
@@ -322,8 +327,8 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOff}>P</Avatar>}
                                     label="Petite"
                                     clickable
-                                    className={classes.tagItemOff}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOff,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 1)}
                                 />
                         }
@@ -333,17 +338,17 @@ const Accordion = (props) => {
                                     avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
                                     label="Extended"
                                     clickable
-                                    className={classes.tagItemOn}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 0)}
                                 />
                             :
                                 <Chip
-                                    avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
+                                    avatar={<Avatar className={classes.tagAvatarOff}>X</Avatar>}
                                     label="Extended"
                                     clickable
-                                    className={classes.tagItemOff}
-                                    deleteIcon={<DoneIcon />}
+                                    className={classNames(classes.tagItemOff,classes.tagWith)}
+                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 1)}
                                 />
                         }
