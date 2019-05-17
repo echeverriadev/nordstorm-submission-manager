@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import Search from './Search'
 import { uploadExcelApi } from '../../../api';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 const styles = theme => ({
   root: {
@@ -43,14 +45,29 @@ const styles = theme => ({
 });
 
 class Filter extends Component {
-
-    onClick = () => {
-      this.refs.buttonFile.click();
+  
+    handleConfirm = (e) => {
+      const file = Array.from(e.target.files)[0]
+      confirmAlert({
+        title: 'Import items',
+        message: 'Do you really want to continue with the Import?',
+        buttons: [
+          {
+            label: 'Ok',
+            onClick: () => this.onSubmit(file)
+          },
+          {
+            label: 'Cancel',
+          }
+        ]
+      });
     }
 
-    onSubmit = (e) => {
-      const file = Array.from(e.target.files)[0]
-
+    onClick = () => {
+      this.refs.buttonFile.click()
+    }
+    
+    onSubmit = (file) => {
       if (['xls', 'xlsx'].indexOf(file.name.split('.')[file.name.split('.').length-1]) === -1) {
         alert('Invalid format, use xls or xlsx instead');
       }else{
@@ -123,7 +140,7 @@ class Filter extends Component {
                   <Icon className={classes.rightIcon}>save_alt</Icon>
                   import
                 </Button>}
-                <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.onSubmit}/>
+                <input className={classes.inputButton} id="button-file" ref="buttonFile" type="file" onChange={this.handleConfirm}/>
             </Grid>
             <Grid item md>
               <Search
