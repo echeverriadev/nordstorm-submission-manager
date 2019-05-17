@@ -83,6 +83,9 @@ const styles = theme => ({
   },
   labelSwitch: {
       fontWeight: "bold"
+  },
+  tagItem: {
+      fontWeight: "bold"
   }
 });
 
@@ -259,7 +262,7 @@ const Accordion = (props) => {
             <Grid item className={classes.column} md={2}>
                 <Grid container direction="column">
                     <Grid item md>
-                        <Typography variant="caption">Departament name</Typography>
+                        <Typography variant="caption">Department name</Typography>
                         <Typography variant="body1"><b>{item.departament}</b></Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>

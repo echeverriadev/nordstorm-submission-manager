@@ -80,7 +80,13 @@ const styles = theme => ({
   tagAvatarOff: {
     color: '#fff',
     backgroundColor: '#757575'
-  }
+  },
+  tagItem: {
+      fontWeight: "bold"
+  },
+  labelSwitch: {
+      fontWeight: "bold"
+  },
 });
 
 
@@ -148,6 +154,7 @@ const Accordion = (props) => {
                             }
                             className={classes.switch}
                             label="Available in Canada"
+                            classes={{label: classes.labelSwitch}}
                             labelPlacement="start"
                         />
                     </Grid>
@@ -207,6 +214,7 @@ const Accordion = (props) => {
                             }
                             className={classes.switch}
                             label="Request Extension"
+                            classes={{label: classes.labelSwitch}}
                             labelPlacement="start"
                         />
                     </Grid>
@@ -235,6 +243,7 @@ const Accordion = (props) => {
                             }
                             className={classes.switch}
                             label="Request Cancelation"
+                            classes={{label: classes.labelSwitch}}
                             labelPlacement="start"
                         />
                     </Grid>
@@ -252,8 +261,8 @@ const Accordion = (props) => {
             </Grid>
             <Grid item className={classes.column} md={2}>
                 <Grid container direction="column">
-                    <Grid item md={3}>
-                        <Typography variant="caption">Departament name</Typography>
+                    <Grid item md>
+                        <Typography variant="caption">Department name</Typography>
                         <Typography variant="body1">{item.departament}</Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
