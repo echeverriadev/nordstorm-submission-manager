@@ -95,11 +95,19 @@ class Dashboard extends Component {
     }
 
     onSubmit = () => {
-      storeItemApi(this.state.addItem).then(response => {
+      const {filter, addItem} = this.state
+      const {divisionId, cycleId} = filter
+      const addItemApi = {
+        ...addItem,
+        _fk_division: divisionId,
+        _fk_cycle: cycleId
+      }
+      storeItemApi(addItemApi).then(response => {
         if(response.code === 200){
           this.setState({
             addItem: initialNewItem
           });
+          this.fetchItemsApi()
           alert(response.message);
         }else{
           console.error(response.message)
@@ -136,7 +144,8 @@ class Dashboard extends Component {
       const filter = {...this.state.filter}
       filter[target.name] = target.value
       this.setState({
-        filter
+        filter,
+        offset: 0
       }, this.fetchItemsApi)
     }
 

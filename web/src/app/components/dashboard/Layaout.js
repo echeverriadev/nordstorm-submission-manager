@@ -10,6 +10,7 @@ import Filter from './Filter';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Pagination from "material-ui-flat-pagination";
+import Typography from '@material-ui/core/Typography';
 
 const theme = createMuiTheme();
 
@@ -85,6 +86,7 @@ const Layaout = (props) => {
               onClick={(e, offset) => onChangePagination(offset)}
               size="large"
             />}
+            {total > 0 && <Typography>{total} items found</Typography>}
         </Grid>
          <MuiThemeProvider theme={theme}>
           <CssBaseline />

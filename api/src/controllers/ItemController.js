@@ -31,7 +31,7 @@ class ItemController {
         let conditions = []
         let values = []
 
-        if(filter.hasOwnProperty('divisionId')){
+        if(filter.hasOwnProperty('divisionId') && filter.divisionId !== "ALL"){
             conditions.push("_fk_division = ?")
             values.push(filter.divisionId)
         }
@@ -129,6 +129,7 @@ class ItemController {
             in_stock_week: req.body.in_stock_week || null,
             sale_price: req.body.sale_price || 0,
             _fk_cycle: req.body._fk_cycle || null,
+            _fk_division: req.body._fk_division || null,
             retail_price: req.body.retail_price || 0,
             is_priority: req.body.is_priority || null,
             available_in_canada: req.body.available_in_canada || null,
