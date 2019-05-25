@@ -36,7 +36,7 @@ const styles = theme => ({
 
 const Layaout = (props) => {
   const { classes, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
-    total, offset, filter, onChangePagination, order, onChangeOrder,
+    total, offset, filter, onChangePagination, order, onChangeOrder, onRefreshItems,
     cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions } = props;
 
   return (
@@ -50,6 +50,7 @@ const Layaout = (props) => {
           onChangeFilter={onChangeFilter}
           onAddCannedFilter={onAddCannedFilter}
           onRemoveCannedFilter={onRemoveCannedFilter}
+          onRefreshItems={onRefreshItems}
         />
         <Grid container spacing={0}>
           {cannedFilters.map((filter, i) =>
@@ -75,7 +76,7 @@ const Layaout = (props) => {
                 ))
               }
               {
-                (filter.cycleId === "" || filter.divisionId === "") ?
+                (filter.cycleId === "" || filter.divisionId === "" || filter.divisionId === "ALL") ?
                 null:
                 <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit} cycles={cycles}/>
               }

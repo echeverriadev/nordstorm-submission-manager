@@ -168,6 +168,8 @@ class ItemController {
     async import(req, res, next){
         let exceltojson;
         console.log(req.file)
+        console.log(req.body)
+        const {_fk_cycle, _fk_division } = req.body
 
         if (!req.file) {
             return res.json({
@@ -188,7 +190,7 @@ class ItemController {
                 input: req.file.path,
                 output: null, //since we don't need output.json
                 lowerCaseHeaders: true
-            }, function(err, result) {
+            }, (err, result) => {
                 if (err) {
                     return res.json({ code: 400, message: err });
                 }
@@ -205,10 +207,12 @@ class ItemController {
                         'brand': element['brand'] || "",
                         'color': element['color'] || "",
                         'size': element['size'] || "",
-                        'description': element['description'] || ""
+                        'description': element['description'] || "",
+                        _fk_cycle,
+                        _fk_division
                     };
 
-                    dbConnection().query('INSERT INTO item_editorial SET ?', row, function(error, results, fields) {
+                    this.connection.query('INSERT INTO item_editorial SET ?', row, function(error, results, fields) {
                         if (error) throw error;
                         console.log(results)
                     });

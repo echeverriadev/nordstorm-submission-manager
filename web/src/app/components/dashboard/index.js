@@ -262,6 +262,7 @@ class Dashboard extends Component {
                     onChangeOrder = {this.changeOrder}
                     onAddCannedFilter = {this.addCannedFilter}
                     onRemoveCannedFilter = {this.removeCannedFilter}
+                    onRefreshItems = {this.fetchItemsApi}
                   />
                 }
                 {value === 1 && <h1>SAMPLE</h1>}

@@ -48,19 +48,21 @@ class Filter extends Component {
   
     handleConfirm = (e) => {
       const file = Array.from(e.target.files)[0]
-      confirmAlert({
-        title: 'Import items',
-        message: 'Do you really want to continue with the Import?',
-        buttons: [
-          {
-            label: 'Ok',
-            onClick: () => this.onSubmit(file)
-          },
-          {
-            label: 'Cancel',
-          }
-        ]
-      });
+      if(file) //If there is a file selected
+        confirmAlert({
+          title: 'Import items',
+          message: 'Do you really want to continue with the Import?',
+          buttons: [
+            {
+              label: 'Ok',
+              onClick: () => this.onSubmit(file)
+            },
+            {
+              label: 'Cancel',
+            }
+          ]
+        });
+        this.refs.buttonFile.value = '' //Without this the same file couldn't be uploaded again
     }
 
     onClick = () => {
@@ -71,12 +73,15 @@ class Filter extends Component {
       if (['xls', 'xlsx'].indexOf(file.name.split('.')[file.name.split('.').length-1]) === -1) {
         alert('Invalid format, use xls or xlsx instead');
       }else{
-        
+        const { filter: {divisionId, cycleId} } = this.props
         const formData = new FormData()
 
         formData.append('file', file)
+        formData.append('_fk_division', divisionId)
+        formData.append('_fk_cycle', cycleId)
         uploadExcelApi(formData).then(res => {
           if(res.code === 200){
+            this.props.onRefreshItems() //Refresh list for getting all new items
             alert('Items imported successfully')
           }else{
             console.error(res)
@@ -135,7 +140,7 @@ class Filter extends Component {
                 </Select>
               </Grid>
               <Grid item>
-                {filter.cycleId !== "" && filter.divisionId !== "" && 
+                {filter.cycleId !== "" && filter.divisionId !== "" && filter.divisionId !== "ALL" && 
                 <Button color="primary" variant="contained" className={classes.button} onClick={this.onClick}>
                   <Icon className={classes.rightIcon}>save_alt</Icon>
                   import
