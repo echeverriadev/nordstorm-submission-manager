@@ -43,5 +43,7 @@ router.patch('/:id', ItemController.updatePatch);
 router.post('', ItemController.store);
 router.post('/import', upload, ItemController.import);
 router.post('/upload', uploadImage, ItemController.uploadImage);
+router.get('/delete/:id', ItemController.deleteRecord);
+router.get('/duplicate/:id', ItemController.duplicateItem);
 
 module.exports = router;
