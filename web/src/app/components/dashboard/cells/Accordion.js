@@ -18,7 +18,7 @@ import classNames from 'classnames';
 
 const styles = theme => ({
   root: {
-    backgroundColor: "#E6E4E4",
+    backgroundColor: "#f3f3f3",
     flexGrow: 1,
     width: '100%',
     overflowX: 'auto',
