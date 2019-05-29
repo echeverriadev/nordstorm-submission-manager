@@ -35,10 +35,11 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: "95%",
+    width: "95%"
   },
   select: {
-    width: "95%"
+    width: "95%",
+    fontSize: "13px"
   },
   selectCountry: {
     paddingTop: 16,
@@ -91,6 +92,12 @@ const styles = theme => ({
   tagWith: {
       width: '100%',
       justifyContent: 'space-between'
+  },
+  inputFont: {
+    fontSize: '13px'
+  },
+  labelFont: {
+    fontSize: '13px'
   }
 });
 
@@ -109,6 +116,9 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <FormHelperText className={classes.selectLabel}>Cycles</FormHelperText>
                         <Select
+                            inputProps= {{
+                              className: classes.inputFont
+                            }}
                             className={classes.select}
                             name="Cycles"
                             value={item._fk_cycle}
@@ -128,6 +138,12 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <TextField
+                            InputProps={{
+                              className: classes.inputFont
+                            }}
+                            InputLabelProps= {{
+                              className: classes.labelFont
+                            }}
                             id="asp"
                             label="Ann. Sale Price"
                             margin="none"
@@ -137,6 +153,12 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <TextField
+                            InputProps={{
+                              className: classes.inputFont
+                            }}
+                            InputLabelProps= {{
+                              className: classes.labelFont
+                            }}
                             id="pp"
                             label="Product Priority"
                             margin="none"
@@ -165,6 +187,12 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <TextField
+                            InputProps={{
+                              className: classes.inputFont
+                            }}
+                            InputLabelProps= {{
+                              className: classes.labelFont
+                            }}
                             id="canadaprice"
                             disabled={!(item.available_in_canada === 1)}
                             label="Canada Price"
@@ -175,6 +203,9 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <Select
+                            inputProps= {{
+                              className: classes.inputFont
+                            }}
                             className={classes.selectCountry}
                             value={item.country_of_origin}
                             onChange={e => onChange(index, "country_of_origin", e.target.value)}
@@ -194,6 +225,12 @@ const Accordion = (props) => {
                         {
                             (item.country_of_origin === "Imported - Specify Country") ?
                             <TextField
+                                InputProps={{
+                                  className: classes.inputFont
+                                }}
+                                InputLabelProps= {{
+                                  className: classes.labelFont
+                                }}
                                 id="specifycountry"
                                 label="Specify Country"
                                 margin="none"
@@ -225,6 +262,12 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <TextField
+                            InputProps={{
+                              className: classes.inputFont
+                            }}
+                            InputLabelProps= {{
+                              className: classes.labelFont
+                            }}
                             id="extensionreason"
                             disabled={!(item.request_extension === 1)}
                             label="Extension Reason"
@@ -254,6 +297,12 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         <TextField
+                            InputProps={{
+                              className: classes.inputFont
+                            }}
+                            InputLabelProps= {{
+                              className: classes.labelFont
+                            }}
                             id="cancelationreason"
                             disabled={!(item.request_cancellation === 1)}
                             label="Cancelation Reason"

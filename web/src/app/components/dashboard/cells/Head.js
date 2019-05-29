@@ -23,6 +23,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     fontWeight: 'bold',
+    fontSize: '13px'
   },
   headCell: {
     '&:hover': {
@@ -89,7 +90,7 @@ const CenteredGrid = (props) => {
         <Grid container className={classes.head}>
             <Grid item md={1}/>
             <Grid item md={11}>
-              <Grid container>
+              <Grid container spacing={8} alignItems="center">
                   {fieldsHeader.map((field, i) => 
                     <Grid 
                       key={i}

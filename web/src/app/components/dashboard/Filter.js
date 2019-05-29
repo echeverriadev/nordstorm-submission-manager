@@ -18,7 +18,8 @@ const styles = theme => ({
   selectFilter: {
     marginTop: 10,
     width: 150,
-    marginRight: 30
+    marginRight: 30,
+    fontSize: '13px'
   },
   leftIcon: {
     marginRight: theme.spacing.unit,

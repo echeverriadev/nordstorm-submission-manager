@@ -57,7 +57,8 @@ const styles = theme => ({
     width: "95%",
   },
   select: {
-    marginBottom: theme.spacing.unit
+    marginBottom: theme.spacing.unit,
+    fontSize: "13px"
   },
   tagLabel: {
     padding: 1,
@@ -72,6 +73,12 @@ const styles = theme => ({
   },
   helperText: {
       color: 'red'
+  },
+  inputFont: {
+    fontSize: '13px'
+  },
+  labelFont: {
+    fontSize: '13px'
   }
 });
 
@@ -145,9 +152,12 @@ class AddCell extends React.Component {
                     </Dropzone>
               </Grid>
               <Grid item md={11}>
-                <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
+                <Grid className={classes.row} spacing={8} container direction="row" alignContent='center' alignItems='center'>
                     <Grid item md={1}>
                       <Select
+                        inputProps= {{
+                          className: classes.inputFont
+                        }}
                         className={classes.select}
                         value={item.nmg_priority}
                         onChange={e => onChange("nmg_priority", e.target.value)}
@@ -166,6 +176,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="department_number"
                         label="Dept #"
                         className={classes.textField}
@@ -178,6 +194,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="vpn"
                         label="VPN"
                         className={classes.textField}
@@ -190,6 +212,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="style_group_number"
                         label="SG"
                         className={classes.textField}
@@ -200,6 +228,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="brand"
                         label="Brand"
                         className={classes.textField}
@@ -212,6 +246,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="color"
                         label="Color"
                         className={classes.textField}
@@ -222,6 +262,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="size"
                         label="Size"
                         className={classes.textField}
@@ -232,6 +278,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={2}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="description"
                         label="Item Description"
                         className={classes.textField}
@@ -244,6 +296,9 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <Select
+                          inputProps= {{
+                            className: classes.inputFont
+                          }}
                           className={classes.select}
                           value={item.in_stock_week}
                           onChange={e => onChange("in_stock_week", e.target.value)}
@@ -262,6 +317,12 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
+                        InputProps={{
+                          className: classes.inputFont
+                        }}
+                        InputLabelProps= {{
+                          className: classes.labelFont
+                        }}
                         id="retail_price"
                         label="Price"
                         className={classes.textField}
