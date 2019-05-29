@@ -186,7 +186,7 @@ const Accordion = (props) => {
                             </MenuItem>
                             <MenuItem value={"USA"}>USA</MenuItem>
                             <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
-                            <MenuItem value={"imported of America Materials"}>imported of America Materials</MenuItem>
+                            <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
                             <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
                         </Select>
                     </Grid>
