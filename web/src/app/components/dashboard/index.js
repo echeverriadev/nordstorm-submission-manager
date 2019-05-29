@@ -8,7 +8,9 @@ import {
   patchItemApi,
   storeItemApi,
   getCyclesApi,
-  getDivisionsApi
+  getDivisionsApi,
+  deleteItemApi,
+  duplicateItemApi
 } from '../../../api';
 
 const styles = theme => ({
@@ -234,6 +236,26 @@ class Dashboard extends Component {
       })
     }
 
+    handleDeleteItemApi = (id) => {
+      deleteItemApi(id).then(response => {
+        console.log('response delete', response);
+        if (response.status === 200)
+          this.fetchItemsApi()
+      }, err => {
+        console.log(err)
+      })
+    }
+
+    handleDuplicateItemApi = (id) => {
+      duplicateItemApi(id).then(response => {
+        console.log('response duplicate', response);
+        if (response.status === 200)
+          this.fetchItemsApi()
+      }, err => {
+        console.log(err)
+      })
+    }
+
     render() {
         const { value, cycles, divisions, rows, addItem,
               total, offset, filter, cannedFilters, order } = this.state;
@@ -263,6 +285,8 @@ class Dashboard extends Component {
                     onAddCannedFilter = {this.addCannedFilter}
                     onRemoveCannedFilter = {this.removeCannedFilter}
                     onRefreshItems = {this.fetchItemsApi}
+                    onDeleteItem = {this.handleDeleteItemApi}
+                    onDuplicateItem = {this.handleDuplicateItemApi}
                   />
                 }
                 {value === 1 && <h1>SAMPLE</h1>}

@@ -22,6 +22,7 @@ import { uploadImageApi } from '../../../../api';
 import { onlyNumber } from '../../../../helpers/validation';
 
 import ItemLogModal from '../ItemLogModal';
+import ItemDeleteDialog from '../ItemDeleteDialog';
 
 
 const styles = theme => ({
@@ -121,9 +122,14 @@ class CardCell extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  render() {
-    const { classes, item, index, onChange, cycles } = this.props;
+  handleDuplicateItem = (id, popupState)  => {
+    const { onDuplicateItem } = this.props;
+    popupState.close();
+    onDuplicateItem(id);
+  }
 
+  render() {
+    const { classes, item, index, onChange, cycles, onDeleteItem } = this.props;
     return (
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
@@ -361,9 +367,9 @@ class CardCell extends React.Component {
                             <MoreVertIcon />
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={popupState.close}>Duplicate</MenuItem>
+                            <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
                             <ItemLogModal />
-                            <MenuItem onClick={popupState.close}>Delete</MenuItem>
+                            <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>
                       )}
