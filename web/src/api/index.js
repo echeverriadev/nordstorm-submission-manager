@@ -7,3 +7,5 @@ export const patchItemApi = (id, field, value) => apiFetch(`/items/${id}`,{metho
 export const storeItemApi = (body) => apiFetch(`/items`,{ method: 'POST', body })
 export const uploadImageApi = (body) => apiFetch(`/items/upload`,{ method: 'POST', body, headers: {} }) //Let empty the content-type
 export const uploadExcelApi = (body) => apiFetch(`/items/import`,{ method: 'POST', body, headers: {} }) //Let empty the content-type
+export const deleteItemApi = (id) => apiFetch(`/items/delete/${id}`,{ method: 'GET'})
+export const duplicateItemApi = (id) => apiFetch(`/items/duplicate/${id}`,{ method: 'GET'})

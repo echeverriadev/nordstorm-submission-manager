@@ -17,6 +17,8 @@ class ItemController {
         this.buildWhere = this.buildWhere.bind(this);
         this.buildOrder = this.buildOrder.bind(this);
         this.escapeSansQuotes = this.escapeSansQuotes.bind(this);
+        this.deleteRecord = this.deleteRecord.bind(this);
+        this.duplicateItem = this.duplicateItem.bind(this);
     }
 
     escapeSansQuotes(criterion) {
@@ -327,6 +329,58 @@ class ItemController {
                     status: 404,
                     massage: "Item not found",
                 })
+        })
+    }
+
+    async deleteRecord(req, res, next) {
+        const { id } = req.params
+        const escaping = [id]
+        if (hasEmptyField(escaping))
+            return res.status(400).json({ status: 400, message: "Bad Request" })
+
+        this.connection.query('DELETE FROM `item_editorial` WHERE `__pk_item` = ?', escaping, (err, result) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({ error: err })
+            }
+
+            if (result.affectedRows)
+                res.status(200).json({
+                    status: 200,
+                    message: "Item deleted"
+                })
+            else
+                res.status(404).json({
+                    status: 404,
+                    message: "Item not found"
+                })
+        })
+    }
+
+    async duplicateItem(req, res, next) {
+        const { id } = req.params
+        const escaping = [id]
+        if (hasEmptyField(escaping))
+            return res.status(400).json({ status: 400, message: "Bad Request" })
+
+        const queryStrings = 'DROP TEMPORARY TABLE IF EXISTS tmp_item_editorial; '
+                           + 'CREATE TEMPORARY TABLE tmp_item_editorial SELECT * FROM item_editorial WHERE `__pk_item` = ?; '
+                           + 'ALTER TABLE tmp_item_editorial MODIFY `__pk_item` int null; '
+                           + 'UPDATE tmp_item_editorial SET `__pk_item` = NULL; '
+                           + 'SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0; '
+                           + 'INSERT INTO item_editorial SELECT * FROM tmp_item_editorial; '
+                           + 'SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; ';
+
+        this.connection.query(queryStrings, escaping, (err, result) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({ error: err })
+            }
+
+            res.status(200).json({
+                status: 200,
+                message: "Item duplicated"
+            })
         })
     }
 
