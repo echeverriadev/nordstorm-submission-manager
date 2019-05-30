@@ -26,8 +26,30 @@ class ItemController {
 
 
     buildWhere(filter = {}) {
-        //const fieldsForSearch =  ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "story", "shot", "product_priority", "country_of_origin", "specify_country", "extension_reason", "cancelation_reason"]
-        const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
+        const fieldsLikeForSearch =  {
+            "dpt": "department_number",
+            "vpn": "vpn",
+            "sgn": "style_group_number",
+            "brand": "brand",
+            "color": "color",
+            "size": "size",
+            "description": "description",
+            "in_stock_week": "in_stock_week",
+            "country_of_origin": "country_of_origin",
+            "specify_country": "country_of_origin_other",
+            "extension_reason": "request_extension_note",
+            "cancelation_reason": "request_cancellation_notes"
+        }
+        
+        const fieldsJoinForSearch = {
+            "story": "creative_story.name",
+            "shot": "shot.name",
+        }
+        
+        let specialCaseJoinField = null
+        
+            
+        // const fieldsForSearch = ["department_number", "vpn", "style_group_number", "brand", "color", "size", "description", "in_stock_week", "country_of_origin"]
         let conditions = []
         let values = []
 
@@ -52,11 +74,21 @@ class ItemController {
             */
             searchText.replace(pattern, (_, field, value) => {
                 if (value){ //second case
-                    if(fieldsForSearch.includes(field)) //and field really exist
-                        conditions.push(`${field} LIKE ${this.connection.escape('%'+value+'%')}`)
+                    if(Object.keys(fieldsLikeForSearch).includes(field)) //and field is simply like search
+                        conditions.push(`${fieldsLikeForSearch[field]} LIKE ${this.connection.escape('%'+value+'%')}`)
+                    else if(field == "product_priority"){
+                        const priorityBoolean = value.toLowerCase() === "yes" || value.toLowerCase() === "y" ? 1 : 0
+                        conditions.push(`is_priority = ${this.connection.escape(priorityBoolean)}`)
+                    }
+                    else if(Object.keys(fieldsJoinForSearch).includes(field)) {
+                        specialCaseJoinField = field
+                        conditions.push(`${fieldsJoinForSearch[field]} LIKE ${this.connection.escape('%'+value+'%')}`)
+                    } else
+                        conditions.push('null') //The search was something like: "fieldDoesntExist: value", so push null for don't get anything
+                        
                 }
                 else { //first case
-                    const conditionLikeString = fieldsForSearch.join(',')
+                    const conditionLikeString = Object.values(fieldsLikeForSearch).join(',')
                     conditions.push(`(CONCAT_WS(${conditionLikeString}) LIKE ${this.connection.escape('%'+field+'%')})`)
                 }
             })
@@ -64,7 +96,8 @@ class ItemController {
 
         return {
             where: conditions.length ? conditions.join(' AND ') : 1,
-            values
+            values,
+            specialCaseJoinField
         }
     }
 
@@ -96,14 +129,37 @@ class ItemController {
         catch (err) {
             filter = {}
         }
-        const { where, values } = this.buildWhere(filter)
+        const { where, values, specialCaseJoinField } = this.buildWhere(filter)
         const orderBy = this.buildOrder(req.query)
         console.log(orderBy)
         const limit = end - start + 1
-        let sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
-        sqlCount = mysql.format(sqlCount, values);
         const allValues = [...values, start, limit]
-        let sqlItems = `SELECT * FROM item_editorial WHERE ${where} ${orderBy} LIMIT ?, ?`
+        let sqlCount, sqlItems
+        if(specialCaseJoinField === "shot"){
+            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
+            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            WHERE ${where}`
+            
+            sqlItems = `SELECT item_editorial.* FROM item_editorial
+            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            WHERE ${where} ${orderBy} LIMIT ?, ?`
+        } else if (specialCaseJoinField === "story") {
+            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
+            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
+            INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            WHERE ${where}`
+            
+            sqlItems = `SELECT item_editorial.* FROM item_editorial
+            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
+            INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            WHERE ${where} ${orderBy} LIMIT ?, ?`
+        } else {
+            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
+            sqlItems = `SELECT * FROM item_editorial WHERE ${where} ${orderBy} LIMIT ?, ?`
+        }
+        sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
         console.log(sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
