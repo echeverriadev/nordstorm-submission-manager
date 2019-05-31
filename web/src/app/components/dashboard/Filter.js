@@ -5,6 +5,7 @@ import {Grid, MenuItem} from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 import Search from './Search'
 import { uploadExcelApi } from '../../../api';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -19,7 +20,9 @@ const styles = theme => ({
     marginTop: 10,
     width: 150,
     marginRight: 30,
-    fontSize: '13px'
+    fontSize: '13px',
+    fontWeight: 'bold',
+    color: 'black',
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
@@ -42,6 +45,12 @@ const styles = theme => ({
   },
   inputButton: {
     display: 'none'
+  },
+  fontBolt:{
+    fontWeight: 'bold',
+    color: 'black',
+    fontSize: '13px'
+    
   },
 });
 
@@ -109,7 +118,13 @@ class Filter extends Component {
                   displayEmpty={true}
                 >
                   <MenuItem value="" disabled>
+                    <InputLabel
+                            FormLabelClasses={{
+                            root: classes.fontBolt,
+                            }}
+                         >
                       Cycle / Month
+                      </InputLabel>
                   </MenuItem>
                   {cycles.map(option => (
                     <MenuItem key={option.id} value={option.id}>
@@ -128,7 +143,13 @@ class Filter extends Component {
                   displayEmpty={true}
                 >
                   <MenuItem value="" disabled>
+                  <InputLabel
+                    FormLabelClasses={{
+                      root: classes.fontBolt,
+                      }}
+                      >
                       Division
+                      </InputLabel>
                   </MenuItem>
                   <MenuItem value="ALL">
                       All divisions
