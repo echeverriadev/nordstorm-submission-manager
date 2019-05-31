@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
 import AddAccordion from './AddAccordion';
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
@@ -58,7 +59,10 @@ const styles = theme => ({
   },
   select: {
     marginBottom: theme.spacing.unit,
-    fontSize: "13px"
+    fontSize: "13px",
+     '&::placeholder': {
+      color: 'grey'
+    }
   },
   tagLabel: {
     padding: 1,
@@ -165,7 +169,11 @@ class AddCell extends React.Component {
                         displayEmpty
                       >
                         <MenuItem value={0} disabled>
-                          Priority
+                         <InputLabel
+                            FormLabelClasses={{
+                            root: classes.inputFont,
+                            }}
+                         >Priority</InputLabel>
                         </MenuItem>
                         <MenuItem value={1}>1</MenuItem>
                         <MenuItem value={2}>2</MenuItem>
@@ -306,7 +314,13 @@ class AddCell extends React.Component {
                           displayEmpty
                         >
                           <MenuItem value={""} disabled>
-                            In Stock
+                          <InputLabel
+                            FormLabelClasses={{
+                            root: classes.inputFont,
+                            }}
+                           >In Stock
+                          </InputLabel>
+                            
                           </MenuItem>
                           <MenuItem value={1}>1</MenuItem>
                           <MenuItem value={2}>2</MenuItem>

@@ -14,6 +14,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -192,7 +193,12 @@ class CardCell extends React.Component {
                       displayEmpty
                     >
                       <MenuItem value={0} disabled>
-                        Priority
+                        
+                        <InputLabel
+                         FormLabelClasses={{
+                            root: classes.inputFont,
+                            }}
+                        >Priority</InputLabel>
                       </MenuItem>
                       <MenuItem value={1}>1</MenuItem>
                       <MenuItem value={2}>2</MenuItem>
@@ -334,7 +340,11 @@ class CardCell extends React.Component {
                         displayEmpty
                       >
                         <MenuItem value={""} disabled>
-                            In Stock
+                           <InputLabel
+                            FormLabelClasses={{
+                            root: classes.inputFont,
+                            }}
+                           >In Stock</InputLabel>
                           </MenuItem>
                           <MenuItem value={1}>1</MenuItem>
                           <MenuItem value={2}>2</MenuItem>
