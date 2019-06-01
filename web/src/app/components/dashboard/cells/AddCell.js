@@ -16,7 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import AddAccordion from './AddAccordion';
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
-import { onlyNumber } from '../../../../helpers/validation';
+import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
   card: {
@@ -85,7 +85,29 @@ const styles = theme => ({
     fontSize: '13px'
   }
 });
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
 
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      
+    />
+  );
+}
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 class AddCell extends React.Component {
   state = { expanded: false, isOpen: false, preview: null };
 
@@ -331,19 +353,22 @@ class AddCell extends React.Component {
                     </Grid>
                     <Grid item md={1}>
                       <TextField
-                        InputProps={{
-                          className: classes.inputFont
-                        }}
-                        InputLabelProps= {{
-                          className: classes.labelFont
-                        }}
-                        id="retail_price"
-                        label="Price"
-                        className={classes.textField}
-                        margin="normal"
-                        value={item.retail_price}
-                        onChange={e => onChange("retail_price", onlyNumber(e.target.value))}
-                      />
+                      InputProps={{
+                        className: classes.inputFont,
+                        inputComponent: NumberFormatCustom,
+                      }}
+                      InputLabelProps= {{
+                        className: classes.labelFont
+                      }}
+                      id="retail_price"
+                      label="Price"
+                      className={classes.textField}
+                      margin="normal"
+                      value={item.retail_price}
+                      onChange={e => onChange("retail_price", e.target.value)}
+                     
+                    />
+                      
                     </Grid>
                     <Grid item md={1} />
                 </Grid>
