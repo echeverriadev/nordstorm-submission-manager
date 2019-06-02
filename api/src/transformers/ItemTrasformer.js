@@ -24,11 +24,12 @@ const format = (data) => {
         request_extension_note: data.request_extension_note || "",
         request_cancellation: data.request_cancellation || null,
         request_cancellation_notes: data.request_cancellation_notes || "",
-        departament_number: data.department_number || "",
+        department_number: data.department_number || "",
         tagged_missy: data.tagged_missy || 0,
         tagged_encore: data.tagged_encore ||0,
         tagged_petite: data.tagged_petite || 0,
-        tagged_extended: data.tagged_extended || 0
+        tagged_extended: data.tagged_extended || 0,
+        department: data.department || ""
     };
 };
 

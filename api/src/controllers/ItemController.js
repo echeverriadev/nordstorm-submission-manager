@@ -29,7 +29,7 @@ class ItemController {
 
     buildWhere(filter = {}) {
         const fieldsLikeForSearch =  {
-            "dpt": "department_number",
+            "dpt": "item_editorial.department_number",
             "vpn": "vpn",
             "sgn": "style_group_number",
             "brand": "brand",
@@ -104,17 +104,20 @@ class ItemController {
     }
 
     buildOrder(query){
-        const numericFields = ["is_priority", "department_number", "style_group_number", "retail_price"]
+        const numericFields = ["is_priority", "department_number", "style_group_number", "retail_price", "__pk_item"]
         let order = []
         let orderByEscaping = []
         if(query.hasOwnProperty('order') && query.order.length){
-			order = query.order.split(','); //[field1, ASC, field2, DESC...]
+            query.order = query.order + ',__pk_item,ASC';
+            order = query.order.split(','); //[field1, ASC, field2, DESC...]
+        } else{
+            order = ['__pk_item','ASC'];
         }
 		for(let i = 0; i < order.length -1 ; i+=2){
 		    if(numericFields.includes(order[i]))
-		        orderByEscaping.push(`CAST(${this.escapeSansQuotes(order[i])} AS unsigned) ${this.escapeSansQuotes(order[i+1])}`)
+		        orderByEscaping.push(`CAST(item_editorial.${this.escapeSansQuotes(order[i])} AS unsigned) ${this.escapeSansQuotes(order[i+1])}`)
 		    else
-		        orderByEscaping.push(this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
+		        orderByEscaping.push("item_editorial."+this.escapeSansQuotes(order[i]) + " " + this.escapeSansQuotes(order[i+1]))
 		}
 
 
@@ -142,8 +145,10 @@ class ItemController {
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             WHERE ${where}`
             
-            sqlItems = `SELECT item_editorial.* FROM item_editorial
+            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            department.department_number as d_department_number FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else if (specialCaseJoinField === "story") {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
@@ -152,14 +157,19 @@ class ItemController {
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             WHERE ${where}`
             
-            sqlItems = `SELECT item_editorial.* FROM item_editorial
+            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            department.department_number as d_department_number FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
-            sqlItems = `SELECT * FROM item_editorial WHERE ${where} ${orderBy} LIMIT ?, ?`
+            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            department.department_number as d_department_number FROM item_editorial
+            LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
+            WHERE ${where} ${orderBy} LIMIT ?, ?`
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
@@ -310,6 +320,7 @@ class ItemController {
         const { id } = req.params
         const { field, value } = req.body
         const escaping = [field, value, id]
+        const refresh = this.updateRelatedField(field);
         if (hasEmptyField(escaping))
             return res.status(400).json({ status: 400, massage: "Bad Request" })
 
@@ -323,6 +334,7 @@ class ItemController {
                 res.status(200).json({
                     status: 200,
                     massage: "Item update",
+                    refresh
                 })
             else
                 res.status(404).json({
@@ -330,6 +342,17 @@ class ItemController {
                     massage: "Item not found",
                 })
         })
+    }
+
+    updateRelatedField(field) {
+        const relatedFields = ['department_number'];
+        if (!field) {
+            return false;
+        }
+        if (relatedFields.indexOf(field) !== -1) {
+            return true;
+        }
+        return false;
     }
 
     async deleteRecord(req, res, next) {

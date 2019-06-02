@@ -317,7 +317,7 @@ const Accordion = (props) => {
                 <Grid container direction="column">
                     <Grid item md>
                         <Typography variant="caption">Department name</Typography>
-                        <Typography variant="body1">{item.departament}</Typography>
+                        <Typography variant="body1">{item.department}</Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
                         <Typography className={classes.tagItem} variant="caption">Tags</Typography>
