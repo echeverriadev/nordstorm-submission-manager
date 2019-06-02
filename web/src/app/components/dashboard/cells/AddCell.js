@@ -17,6 +17,7 @@ import AddAccordion from './AddAccordion';
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 import { onlyNumber } from '../../../../helpers/validation';
+import { uploadImageApi } from '../../../../api';
 
 const styles = theme => ({
   card: {
@@ -87,7 +88,7 @@ const styles = theme => ({
 });
 
 class AddCell extends React.Component {
-  state = { expanded: false, isOpen: false, preview: null };
+  state = { expanded: false, isOpen: false };
 
   onDrop = (files) => {
     const file = files[0]
@@ -96,14 +97,7 @@ class AddCell extends React.Component {
 
       formData.append('file', file);
 
-      this.setState({preview: URL.createObjectURL(files[0])});
-
-      fetch(`${process.env.REACT_APP_API_URL}/api/items/upload`, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(res => {
+      uploadImageApi(formData).then().then(res => {
         if(res.code === 200){
           this.props.onChange("image", res.data.url);
         }
@@ -147,7 +141,7 @@ class AddCell extends React.Component {
                                   <img
                                       className={classes.img}
                                       alt="complex"
-                                      src={this.state.preview ? this.state.preview : item.image || "https://cdn2.iconfinder.com/data/icons/picons-basic-3/57/basic3-083_dashed_box_drop_zone-512.png"}
+                                      src={item.image || "https://cdn2.iconfinder.com/data/icons/picons-basic-3/57/basic3-083_dashed_box_drop_zone-512.png"}
                                   />
 
                           </div>

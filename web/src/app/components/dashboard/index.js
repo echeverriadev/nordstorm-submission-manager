@@ -110,7 +110,7 @@ class Dashboard extends Component {
             addItem: initialNewItem
           });
           this.fetchItemsApi()
-          alert(response.message);
+          // alert(response.message);
         }else{
           console.error(response.message)
         }

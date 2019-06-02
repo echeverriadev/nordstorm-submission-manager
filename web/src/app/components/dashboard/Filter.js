@@ -95,8 +95,6 @@ class Filter extends Component {
     render = () => {
         const { classes, cycles, divisions, filter, onChangeFilter,
         cannedFilters, onAddCannedFilter, onRemoveCannedFilter } = this.props
-
-        console.log(filter)
       return (
           <Grid className={classes.root}>
               <Grid item >
