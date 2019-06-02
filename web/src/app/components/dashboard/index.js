@@ -45,7 +45,6 @@ const initialNewItem = {
   request_extension_note: "",
   request_cancellation: null,
   request_cancellation_notes: "",
-  departament_number: "",
   tagged_missy: 0,
   tagged_encore: 0,
   tagged_petite: 0,
@@ -133,6 +132,8 @@ class Dashboard extends Component {
       patchItemApi(id,key,value).then(response => {
         if (response.status === 200)
           console.log(response)
+        if (response.refresh)
+          this.fetchItemsApi()
       }, err => {
         console.log(err)
       })
