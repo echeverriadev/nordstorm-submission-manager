@@ -237,7 +237,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="department_number"
+                      id={"department_number"+index}
                       label="Dept #"
                       className={classes.textField}
                       margin="normal"
@@ -255,7 +255,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="vpn"
+                      id={"vpn"+index}
                       label="VPN"
                       className={classes.textField}
                       margin="normal"
@@ -273,7 +273,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="style_group_number"
+                      id={"style_group_number"+index}
                       label="SG"
                       className={classes.textField}
                       color="primary"
@@ -290,7 +290,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="brand"
+                      id={"brand"+index}
                       label="Brand"
                       className={classes.textField}
                       margin="normal"
@@ -308,7 +308,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="color"
+                      id={"color"+index}
                       label="Color"
                       className={classes.textField}
                       margin="normal"
@@ -324,7 +324,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="size"
+                      id={"size"+index}
                       label="Size"
                       className={classes.textField}
                       margin="normal"
@@ -340,7 +340,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="description"
+                      id={"description"+index}
                       label="Item Description"
                       className={classes.textField}
                       margin="normal"
@@ -380,7 +380,7 @@ class CardCell extends React.Component {
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
-                      id="retail_price"
+                      id={"retail_price"+index}
                       label="Price"
                       className={classes.textField}
                       margin="normal"

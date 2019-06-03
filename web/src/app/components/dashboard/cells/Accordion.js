@@ -169,7 +169,7 @@ const Accordion = (props) => {
                               className: classes.labelFont
                               
                             }}
-                            id="asp"
+                            id={"asp"+index}
                             label="Ann. Sale Price"
                             margin="none"
                             value={item.sale_price}
@@ -184,7 +184,7 @@ const Accordion = (props) => {
                             InputLabelProps= {{
                               className: classes.labelFont
                             }}
-                            id="pp"
+                            id={"pp"+index}
                             label="Product Priority"
                             margin="none"
                             value={item.is_priority}
@@ -219,7 +219,7 @@ const Accordion = (props) => {
                             InputLabelProps= {{
                               className: classes.labelFont
                             }}
-                            id="canadaprice"
+                            id={"canadaprice"+index}
                             disabled={!(item.available_in_canada === 1)}
                             label="Canada Price"
                             margin="none"
@@ -257,7 +257,7 @@ const Accordion = (props) => {
                                 InputLabelProps= {{
                                   className: classes.labelFont
                                 }}
-                                id="specifycountry"
+                                id={"specifycountry"+index}
                                 label="Specify Country"
                                 margin="none"
                                 value={item.country_of_origin_other}
@@ -294,7 +294,7 @@ const Accordion = (props) => {
                             InputLabelProps= {{
                               className: classes.labelFont
                             }}
-                            id="extensionreason"
+                            id={"extensionreason"+index}
                             disabled={!(item.request_extension === 1)}
                             label="Extension Reason"
                             margin="none"
@@ -329,7 +329,7 @@ const Accordion = (props) => {
                             InputLabelProps= {{
                               className: classes.labelFont
                             }}
-                            id="cancelationreason"
+                            id={"cancelationreason"+index}
                             disabled={!(item.request_cancellation === 1)}
                             label="Cancelation Reason"
                             margin="none"
