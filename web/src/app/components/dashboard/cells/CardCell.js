@@ -14,14 +14,12 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
 import { uploadImageApi } from '../../../../api';
-import { onlyNumber } from '../../../../helpers/validation';
-
+import NumberFormat from 'react-number-format';
 import ItemLogModal from '../ItemLogModal';
 import ItemDeleteDialog from '../ItemDeleteDialog';
 
@@ -87,8 +85,33 @@ const styles = theme => ({
   },
   labelFont: {
     fontSize: '13px'
-  }
+  },
+  
 });
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      
+    />
+  );
+}
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 class CardCell extends React.Component {
   state = { expanded: false, isOpen: false, preview: null };
@@ -128,8 +151,11 @@ class CardCell extends React.Component {
     popupState.close();
     onDuplicateItem(id);
   }
+  
 
   render() {
+    
+  
     const { classes, item, index, onChange, cycles, onDeleteItem } = this.props;
     return (
       <Card className={classes.card}>
@@ -194,11 +220,7 @@ class CardCell extends React.Component {
                     >
                       <MenuItem value={0} disabled>
                         
-                        <InputLabel
-                         FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                        >Priority</InputLabel>
+                       Priority
                       </MenuItem>
                       <MenuItem value={1}>1</MenuItem>
                       <MenuItem value={2}>2</MenuItem>
@@ -340,11 +362,7 @@ class CardCell extends React.Component {
                         displayEmpty
                       >
                         <MenuItem value={""} disabled>
-                           <InputLabel
-                            FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                           >In Stock</InputLabel>
+                          In Stock
                           </MenuItem>
                           <MenuItem value={1}>1</MenuItem>
                           <MenuItem value={2}>2</MenuItem>
@@ -356,7 +374,8 @@ class CardCell extends React.Component {
                   <Grid item md={1}>
                     <TextField
                       InputProps={{
-                        className: classes.inputFont
+                        className: classes.inputFont,
+                        inputComponent: NumberFormatCustom,
                       }}
                       InputLabelProps= {{
                         className: classes.labelFont
@@ -366,7 +385,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.retail_price}
-                      onChange={e => onChange(index, "retail_price", onlyNumber(e.target.value))}
+                      onChange={e => onChange(index, "retail_price", e.target.value)}
+                     
                     />
                   </Grid>
                   <Grid item md={1}>

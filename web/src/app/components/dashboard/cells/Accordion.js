@@ -13,7 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import Typography from '@material-ui/core/Typography';
-import { onlyNumber } from '../../../../helpers/validation';
+import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
 
 const styles = theme => ({
@@ -101,6 +101,29 @@ const styles = theme => ({
   }
 });
 
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      
+    />
+  );
+}
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 const Accordion = (props) => {
   const { classes, item, index, onChange, cycles } = props;
@@ -139,16 +162,18 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             InputProps={{
-                              className: classes.inputFont
+                              className: classes.inputFont,
+                              inputComponent: NumberFormatCustom
                             }}
                             InputLabelProps= {{
                               className: classes.labelFont
+                              
                             }}
                             id="asp"
                             label="Ann. Sale Price"
                             margin="none"
                             value={item.sale_price}
-                            onChange={e => onChange(index, "sale_price", onlyNumber(e.target.value))}
+                            onChange={e => onChange(index, "sale_price", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>
@@ -188,7 +213,8 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         <TextField
                             InputProps={{
-                              className: classes.inputFont
+                              className: classes.inputFont,
+                              inputComponent: NumberFormatCustom,
                             }}
                             InputLabelProps= {{
                               className: classes.labelFont
@@ -198,7 +224,7 @@ const Accordion = (props) => {
                             label="Canada Price"
                             margin="none"
                             value={item.price_cad}
-                            onChange={e => onChange(index, "price_cad", onlyNumber(e.target.value))}
+                            onChange={e => onChange(index, "price_cad", e.target.value)}
                         />
                     </Grid>
                     <Grid item md={3}>

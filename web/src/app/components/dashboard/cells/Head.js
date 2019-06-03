@@ -26,6 +26,7 @@ const styles = theme => ({
     fontSize: '13px'
   },
   headCell: {
+      display: 'flex',
     '&:hover': {
       cursor: "pointer"
     }
@@ -99,10 +100,12 @@ const CenteredGrid = (props) => {
                       md={field.grids}
                       className={classes.headCell}
                     >
+                        <div>
+                            {order.field === field.name && 
+                              <Icon fontSize="small">{iconCriterion[order.criterion]}</Icon>
+                            }
+                        </div>
                       <Typography align="left" className={classes.title} variant="body2">
-                        {order.field === field.name && 
-                          <Icon fontSize="small">{iconCriterion[order.criterion]}</Icon>
-                        }
                         {field.label}
                       </Typography>
                     </Grid>

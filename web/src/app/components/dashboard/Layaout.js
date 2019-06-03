@@ -31,6 +31,7 @@ const styles = theme => ({
     zIndex: '100',
     backgroundColor: 'white',
     width: '100%',
+    marginTop:'12px'
   },
 
 });
@@ -43,6 +44,7 @@ const Layaout = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.head}>
+      
         <Filter
           cycles={cycles}
           divisions={divisions}
