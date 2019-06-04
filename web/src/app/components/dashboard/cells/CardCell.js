@@ -34,7 +34,7 @@ const styles = theme => ({
     margin: 0,
     padding: 0,
     maxHeight: 110,
-    marginTop: '10px'
+    marginTop: '20px'
   },
   expand: {
     transform: 'rotate(0deg)',
