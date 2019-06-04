@@ -321,8 +321,8 @@ class ItemController {
         const { field, value } = req.body
         const escaping = [field, value, id]
         const refresh = this.updateRelatedField(field);
-        if (hasEmptyField(escaping))
-            return res.status(400).json({ status: 400, massage: "Bad Request" })
+       // if (hasEmptyField(escaping))
+         //   return res.status(400).json({ status: 400, massage: "Bad Request" })
 
         this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
             if (err) {
