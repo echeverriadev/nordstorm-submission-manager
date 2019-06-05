@@ -41,7 +41,7 @@ const iconCriterion = {
 const fieldsHeader = [
   {
    label: "NMG Priority",
-   name: "is_priority",
+   name: "nmg_priority",
    grids: 1
   },{
    label: "Dept.#",
