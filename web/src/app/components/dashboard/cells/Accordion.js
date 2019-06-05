@@ -61,10 +61,10 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     color: '#fff',
     fontWeight: 'bold',
-    '&:hover': {
-        backgroundColor: "#00B2BD",
+    '&:hover, &:focus': {
+        backgroundColor: "#74a8da!important",
     },
-    backgroundColor: '#74a8da'
+    backgroundColor: '#74a8da;!important'
   },
   tagAvatarOn: {
     color: '#fff',
@@ -74,8 +74,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     color: '#fff',
     fontWeight: 'bold',
-    '&:hover': {
-        backgroundColor: "#B8B8B8",
+    '&:hover, &:focus': {
+        backgroundColor: "#C5C5C5",
     },
     backgroundColor: '#C5C5C5'
   },
@@ -352,7 +352,7 @@ const Accordion = (props) => {
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
                                     label="Missy"
-                                    clickable
+                                    
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 0)}
@@ -361,7 +361,7 @@ const Accordion = (props) => {
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
-                                    clickable
+                                    
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 1)}

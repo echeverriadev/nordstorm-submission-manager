@@ -61,8 +61,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     color: '#fff',
     fontWeight: 'bold',
-    '&:hover': {
-        backgroundColor: "#00B2BD",
+    '&:hover, &:focus': {
+        backgroundColor: "#74a8da",
     },
     backgroundColor: '#74a8da'
   },
@@ -74,8 +74,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     color: '#fff',
     fontWeight: 'bold',
-    '&:hover': {
-        backgroundColor: "#B8B8B8",
+    '&:hover, &:focus': {
+        backgroundColor: "#C5C5C5",
     },
     backgroundColor: '#C5C5C5'
   },
