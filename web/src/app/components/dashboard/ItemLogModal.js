@@ -17,6 +17,39 @@ function getModalStyle() {
   };
 }
 
+const itemLogs = [
+  {
+    user_name: "User Name",
+    time_stamp: "2019-01-31 10:32",
+    event: "Edited",
+    details: {
+      "Your Field": "AbC",
+      "My Field": "123",
+      "His Field": "Lorem ipsum"
+    }
+  },
+  {
+    user_name: "User Name",
+    time_stamp: "2019-01-31 10:32",
+    event: "Edited",
+    details: {
+      "His Field": "Lorem ipsum",
+      "Your Field": "AbC",
+      "My Field": "123",
+    }
+  },
+  {
+    user_name: "User Name",
+    time_stamp: "2019-01-31 10:32",
+    event: "Edited",
+    details: {
+      "My Field": "123",
+      "His Field": "Lorem ipsum",
+      "Your Field": "AbC",
+    }
+  }
+]
+
 const styles = theme => ({
   paper: {
     position: 'absolute',
@@ -26,15 +59,34 @@ const styles = theme => ({
     // padding: theme.spacing.unit * 4,
     outline: 'none',
   },
-  title: {
-    backgroundColor: theme.palette.primary.main,
-    color: "white"
+  titleModal: {
+    //backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#004F7A",
+    color: "white",
+    padding: '10px'
+  },
+  headTable: {
+    color: theme.palette.primary.main,
+    fontWeight: "bold"
+  },
+  selected: {
+    backgroundColor: theme.palette.primary.main + "!important",
+    color: "white !important"
+  },
+  list: {
+    padding: 0,
+    borderRight: "1px solid rgba(0, 0, 0, 0.12)"
+  },
+  tableCell: {
+    borderBottom: "none"
   }
 });
 
 class ItemLogModal extends React.Component {
   state = {
     open: false,
+    selected: null,
+    details: {}
   };
 
   handleOpen = () => {
@@ -44,9 +96,17 @@ class ItemLogModal extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+  
+  handleListItemClick = (event, index) => {
+    this.setState({
+      selected: index,
+      details: itemLogs[index].details
+    })
+  }
 
   render() {
     const { classes } = this.props;
+    const {open, selected, details} = this.state
 
     return (
       <div>
@@ -54,74 +114,64 @@ class ItemLogModal extends React.Component {
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={this.state.open}
+          open={open}
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <Typography className={classes.title} variant="h6" id="modal-title">
+            <Typography className={classes.titleModal} variant="h6" id="modal-title">
               Item Edit Log
             </Typography>        
             <Grid container spacing={8}>
               <Grid item xs={4}>
-                <List>
-                  <ListItem alignItems="flex-start">
-                    <ListItemText
-                      primary="User Name"
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary"
-                          >
-                            2019-01-31 10:32
-                          </Typography>
-                          Edited
-                        </React.Fragment>
-                      }
-                    />
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem alignItems="flex-start">
-                    <ListItemText
-                      primary="User Name"
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary"
-                          >
-                            2019-01-31 10:32
-                          </Typography>
-                          Edited
-                        </React.Fragment>
-                      }
-                    />
-                  </ListItem>
+                <List className={classes.list}>
+                  {itemLogs.map((item, index) => 
+                    <React.Fragment>
+                      <ListItem
+                        classes={{selected: classes.selected}}
+                        alignItems="flex-start"
+                        button
+                        selected={selected === index}
+                        onClick={event => this.handleListItemClick(event, index)}
+                      >
+                        <ListItemText
+                          primary={item.user_name}
+                          primaryTypographyProps={{
+                            color: "inherit"
+                          }}
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                component="span"
+                                variant="caption"
+                                // color="textPrimary"
+                              >
+                                {item.time_stamp}
+                              </Typography>
+                              {item.event}
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                      {index !== itemLogs.length - 1 && <Divider component="li" />}
+                    </React.Fragment>
+                  )}
                 </List>
               </Grid>
               <Grid item xs={8}>
                 <Table className={classes.table} size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Field</TableCell>
-                      <TableCell>New Value</TableCell>
+                      <TableCell className={classes.headTable}>Field</TableCell>
+                      <TableCell className={classes.headTable}>New Value</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>My Field</TableCell>
-                      <TableCell>123</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Your Field</TableCell>
-                      <TableCell>AbC</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>His Field</TableCell>
-                      <TableCell>Lorem ipsum</TableCell>
-                    </TableRow>
+                    {Object.keys(details).map((key, index) => 
+                      <TableRow key={index}>
+                        <TableCell className={classes.tableCell}>{key}</TableCell>
+                        <TableCell className={classes.tableCell}>{details[key]}</TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </Grid>
