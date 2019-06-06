@@ -19,6 +19,7 @@ class ItemController {
         this.escapeSansQuotes = this.escapeSansQuotes.bind(this);
         this.deleteRecord = this.deleteRecord.bind(this);
         this.duplicateItem = this.duplicateItem.bind(this);
+        this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
     }
 
     escapeSansQuotes(criterion) {
@@ -321,9 +322,12 @@ class ItemController {
         const { field, value } = req.body
         const escaping = [field, value, id]
         const refresh = this.updateRelatedField(field);
+        //if country_of_origin was update to another value distinct to Imported - Specify Country, It must clean the field country_of_origin_other
+        if(field === "country_of_origin" && value !== "Imported - Specify Country") 
+            this.cleanCountryOfOriginOther(id)
        // if (hasEmptyField(escaping))
          //   return res.status(400).json({ status: 400, massage: "Bad Request" })
-
+        
         this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
             if (err) {
                 console.log(err)
@@ -353,6 +357,14 @@ class ItemController {
             return true;
         }
         return false;
+    }
+    
+    cleanCountryOfOriginOther(_pk_item) {
+        console.log("cleanCountryOfOriginOther")
+        this.connection.query('UPDATE item_editorial SET country_of_origin_other = NULL WHERE __pk_item = ?', [_pk_item], (err, result) => {
+            console.error(err)
+            console.log(result)
+        })
     }
 
     async deleteRecord(req, res, next) {
