@@ -15,6 +15,8 @@ import DoneIcon from '@material-ui/icons/Done';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
+import InputLabel from '@material-ui/core/InputLabel';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
   root: {
@@ -98,6 +100,16 @@ const styles = theme => ({
   },
   labelFont: {
     fontSize: '13px'
+  },
+  labelItem: {
+    fontWeight: 'bold'
+  },
+  labelItemContainer: {
+    marginTop: '6%'
+  },
+  gridContainer: {
+    paddingBottom: '2%',
+    paddingTop: '1%'
   }
 });
 function NumberFormatCustom(props) {
@@ -134,7 +146,7 @@ const Accordion = (props) => {
                 <FormHelperText className={classes.helperText}>Drop the image to replace</FormHelperText>
             </Grid>
             <Grid item className={classes.column} md={9}>
-                <Grid container>
+                <Grid className={classes.gridContainer} container>
                     <Grid item md={3}>
                         <FormHelperText className={classes.selectLabel}>Cycles</FormHelperText>
                         <Select
@@ -158,7 +170,9 @@ const Accordion = (props) => {
                             }
                         </Select>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid style={{marginTop: "4px"}} item md={3}>
+                    {
+                        (item._fk_cycle && item._fk_cycle != -1)?
                         <TextField
                             InputProps={{
                               className: classes.inputFont,
@@ -166,32 +180,52 @@ const Accordion = (props) => {
                             }}
                             InputLabelProps= {{
                               className: classes.labelFont
+                              
                             }}
-                            id="asp"
-                            label="Ann. sale price"
+                            label="Ann. Sale Price"
                             margin="none"
                             value={item.sale_price}
                             onChange={e => onChange("sale_price", e.target.value)}
                         />
+                        :
+                        <div className={classes.labelItemContainer}>
+                            <InputLabel
+                             className={classes.labelItem}
+                             htmlFor="sale_price">
+                            Ann. Sale Price: {item.sale_price}
+                            </InputLabel>
+                        </div>
+                    }
                     </Grid>
-                    <Grid item md={3}>
-                        <TextField
-                            InputProps={{
-                              className: classes.inputFont
-                            }}
-                            InputLabelProps= {{
-                              className: classes.labelFont
-                            }}
-                            id="pp"
-                            label="Product Priority"
-                            margin="none"
-                            value={item.is_priority}
-                            onChange={e => onChange("is_priority", e.target.value)}
-                        />
+                    <Grid style={{marginTop: "4px", marginLeft: "-4%"}} item md={3}>
+                    {
+                        (item._fk_cycle && item._fk_cycle != -1)?
+                            <TextField
+                                InputProps={{
+                                  className: classes.inputFont
+                                }}
+                                InputLabelProps= {{
+                                  className: classes.labelFont
+                                }}
+                                label="Product Priority"
+                                margin="none"
+                                value={item.is_priority}
+                                onChange={e => onChange("is_priority", e.target.value)}
+                            />
+                        :
+                        <div className={classes.labelItemContainer}>
+                            <InputLabel
+                             className={classes.labelItem}
+                             htmlFor="produc_priority">
+                                Priority: {item.is_priority? item.is_priority : "None"}
+                            </InputLabel>
+                        </div>
+                    }
+                        
                     </Grid>
                 </Grid>
-
-                <Grid container>
+                <Divider/>
+                <Grid className={classes.gridContainer} container>
                     <Grid item md={3}>
                         <FormControlLabel
                             control={
@@ -203,72 +237,103 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
-                            label="Available in Canada"
                             classes={{label: classes.labelSwitch}}
+                            label="Available in Canada"
                             labelPlacement="start"
                         />
                     </Grid>
                     <Grid item md={3}>
-                        <TextField
-                            InputProps={{
-                            
-                              className: classes.inputFont,
-                              inputComponent: NumberFormatCustom,
-                            }}
-                            InputLabelProps= {{
-                              className: classes.labelFont
-                            }}
-                            id="canadaprice"
-                            disabled={!(item.available_in_canada === 1)}
-                            label="Canada Price"
-                            margin="none"
-                            value={item.price_cad}
-                            onChange={e => onChange("price_cad", e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item md={3}>
-                        <Select
-                            inputProps= {{
-                              className: classes.inputFont
-                            }}
-                            className={classes.selectCountry}
-                            value={item.country_of_origin}
-                            onChange={e => onChange("country_of_origin", e.target.value)}
-                            name="Country of origin"
-                            displayEmpty
-                        >
-                            <MenuItem value={""} disabled>
-                                Country of Origin
-                            </MenuItem>
-                            <MenuItem value={"USA"}>USA</MenuItem>
-                            <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
-                            <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
-                            <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item md={3}>
-                        {
-                            (item.country_of_origin === "Imported - Specify Country") ?
+                    {
+                        (item.available_in_canada && item.available_in_canada === 1)?
                             <TextField
                                 InputProps={{
-                                  className: classes.inputFont
+                                  className: classes.inputFont,
+                                  inputComponent: NumberFormatCustom,
                                 }}
                                 InputLabelProps= {{
                                   className: classes.labelFont
                                 }}
-                                id="specifycountry"
-                                label="Specify Country"
+                                disabled={!(item.available_in_canada === 1)}
+                                label="Canada Price"
                                 margin="none"
-                                value={item.country_of_origin_other}
-                                onChange={e => onChange("country_of_origin_other", e.target.value)}
+                                defaultValue={(item.price_cad && item.price_cad != "")? item.price_cad : 0}
+                                onChange={e => onChange("price_cad", e.target.value)}
                             />
+                        :
+                        <div className={classes.labelItemContainer}>
+                            <InputLabel
+                             className={classes.labelItem}
+                             htmlFor="produc_priority">
+                                Canada price: {(item.price_cad && item.price_cad != "")? item.price_cad : "0"}
+                            </InputLabel>
+                        </div>
+                    }
+                        
+                    </Grid>
+                    <Grid style={{marginLeft: "-4%"}} item md={3}>
+                    {
+                        (item.available_in_canada && item.available_in_canada === 1)?
+                            <Select
+                                inputProps= {{
+                                  className: classes.inputFont
+                                }}
+                                className={classes.selectCountry}
+                                value={item.country_of_origin}
+                                onChange={e => onChange("country_of_origin", e.target.value)}
+                                name="Country of origin"
+                                displayEmpty
+                            >
+                                <MenuItem value={""} disabled>
+                                    Country of Origin
+                                </MenuItem>
+                                <MenuItem value={"USA"}>USA</MenuItem>
+                                <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
+                                <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
+                                <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
+                            </Select>
+                        :
+                            <div className={classes.labelItemContainer}>
+                                <InputLabel
+                                 className={classes.labelItem}
+                                 htmlFor="country_of_origin">
+                                    Country of Origin: {(item.country_of_origin && item.country_of_origin != "")? item.country_of_origin : "None"}
+                                </InputLabel>
+                            </div>
+                        
+                    }
+                    </Grid>
+                    <Grid style={{marginTop: "3px", marginLeft: "3%"}} item md={3}>
+                        {
+                            (item.country_of_origin === "Imported - Specify Country") ?
+                               (item.available_in_canada && item.available_in_canada === 1)?
+                                    <TextField
+                                        InputProps={{
+                                          className: classes.inputFont
+                                        }}
+                                        InputLabelProps= {{
+                                          className: classes.labelFont
+                                        }}
+                                        label="Specify Country"
+                                        margin="none"
+                                        value={item.country_of_origin_other}
+                                        onChange={e => onChange( "country_of_origin_other", e.target.value)}
+                                    />
+                                :
+                                    <div className={classes.labelItemContainer}>
+                                        <InputLabel
+                                         className={classes.labelItem}
+                                         htmlFor="specify_country_of_origin">
+                                            Specify Country of Origin: {(item.country_of_origin_other && item.country_of_origin_other  != "")? item.country_of_origin_other : "None"}
+                                        </InputLabel>
+                                    </div>
+                                    
                             :
                             null
                         }
                     </Grid>
                 </Grid>
-
-                <Grid container>
+              <Divider/>
+                <Grid className={classes.gridContainer} container>
                     <Grid item md={3}>
                         <FormControlLabel
                             control={
@@ -280,29 +345,40 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
-                            label="Request Extension"
                             classes={{label: classes.labelSwitch}}
+                            label="Request Extension"
                             labelPlacement="start"
                         />
                     </Grid>
                     <Grid item md={3}>
-                        <TextField
-                            InputProps={{
-                              className: classes.inputFont
-                            }}
-                            InputLabelProps= {{
-                              className: classes.labelFont
-                            }}
-                            id="extensionreason"
-                            disabled={!(item.request_extension === 1)}
-                            label="Extension Reason"
-                            margin="none"
-                            value={item.request_extension_note}
-                            onChange={e => onChange("request_extension_note", e.target.value)}
-                        />
+                        {
+                            (item.request_extension === 1)?
+                                <TextField
+                                    InputProps={{
+                                      className: classes.inputFont
+                                    }}
+                                    InputLabelProps= {{
+                                      className: classes.labelFont
+                                    }}
+                                    disabled={!(item.request_extension === 1)}
+                                    label="Extension Reason"
+                                    margin="none"
+                                    value={item.request_extension_note}
+                                    onChange={e => onChange("request_extension_note", e.target.value)}
+                                />
+                            :
+                                <div className={classes.labelItemContainer}>
+                                    <InputLabel
+                                     className={classes.labelItem}
+                                     htmlFor="Extension Reason">
+                                        Extension Reason: {(item.request_extension_note && item.request_extension_note  != "")? item.request_extension_note : "None"}
+                                    </InputLabel>
+                                </div>
+                            
+                        }
                     </Grid>
                 </Grid>
-
+              <Divider/>
                 <Grid container>
                     <Grid item md={3}>
                         <FormControlLabel
@@ -315,26 +391,36 @@ const Accordion = (props) => {
                                 />
                             }
                             className={classes.switch}
-                            label="Request Cancelation"
                             classes={{label: classes.labelSwitch}}
+                            label="Request Cancelation"
                             labelPlacement="start"
                         />
                     </Grid>
                     <Grid item md={3}>
-                        <TextField
-                            InputProps={{
-                              className: classes.inputFont
-                            }}
-                            InputLabelProps= {{
-                              className: classes.labelFont
-                            }}
-                            id="cancelationreason"
-                            disabled={!(item.request_cancellation === 1)}
-                            label="Cancelation Reason"
-                            margin="none"
-                            value={item.request_cancellation_notes}
-                            onChange={e => onChange("request_cancellation_notes", e.target.value)}
-                        />
+                     {
+                        (item.request_cancellation === 1)?
+                            <TextField
+                                InputProps={{
+                                  className: classes.inputFont
+                                }}
+                                InputLabelProps= {{
+                                  className: classes.labelFont
+                                }}
+                                disabled={!(item.request_cancellation === 1)}
+                                label="Cancelation Reason"
+                                margin="none"
+                                value={item.request_cancellation_notes}
+                                onChange={e => onChange("request_cancellation_notes", e.target.value)}
+                            />
+                        :
+                            <div className={classes.labelItemContainer}>
+                                <InputLabel
+                                 className={classes.labelItem}
+                                 htmlFor="Cancelation Reason">
+                                    Cancelation Reason: {(item.request_cancellation_notes && item.request_cancellation_notes  != "")? item.request_cancellation_notes : "None"}
+                                </InputLabel>
+                            </div>
+                     }
                     </Grid>
                 </Grid>
             </Grid>
@@ -342,16 +428,16 @@ const Accordion = (props) => {
                 <Grid container direction="column">
                     <Grid item md>
                         <Typography variant="caption">Department name</Typography>
-                        <Typography variant="body1">{item.department}</Typography>
+                        <Typography variant="body1"><b>{item.department}</b></Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
-                        <Typography className={classes.tagItem} variant="caption">Tags</Typography>
+                    <Typography className={classes.tagItem} variant="caption">Tags</Typography>
                         {
                             item.tagged_missy === 1 ?
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
                                     label="Missy"
-                                    clickable
+                                    
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_missy", 0)}
@@ -360,7 +446,7 @@ const Accordion = (props) => {
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
-                                    clickable
+                                    
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_missy", 1)}
