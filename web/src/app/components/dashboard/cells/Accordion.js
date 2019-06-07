@@ -356,6 +356,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 0)}
+                                    onClick={() => onChange(index, "tagged_missy", 0)}
                                 />
                             :
                                 <Chip
@@ -363,8 +364,8 @@ const Accordion = (props) => {
                                     label="Missy"
                                     
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 1)}
+                                    onClick={() => onChange(index, "tagged_missy", 1)}
                                 />
                         }
                         {
@@ -376,15 +377,15 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 0)}
+                                    onClick={() => onChange(index, "tagged_encore", 0)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
                                     label="Encore"
-                                    clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 1)}
+                                    onClick={() => onChange(index, "tagged_encore", 1)}
                                 />
                         }
                         {
@@ -396,15 +397,15 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 0)}
+                                    onClick={() => onChange(index, "tagged_petite", 0)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>P</Avatar>}
                                     label="Petite"
-                                    clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 1)}
+                                    onClick={() => onChange(index, "tagged_petite", 1)}
                                 />
                         }
                         {
@@ -416,15 +417,15 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 0)}
+                                    onClick={() => onChange(index, "tagged_extended", 0)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>X</Avatar>}
                                     label="Extended"
-                                    clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 1)}
+                                    onClick={() => onChange(index, "tagged_extended", 1)}
                                 />
                         }
                     </Grid>
