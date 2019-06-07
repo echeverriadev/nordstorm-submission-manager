@@ -356,6 +356,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 0)}
+                                    onClick={() => onChange(index, "tagged_missy", 0)}
                                 />
                             :
                                 <Chip
@@ -365,6 +366,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_missy", 1)}
+                                    onClick={() => onChange(index, "tagged_missy", 1)}
                                 />
                         }
                         {
@@ -376,6 +378,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 0)}
+                                    onClick={() => onChange(index, "tagged_encore", 0)}
                                 />
                             :
                                 <Chip
@@ -385,6 +388,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_encore", 1)}
+                                    onClick={() => onChange(index, "tagged_encore", 1)}
                                 />
                         }
                         {
@@ -396,6 +400,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 0)}
+                                    onClick={() => onChange(index, "tagged_petite", 0)}
                                 />
                             :
                                 <Chip
@@ -405,6 +410,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_petite", 1)}
+                                    onClick={() => onChange(index, "tagged_petite", 1)}
                                 />
                         }
                         {
@@ -416,6 +422,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 0)}
+                                    onClick={() => onChange(index, "tagged_extended", 0)}
                                 />
                             :
                                 <Chip
@@ -425,6 +432,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange(index, "tagged_extended", 1)}
+                                    onClick={() => onChange(index, "tagged_extended", 1)}
                                 />
                         }
                     </Grid>
