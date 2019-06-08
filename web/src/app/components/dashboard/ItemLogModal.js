@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {MenuItem, Modal, Typography, Grid, List, ListItem, 
         Divider, ListItemText, Table, TableHead, TableRow, TableCell, TableBody} from '@material-ui/core';
-
+import { getItemlogsApi } from '../../../api';
 
 
 function getModalStyle() {
@@ -17,38 +17,38 @@ function getModalStyle() {
   };
 }
 
-const itemLogs = [
-  {
-    user_name: "User Name",
-    time_stamp: "2019-01-31 10:32",
-    event: "Edited",
-    details: {
-      "Your Field": "AbC",
-      "My Field": "123",
-      "His Field": "Lorem ipsum"
-    }
-  },
-  {
-    user_name: "User Name",
-    time_stamp: "2019-01-31 10:32",
-    event: "Edited",
-    details: {
-      "His Field": "Lorem ipsum",
-      "Your Field": "AbC",
-      "My Field": "123",
-    }
-  },
-  {
-    user_name: "User Name",
-    time_stamp: "2019-01-31 10:32",
-    event: "Edited",
-    details: {
-      "My Field": "123",
-      "His Field": "Lorem ipsum",
-      "Your Field": "AbC",
-    }
-  }
-]
+// const itemLogs = [
+//   {
+//     user_name: "User Name",
+//     time_stamp: "2019-01-31 10:32",
+//     event: "Edited",
+//     details: {
+//       "Your Field": "AbC",
+//       "My Field": "123",
+//       "His Field": "Lorem ipsum"
+//     }
+//   },
+//   {
+//     user_name: "User Name",
+//     time_stamp: "2019-01-31 10:32",
+//     event: "Edited",
+//     details: {
+//       "His Field": "Lorem ipsum",
+//       "Your Field": "AbC",
+//       "My Field": "123",
+//     }
+//   },
+//   {
+//     user_name: "User Name",
+//     time_stamp: "2019-01-31 10:32",
+//     event: "Edited",
+//     details: {
+//       "My Field": "123",
+//       "His Field": "Lorem ipsum",
+//       "Your Field": "AbC",
+//     }
+//   }
+// ]
 
 const styles = theme => ({
   paper: {
@@ -56,11 +56,9 @@ const styles = theme => ({
     width: theme.spacing.unit * 75,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    // padding: theme.spacing.unit * 4,
     outline: 'none',
   },
   titleModal: {
-    //backgroundColor: theme.palette.primary.main,
     backgroundColor: "#004F7A",
     color: "white",
     padding: '10px'
@@ -86,13 +84,27 @@ class ItemLogModal extends React.Component {
   state = {
     open: false,
     selected: null,
-    details: {}
+    details: {},
+    itemLogs: []
   };
 
   handleOpen = () => {
     this.setState({ open: true });
+    this.fetchPatchItemApi()
+    
   };
-
+  
+  fetchPatchItemApi = () => {
+    const { itemId } = this.props
+    getItemlogsApi(itemId).then(response => {
+      if (response.status === 200)
+        this.setState({
+          itemLogs: response.data
+        })
+    })
+    .catch(console.error)
+  }
+  
   handleClose = () => {
     this.setState({ open: false });
   };
@@ -100,13 +112,13 @@ class ItemLogModal extends React.Component {
   handleListItemClick = (event, index) => {
     this.setState({
       selected: index,
-      details: itemLogs[index].details
+      details: this.state.itemLogs[index].details
     })
   }
 
   render() {
     const { classes } = this.props;
-    const {open, selected, details} = this.state
+    const {open, selected, details, itemLogs} = this.state
 
     return (
       <div>
