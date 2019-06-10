@@ -238,7 +238,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"department_number"+index}
-                      label="Dept #"
+                      placeholder="Dept #"
                       className={classes.textField}
                       margin="normal"
                       value={item.department_number}
@@ -256,7 +256,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"vpn"+index}
-                      label="VPN"
+                      placeholder="VPN"
                       className={classes.textField}
                       margin="normal"
                       value={item.vpn}
@@ -274,7 +274,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"style_group_number"+index}
-                      label="SG"
+                      placeholder="SG"
                       className={classes.textField}
                       color="primary"
                       margin="normal"
@@ -291,7 +291,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"brand"+index}
-                      label="Brand"
+                      placeholder="Brand"
                       className={classes.textField}
                       margin="normal"
                       value={item.brand}
@@ -309,7 +309,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"color"+index}
-                      label="Color"
+                      placeholder="Color"
                       className={classes.textField}
                       margin="normal"
                       value={item.color}
@@ -325,7 +325,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"size"+index}
-                      label="Size"
+                      placeholder="Size"
                       className={classes.textField}
                       margin="normal"
                       value={item.size}
@@ -341,7 +341,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"description"+index}
-                      label="Item Description"
+                      placeholder="Item Description"
                       className={classes.textField}
                       margin="normal"
                       //multiline
@@ -381,7 +381,7 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"retail_price"+index}
-                      label="Price"
+                      placeholder="Price"
                       className={classes.textField}
                       margin="normal"
                       value={item.retail_price}
