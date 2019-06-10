@@ -1,4 +1,5 @@
 const format = (data) => {
+    console.log(data)
     return {
         id: data.__pk_cycle,
         name: data.name

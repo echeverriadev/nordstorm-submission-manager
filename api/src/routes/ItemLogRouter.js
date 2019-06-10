@@ -3,6 +3,6 @@ const ItemLogController = require('../controllers/ItemLogController');
 
 const router = express.Router();
 
-router.get('', ItemLogController.index);
+router.get('/:_fk_item_editorial', ItemLogController.index);
 
 module.exports = router;

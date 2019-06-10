@@ -190,6 +190,7 @@ class Dashboard extends Component {
         const limit = 10
         const end = (limit - 1) + offset
         const parseCannedFilters = this.parseCannedFilters()
+        console.log(filter)
         const parsedFilter = {
           ...filter, //object
           parseCannedFilters //array of string
