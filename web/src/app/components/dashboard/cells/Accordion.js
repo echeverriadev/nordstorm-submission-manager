@@ -54,7 +54,7 @@ const styles = theme => ({
     justifyContent: "space-between"
   },
   tagsList: {
-    margin: 0,
+    margin: "15px 0 0",
     padding: 0,
     width: "100%",
     textAlign: "left"
