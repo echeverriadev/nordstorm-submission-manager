@@ -10,6 +10,7 @@ import Search from './Search'
 import { uploadExcelApi } from '../../../api';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import '../Utils/dashboardCustom.css' 
 
 const styles = theme => ({
   root: {

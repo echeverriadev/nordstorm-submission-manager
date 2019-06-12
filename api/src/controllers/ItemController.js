@@ -30,13 +30,14 @@ class ItemController {
 
     buildWhere(filter = {}) {
         const fieldsLikeForSearch =  {
-            "dpt": "item_editorial.department_number",
+            "dept": "item_editorial.department_number",
             "vpn": "vpn",
             "sgn": "style_group_number",
             "brand": "brand",
             "color": "color",
             "size": "size",
             "description": "description",
+            "product_priority": "nmg_priority",
             "in_stock_week": "in_stock_week",
             "country_of_origin": "country_of_origin",
             "specify_country": "country_of_origin_other",
@@ -75,10 +76,15 @@ class ItemController {
                 On first case, field will be the whole text
                 On second case, field: "field" and value: "text to search in field"
             */
+            
             searchText.replace(pattern, (_, field, value) => {
                 if (value){ //second case
                     if(Object.keys(fieldsLikeForSearch).includes(field)) //and field is simply like search
-                        conditions.push(`${fieldsLikeForSearch[field]} LIKE ${this.connection.escape('%'+value+'%')}`)
+                        if(fieldsLikeForSearch[field] == "nmg_priority" || fieldsLikeForSearch[field] == "in_stock_week" ){
+                            conditions.push(fieldsLikeForSearch[field] + "=" + this.connection.escape(value))
+                        }else{
+                            conditions.push(`${fieldsLikeForSearch[field]} LIKE ${this.connection.escape('%'+value+'%')}`)
+                        }
                     else if(field == "product_priority"){
                         const priorityBoolean = value.toLowerCase() === "yes" || value.toLowerCase() === "y" ? 1 : 0
                         conditions.push(`is_priority = ${this.connection.escape(priorityBoolean)}`)
@@ -191,7 +197,7 @@ class ItemController {
 
     async store(req, res, next){
         const data = {
-            nmg_priority: req.body.nmg_priority || "",
+            nmg_priority: req.body.nmg_priority || null,
             department_number: req.body.department_number || "",
             vpn: req.body.vpn || "",
             brand: req.body.brand || "",
