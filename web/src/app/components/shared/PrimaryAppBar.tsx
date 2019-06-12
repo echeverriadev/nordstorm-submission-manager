@@ -1,98 +1,101 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import React from "react";
+import PropTypes from "prop-types";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import InputBase from "@material-ui/core/InputBase";
+import Badge from "@material-ui/core/Badge";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { nauthLogout } from "../../../api";
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import {
+  createStyles,
+  Theme,
+  withStyles,
+  WithStyles
+} from "@material-ui/core/styles";
 
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
-
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MailIcon from "@material-ui/icons/Mail";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import MoreIcon from "@material-ui/icons/MoreVert";
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      width: "100%"
     },
     grow: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     menuButton: {
       marginLeft: -12,
-      marginRight: 20,
+      marginRight: 20
     },
     title: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
-      },
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+        display: "block"
+      }
     },
     search: {
-      position: 'relative',
+      position: "relative",
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+      "&:hover": {
+        backgroundColor: fade(theme.palette.common.white, 0.25)
       },
-      marginRight: theme.spacing.unit * 2,
+      //marginRight: theme.spacing.unit * 2,
       marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing.unit * 3,
-        width: 'auto',
-      },
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        //marginLeft: theme.spacing.unit * 3,
+        width: "auto"
+      }
     },
     searchIcon: {
-      width: theme.spacing.unit * 9,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      //width: theme.spacing.unit * 9,
+      height: "100%",
+      position: "absolute",
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
     },
     inputRoot: {
-      color: 'inherit',
-      width: '100%',
+      color: "inherit",
+      width: "100%"
     },
     inputInput: {
-      paddingTop: theme.spacing.unit,
-      paddingRight: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 10,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: 200,
-      },
+      //paddingTop: theme.spacing.unit,
+      //paddingRight: theme.spacing.unit,
+      //paddingBottom: theme.spacing.unit,
+      //paddingLeft: theme.spacing.unit * 10,
+      transition: theme.transitions.create("width"),
+      width: "100%",
+      [theme.breakpoints.up("md")]: {
+        width: 200
+      }
     },
     sectionDesktop: {
-      display: 'none',
-      [theme.breakpoints.up('md')]: {
-        display: 'flex',
-      },
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "flex"
+      }
     },
     sectionMobile: {
-      display: 'flex',
-      [theme.breakpoints.up('md')]: {
-        display: 'none',
-      },
-    },
+      display: "flex",
+      [theme.breakpoints.up("md")]: {
+        display: "none"
+      }
+    }
   });
-
-
 
 export interface Props extends WithStyles<typeof styles> {}
 
@@ -104,7 +107,7 @@ interface State {
 class PrimaryAppBar extends React.Component<Props, State> {
   state: State = {
     anchorEl: null,
-    mobileMoreAnchorEl: null,
+    mobileMoreAnchorEl: null
   };
 
   handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -124,6 +127,16 @@ class PrimaryAppBar extends React.Component<Props, State> {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleLogout = () => {
+    nauthLogout()
+      .then(response => {
+        let data = response.data;
+        console.log(JSON.stringify(response));
+        window.location.href = "/";
+      })
+      .catch(error => console.error(error));
+  };
+
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
@@ -133,21 +146,22 @@ class PrimaryAppBar extends React.Component<Props, State> {
     const renderMenu = (
       <Menu
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
         <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
       </Menu>
     );
 
     const renderMobileMenu = (
       <Menu
         anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
@@ -180,13 +194,27 @@ class PrimaryAppBar extends React.Component<Props, State> {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Open drawer"
+            >
               {/* <MenuIcon /> */}
-              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              <Typography
+                className={classes.title}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
                 FIT
-             </Typography>
+              </Typography>
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography
+              className={classes.title}
+              variant="h6"
+              color="inherit"
+              noWrap
+            >
               FEATURED ITEM TOOL v4.3.2
             </Typography>
 
@@ -203,7 +231,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
                 </Badge>
               </IconButton>
               <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                aria-owns={isMenuOpen ? "material-appbar" : undefined}
                 aria-haspopup="true"
                 onClick={this.handleProfileMenuOpen}
                 color="inherit"
@@ -212,16 +240,19 @@ class PrimaryAppBar extends React.Component<Props, State> {
               </IconButton>
 
               <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                aria-owns={isMenuOpen ? "material-appbar" : undefined}
                 aria-haspopup="true"
                 color="inherit"
               >
                 <ChevronLeftIcon />
               </IconButton>
-
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+              <IconButton
+                aria-haspopup="true"
+                onClick={this.handleMobileMenuOpen}
+                color="inherit"
+              >
                 <MoreIcon />
               </IconButton>
             </div>
@@ -235,7 +266,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
 }
 
 (PrimaryAppBar as React.ComponentClass<Props>).propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 } as any;
 
 export default withStyles(styles)(PrimaryAppBar);
