@@ -197,7 +197,7 @@ class ItemController {
 
     async store(req, res, next){
         const data = {
-            nmg_priority: req.body.nmg_priority || "",
+            nmg_priority: req.body.nmg_priority || null,
             department_number: req.body.department_number || "",
             vpn: req.body.vpn || "",
             brand: req.body.brand || "",
