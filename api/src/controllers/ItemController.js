@@ -37,7 +37,7 @@ class ItemController {
             "color": "color",
             "size": "size",
             "description": "description",
-            "product_priority": "is_priority",
+            "product_priority": "nmg_priority",
             "in_stock_week": "in_stock_week",
             "country_of_origin": "country_of_origin",
             "specify_country": "country_of_origin_other",
@@ -80,7 +80,7 @@ class ItemController {
             searchText.replace(pattern, (_, field, value) => {
                 if (value){ //second case
                     if(Object.keys(fieldsLikeForSearch).includes(field)) //and field is simply like search
-                        if(fieldsLikeForSearch[field] == "is_priority" || fieldsLikeForSearch[field] == "in_stock_week" ){
+                        if(fieldsLikeForSearch[field] == "nmg_priority" || fieldsLikeForSearch[field] == "in_stock_week" ){
                             conditions.push(fieldsLikeForSearch[field] + "=" + this.connection.escape(value))
                         }else{
                             conditions.push(`${fieldsLikeForSearch[field]} LIKE ${this.connection.escape('%'+value+'%')}`)
