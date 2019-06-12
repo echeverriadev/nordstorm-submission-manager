@@ -5,7 +5,7 @@ const format = (data) => {
         user_name: data.user_name,
         time_stamp: data.time_stamp,
         event: data.event,
-        details: data.details
+        details: randomDetails[Math.floor(Math.random() * 5)]
     };
 };
 
@@ -19,3 +19,31 @@ exports.transform = (data) => {
     return format(data);
 
 };
+
+const randomDetails = [
+    {
+        "Your Field": "AbC",
+        "My Field": "123",
+        "His Field": "Lorem ipsum",
+    },
+    {
+        "My Field": "123",
+        "Your Field": "AbC",
+        "His Field": "Lorem ipsum",
+    },
+    {
+        "His Field": "Lorem ipsum",
+        "Your Field": "AbC",
+        "My Field": "123",
+    },
+    {
+        "His Field": "Lorem ipsum",
+        "My Field": "123",
+        "Your Field": "AbC",
+    },
+    {
+        "Your Field": "AbC",
+        "His Field": "Lorem ipsum",
+        "My Field": "123",
+    },
+]
