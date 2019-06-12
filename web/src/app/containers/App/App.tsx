@@ -58,9 +58,9 @@ class App extends Component {
           expirationTime = parseInt(queryStringArray[2].split("=")[1]);
         }
 
-        if (!response.logged && token.length === 0 && !response.relog) {
+        if (!response.logged && token.length === 0) {
           window.location = response.oktaUrl;
-        } else if (!response.logged && token.length > 0 && !response.relog) {
+        } else if (!response.logged && token.length > 0) {
           history.pushState(
             "",
             document.title,

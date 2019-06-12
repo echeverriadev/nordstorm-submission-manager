@@ -18,6 +18,15 @@ class NAuthController {
    * Logings into nauth
    */
   async login(req, res, next) {
+    let nauthByPass = process.env.NA_BYPASS;
+
+    if (nauthByPass) {
+      res.status(200).json({
+        status: 200,
+        logged: true
+      });
+    }
+
     let nauthToken = req.cookies.nauthToken;
     let nauthExpirationTime = req.cookies.nauthExpirationTime;
 
