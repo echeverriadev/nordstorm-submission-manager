@@ -111,7 +111,7 @@ NumberFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 class AddCell extends React.Component {
-  state = { expanded: false, isOpen: false };
+  state = { expanded: false, isOpen: false, key: 0, };
 
   onDrop = (files) => {
     const file = files[0]
@@ -137,6 +137,9 @@ class AddCell extends React.Component {
   canSubmit = ({charCode}) => {
     if(charCode === 13 || charCode === 10){
       this.props.onSubmit()
+      this.setState({
+        key: Math.random(),
+      });
     }
   }
 
@@ -148,7 +151,7 @@ class AddCell extends React.Component {
     const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={this.canSubmit} className={classes.card}>
+      <Card onKeyPress={this.canSubmit} className={classes.card} key={this.state.key}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 

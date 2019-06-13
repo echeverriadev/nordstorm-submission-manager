@@ -1,5 +1,5 @@
-import fetch from 'isomorphic-fetch';
-import queryString from 'query-string';
+import fetch from "isomorphic-fetch";
+import queryString from "query-string";
 
 export function apiFetch(endpoint, options = {}, query = false) {
   console.log(endpoint)
@@ -14,7 +14,7 @@ export function apiFetch(endpoint, options = {}, query = false) {
       const fetchOptions = apiOptions(options);
       const fetchEndpoint = apiEndpoint(endpoint, qs);
       const response = await fetch(fetchEndpoint, fetchOptions);
-      if(response.status === 401){
+      if (response.status === 401) {
         throw new Error("Credenciales incorrectas");
       }
       return response.json();
@@ -27,7 +27,7 @@ export function apiFetch(endpoint, options = {}, query = false) {
 }
 
 export function apiEndpoint(endpoint, qs) {
-  let query = '';
+  let query = "";
 
   if (qs) {
     query = `?${qs}`;
@@ -38,20 +38,22 @@ export function apiEndpoint(endpoint, qs) {
 
 export function apiOptions(options = {}) {
   const {
-    method = 'GET',
+    method = "GET",
     headers = {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     },
-    body = false
+    body = false,
+    credentials = "include"
   } = options;
 
   const newOptions = {
     method,
-    headers
+    headers,
+    credentials
   };
 
   if (body) {
-    newOptions.body = headers['Content-Type'] ? JSON.stringify(body) : body;
+    newOptions.body = headers["Content-Type"] ? JSON.stringify(body) : body;
   }
 
   return newOptions;
