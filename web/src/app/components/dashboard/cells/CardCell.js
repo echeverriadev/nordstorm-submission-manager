@@ -64,6 +64,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
     width: "95%",
+    
   },
   select: {
     marginBottom: theme.spacing.unit,
@@ -81,10 +82,19 @@ const styles = theme => ({
     color: "#199EB9",
   },
   inputFont: {
-    fontSize: '13px'
+    fontSize: '13px',
+  
   },
+  input: {
+    '&::placeholder': {
+      color: 'red'
+    }
+    
+  },
+  
   labelFont: {
-    fontSize: '13px'
+    fontSize: '13px',
+    
   },
   
 });
@@ -232,13 +242,14 @@ class CardCell extends React.Component {
                   <Grid item md={1}>
                     <TextField
                       InputProps={{
-                        className: classes.inputFont
+                        className: classes.inputFont,
+                        classes: {input: classes.input }
                       }}
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
                       id={"department_number"+index}
-                      placeholder="Dept #"
+                      placeholder="Dept #*"
                       className={classes.textField}
                       margin="normal"
                       value={item.department_number}
@@ -250,13 +261,14 @@ class CardCell extends React.Component {
                   <Grid item md={1}>
                     <TextField
                       InputProps={{
-                        className: classes.inputFont
+                        className: classes.inputFont,
+                        classes: {input: classes.input }
                       }}
                       InputLabelProps= {{
                         className: classes.labelFont
                       }}
                       id={"vpn"+index}
-                      placeholder="VPN"
+                      placeholder="VPN*"
                       className={classes.textField}
                       margin="normal"
                       value={item.vpn}
@@ -285,13 +297,15 @@ class CardCell extends React.Component {
                   <Grid item md={1}>
                     <TextField
                       InputProps={{
-                        className: classes.inputFont
+                        className: classes.inputFont,
+                        classes: {input: classes.input }
                       }}
                       InputLabelProps= {{
-                        className: classes.labelFont
+                        className: classes.labelFont,
+                        
                       }}
                       id={"brand"+index}
-                      placeholder="Brand"
+                      placeholder="Brand*"
                       className={classes.textField}
                       margin="normal"
                       value={item.brand}
