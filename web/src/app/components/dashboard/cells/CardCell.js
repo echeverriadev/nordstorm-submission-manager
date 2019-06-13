@@ -87,7 +87,8 @@ const styles = theme => ({
   },
   input: {
     '&::placeholder': {
-      color: 'red'
+      color: 'red',
+      opacity: 0.75
     }
     
   },
