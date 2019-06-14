@@ -1,6 +1,7 @@
 import { apiFetch } from "./apiFetch";
 
 export const getCyclesApi = () => apiFetch(`/cycles`);
+export const getItemlogsApi = (_fk_item_editorial) => apiFetch(`/itemlogs/${_fk_item_editorial}`)
 export const getDivisionsApi = () => apiFetch(`/divisions`);
 export const getItemsApi = (start, end, filter, order) =>
   apiFetch(
