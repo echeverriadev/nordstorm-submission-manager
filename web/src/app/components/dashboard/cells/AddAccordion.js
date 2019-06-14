@@ -448,7 +448,6 @@ const Accordion = (props) => {
                                     label="Missy"
                                     
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_missy", 1)}
                                 />
                         }
@@ -468,7 +467,6 @@ const Accordion = (props) => {
                                     label="Encore"
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_encore", 1)}
                                 />
                         }
@@ -488,7 +486,6 @@ const Accordion = (props) => {
                                     label="Petite"
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_petite", 1)}
                                 />
                         }
@@ -508,7 +505,6 @@ const Accordion = (props) => {
                                     label="Extended"
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_extended", 1)}
                                 />
                         }
