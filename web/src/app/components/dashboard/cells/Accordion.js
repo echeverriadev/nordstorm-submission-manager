@@ -44,11 +44,10 @@ const styles = theme => ({
     fontSize: "13px"
   },
   selectCountry: {
-    paddingTop: 16,
     width: "95%"
   },
   switch: {
-    fontSize: 18,
+    fontSize: 16,
     margin: 0,
     width: "95%",
     justifyContent: "space-between"
@@ -73,7 +72,8 @@ const styles = theme => ({
     backgroundColor: '#4278a9'
   },
   labelItem: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   tagItemOff: {
     marginTop: theme.spacing.unit,
@@ -175,55 +175,51 @@ const Accordion = (props) => {
                     <Grid style={{marginTop: "4px"}} item md={3}>
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
-                        <TextField
-                            InputProps={{
-                              className: classes.inputFont,
-                              inputComponent: NumberFormatCustom
-                            }}
-                            InputLabelProps= {{
-                              className: classes.labelFont
-                              
-                            }}
-                            id={"asp"+index}
-                            label="Ann. Sale Price"
-                            margin="none"
-                            value={item.sale_price}
-                            onChange={e => onChange(index, "sale_price", e.target.value)}
-                        />
-                        :
-                        <div className={classes.labelItemContainer}>
-                            <InputLabel
-                             className={classes.labelItem}
-                             htmlFor="sale_price">
-                            Ann. Sale Price: {item.sale_price}
-                            </InputLabel>
+                        <div>
+                          <FormHelperText className={classes.selectLabel}>Ann. Sale Price</FormHelperText>
+                          <TextField
+                              InputProps={{
+                                className: classes.inputFont,
+                                inputComponent: NumberFormatCustom,
+                                disableAnimation: true,
+                              }}
+                              InputLabelProps= {{
+                                className: classes.labelFont
+                                
+                              }}
+                              id={"asp"+index}
+                              placeholder="Input text"
+                              margin="none"
+                              value={item.sale_price}
+                              onChange={e => onChange(index, "sale_price", e.target.value)}
+                          />
                         </div>
+                        :
+                        <div></div>
                     }
                     </Grid>
                     <Grid style={{marginTop: "4px", marginLeft: "-4%"}} item md={3}>
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
-                            <TextField
-                                InputProps={{
-                                  className: classes.inputFont
-                                }}
-                                InputLabelProps= {{
-                                  className: classes.labelFont
-                                }}
-                                id={"pp"+index}
-                                label="Product Priority"
-                                margin="none"
-                                value={item.is_priority}
-                                onChange={e => onChange(index, "is_priority", e.target.value)}
-                            />
+                            <div>
+                              <FormHelperText className={classes.selectLabel}>Product Priority</FormHelperText>
+                              <TextField
+                                  InputProps={{
+                                    className: classes.inputFont,
+                                    disableAnimation: true,
+                                  }}
+                                  InputLabelProps= {{
+                                    className: classes.labelFont
+                                  }}
+                                  id={"pp"+index}
+                                  placeholder="Input Text"
+                                  margin="none"
+                                  value={item.is_priority}
+                                  onChange={e => onChange(index, "is_priority", e.target.value)}
+                              />
+                            </div>
                         :
-                        <div className={classes.labelItemContainer}>
-                            <InputLabel
-                             className={classes.labelItem}
-                             htmlFor="produc_priority">
-                                Priority: {item.is_priority? item.is_priority : "None"}
-                            </InputLabel>
-                        </div>
+                        <div></div>
                     }
                         
                     </Grid>
@@ -249,61 +245,57 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
-                            <TextField
-                                InputProps={{
-                                  className: classes.inputFont,
-                                  inputComponent: NumberFormatCustom,
-                                }}
-                                InputLabelProps= {{
-                                  className: classes.labelFont
-                                }}
-                                id={"canadaprice"+index}
-                                disabled={!(item.available_in_canada === 1)}
-                                label="Canada Price"
-                                margin="none"
-                                defaultValue={(item.price_cad && item.price_cad != "")? item.price_cad : 0}
-                                onChange={e => onChange(index, "price_cad", e.target.value)}
-                            />
+                            <div>
+                              <FormHelperText className={classes.selectLabel}>Canada Price</FormHelperText>
+                              <TextField
+                                  InputProps={{
+                                    className: classes.inputFont,
+                                    inputComponent: NumberFormatCustom,
+                                  }}
+                                  InputLabelProps= {{
+                                    className: classes.labelFont,
+                                    disableAnimation: true,
+                                  }}
+                                  id={"canadaprice"+index}
+                                  disabled={!(item.available_in_canada === 1)}
+                                  placeholder="Input text"
+                                  margin="none"
+                                  defaultValue={(item.price_cad && item.price_cad != "")? item.price_cad : 0}
+                                  onChange={e => onChange(index, "price_cad", e.target.value)}
+                              />
+                            </div>
                         :
-                        <div className={classes.labelItemContainer}>
-                            <InputLabel
-                             className={classes.labelItem}
-                             htmlFor="produc_priority">
-                                Canada price: {(item.price_cad && item.price_cad != "")? item.price_cad : "0"}
-                            </InputLabel>
-                        </div>
+                        <div></div>
                     }
                         
                     </Grid>
                     <Grid style={{marginLeft: "-4%"}} item md={3}>
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
-                            <Select
-                                inputProps= {{
-                                  className: classes.inputFont
-                                }}
-                                className={classes.selectCountry}
-                                value={item.country_of_origin}
-                                onChange={e => onChange(index, "country_of_origin", e.target.value)}
-                                name="Country of origin"
-                                displayEmpty
-                            >
-                                <MenuItem value={""} disabled>
-                                    Country of Origin
-                                </MenuItem>
-                                <MenuItem value={"USA"}>USA</MenuItem>
-                                <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
-                                <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
-                                <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
-                            </Select>
-                        :
-                            <div className={classes.labelItemContainer}>
-                                <InputLabel
-                                 className={classes.labelItem}
-                                 htmlFor="country_of_origin">
-                                    Country of Origin: {(item.country_of_origin && item.country_of_origin != "")? item.country_of_origin : "None"}
-                                </InputLabel>
+                            <div>
+                              <FormHelperText className={classes.selectLabel}>Country of Origin</FormHelperText>
+                              <Select
+                                  inputProps= {{
+                                    className: classes.inputFont,
+                                    disableAnimation: true,
+                                  }}
+                                  className={classes.selectCountry}
+                                  value={item.country_of_origin}
+                                  onChange={e => onChange(index, "country_of_origin", e.target.value)}
+                                  name="Country of origin"
+                                  displayEmpty
+                              >
+                                  <MenuItem value={""} disabled>
+                                      Input text
+                                  </MenuItem>
+                                  <MenuItem value={"USA"}>USA</MenuItem>
+                                  <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
+                                  <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
+                                  <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
+                              </Select>
                             </div>
+                        :
+                            <div></div>
                         
                     }
                     </Grid>
@@ -311,27 +303,24 @@ const Accordion = (props) => {
                         {
                             (item.country_of_origin === "Imported - Specify Country") ?
                                (item.available_in_canada && item.available_in_canada === 1)?
-                                    <TextField
-                                        InputProps={{
-                                          className: classes.inputFont
-                                        }}
-                                        InputLabelProps= {{
-                                          className: classes.labelFont
-                                        }}
-                                        id={"specifycountry"+index}
-                                        label="Specify Country"
-                                        margin="none"
-                                        value={item.country_of_origin_other}
-                                        onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
-                                    />
-                                :
-                                    <div className={classes.labelItemContainer}>
-                                        <InputLabel
-                                         className={classes.labelItem}
-                                         htmlFor="specify_country_of_origin">
-                                            Specify Country of Origin: {(item.country_of_origin_other && item.country_of_origin_other  != "")? item.country_of_origin_other : "None"}
-                                        </InputLabel>
+                                    <div>
+                                      <FormHelperText className={classes.selectLabel}>Specify Country</FormHelperText>
+                                      <TextField
+                                          InputProps={{
+                                            className: classes.inputFont
+                                          }}
+                                          InputLabelProps= {{
+                                            className: classes.labelFont
+                                          }}
+                                          id={"specifycountry"+index}
+                                          placeholder="Input text"
+                                          margin="none"
+                                          value={item.country_of_origin_other}
+                                          onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
+                                      />
                                     </div>
+                                :
+                                    <div></div>
                                     
                             :
                             null
@@ -359,28 +348,26 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                         {
                             (item.request_extension === 1)?
-                                <TextField
-                                    InputProps={{
-                                      className: classes.inputFont
-                                    }}
-                                    InputLabelProps= {{
-                                      className: classes.labelFont
-                                    }}
-                                    id={"extensionreason"+index}
-                                    disabled={!(item.request_extension === 1)}
-                                    label="Extension Reason"
-                                    margin="none"
-                                    value={item.request_extension_note}
-                                    onChange={e => onChange(index, "request_extension_note", e.target.value)}
-                                />
-                            :
-                                <div className={classes.labelItemContainer}>
-                                    <InputLabel
-                                     className={classes.labelItem}
-                                     htmlFor="Extension Reason">
-                                        Extension Reason: {(item.request_extension_note && item.request_extension_note  != "")? item.request_extension_note : "None"}
-                                    </InputLabel>
+                                <div>
+                                  <FormHelperText className={classes.selectLabel}>Extension Reason</FormHelperText>
+                                  <TextField
+                                      InputProps={{
+                                        className: classes.inputFont
+                                      }}
+                                      InputLabelProps= {{
+                                        className: classes.labelFont,
+                                        disableAnimation: true,
+                                      }}
+                                      id={"extensionreason"+index}
+                                      disabled={!(item.request_extension === 1)}
+                                      placeholder="Input text"
+                                      margin="none"
+                                      value={item.request_extension_note}
+                                      onChange={e => onChange(index, "request_extension_note", e.target.value)}
+                                  />
                                 </div>
+                            :
+                                <div></div>
                             
                         }
                     </Grid>
@@ -406,28 +393,26 @@ const Accordion = (props) => {
                     <Grid item md={3}>
                      {
                         (item.request_cancellation === 1)?
-                            <TextField
-                                InputProps={{
-                                  className: classes.inputFont
-                                }}
-                                InputLabelProps= {{
-                                  className: classes.labelFont
-                                }}
-                                id={"cancelationreason"+index}
-                                disabled={!(item.request_cancellation === 1)}
-                                label="Cancelation Reason"
-                                margin="none"
-                                value={item.request_cancellation_notes}
-                                onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
-                            />
-                        :
-                            <div className={classes.labelItemContainer}>
-                                <InputLabel
-                                 className={classes.labelItem}
-                                 htmlFor="Cancelation Reason">
-                                    Cancelation Reason: {(item.request_cancellation_notes && item.request_cancellation_notes  != "")? item.request_cancellation_notes : "None"}
-                                </InputLabel>
+                            <div>
+                              <FormHelperText className={classes.selectLabel}>Cancelation Reason</FormHelperText>
+                              <TextField
+                                  InputProps={{
+                                    className: classes.inputFont,
+                                    disableAnimation: true,
+                                  }}
+                                  InputLabelProps= {{
+                                    className: classes.labelFont
+                                  }}
+                                  id={"cancelationreason"+index}
+                                  disabled={!(item.request_cancellation === 1)}
+                                  placeholder="Input text"
+                                  margin="none"
+                                  value={item.request_cancellation_notes}
+                                  onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
+                              />
                             </div>
+                        :
+                            <div></div>
                      }
                     </Grid>
                 </Grid>

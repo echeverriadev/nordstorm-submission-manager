@@ -150,9 +150,6 @@ class Filter extends Component {
                       Division
                       </InputLabel>
                   </MenuItem>
-                  <MenuItem value="ALL">
-                      All divisions
-                  </MenuItem>
                   {divisions.map((option,index) => (
                     <MenuItem key={index} value={option.id}>
                       {option.name}
