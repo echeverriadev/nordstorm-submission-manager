@@ -110,7 +110,22 @@ const styles = theme => ({
   gridContainer: {
     paddingBottom: '2%',
     paddingTop: '1%'
-  }
+  },
+  switchBase: {
+    color: '#cccccc',
+    '&$switchChecked': {
+      '& + .MuiSwitch-track': {
+        backgroundColor: '#9ab6cb',
+      }
+    },
+  },
+  switchChecked: {
+    color: '#013656',
+  },
+  switchRoot: {
+    color: '#9ab6cb',
+  },
+  track: {},
 });
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -227,9 +242,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.available_in_canada === 1 ? true : false}
-                                    color="primary"
                                     checked={item.available_in_canada === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("available_in_canada", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
@@ -325,9 +342,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.request_extension === 1 ? true : false}
-                                    color="primary"
                                     checked={item.request_extension === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("request_extension", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
@@ -369,9 +388,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.request_cancellation === 1 ? true : false}
-                                    color="primary"
                                     checked={item.request_cancellation === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("request_cancellation", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
