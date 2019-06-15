@@ -4,8 +4,8 @@ module.exports = (req, res, next) => {
   let nauthExpirationTime = req.cookies.nauthExpirationTime;
   let nauthByPass = process.env.NA_BYPASS;
 
+  // if tokenExpiration and token are empty, we redirect to nauth login page.
   if (!nauthByPass) {
-    // if tokenExpiration and token are empty, we redirect to nauth login page.
     if (nauthToken === undefined && nauthExpirationTime === undefined) {
       res.status(401).json({
         error: {
