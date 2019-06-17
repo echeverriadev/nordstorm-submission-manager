@@ -10,7 +10,8 @@ import {
   getCyclesApi,
   getDivisionsApi,
   deleteItemApi,
-  duplicateItemApi
+  duplicateItemApi,
+  addItemLog
 } from '../../../api';
 
 const styles = theme => ({
@@ -246,12 +247,24 @@ class Dashboard extends Component {
         console.log(err)
       })
     }
-
+    
+    fetchAddItemLog = (id, reason) => {
+      addItemLog(id, reason).then(response => {
+        if(response.status === 200){
+          console.log("SUCCESSS")
+        }
+      }, err => {
+        console.log(err)
+      })
+    }
+    
     handleDuplicateItemApi = (id) => {
       duplicateItemApi(id).then(response => {
         console.log('response duplicate', response);
-        if (response.status === 200)
+        if (response.status === 200){
+          this.fetchAddItemLog(id, 'duplicate')
           this.fetchItemsApi()
+        }
       }, err => {
         console.log(err)
       })

@@ -398,7 +398,7 @@ class CardCell extends React.Component {
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} />
+                            <ItemLogModal itemId={item.id} itemLog={item}/>
                             <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>

@@ -10,3 +10,4 @@ export const uploadImageApi = (body) => apiFetch(`/items/upload`,{ method: 'POST
 export const uploadExcelApi = (body) => apiFetch(`/items/import`,{ method: 'POST', body, headers: {} }) //Let empty the content-type
 export const deleteItemApi = (id) => apiFetch(`/items/delete/${id}`,{ method: 'GET'})
 export const duplicateItemApi = (id) => apiFetch(`/items/duplicate/${id}`,{ method: 'GET'})
+export const addItemLog = (_pk_item_editorial, reason) => apiFetch(`/itemLogs/addItemLog/${_pk_item_editorial}`,{ method: 'POST', body: {reason}}) 

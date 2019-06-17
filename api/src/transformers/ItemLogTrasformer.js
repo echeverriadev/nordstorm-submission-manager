@@ -4,8 +4,9 @@ const format = (data) => {
         _fk_item_editorial: data._fk_item_editorial,
         user_name: data.user_name,
         time_stamp: data.time_stamp,
+        lan_id: data.lan_id,
         event: data.event,
-        details: randomDetails[Math.floor(Math.random() * 5)]
+        details: {}
     };
 };
 

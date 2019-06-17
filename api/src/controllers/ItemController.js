@@ -127,6 +127,7 @@ class ItemController {
 
     async index(req, res, next) {
         let { filter } = req.query
+        console.log('FILTER',filter)
         const range = req.query.range || "[0,9]"
         const [start, end] = JSON.parse(range)
         try {
@@ -147,8 +148,9 @@ class ItemController {
             WHERE ${where}`
             
             sqlItems = `SELECT item_editorial.*, department.name_display as department,
-            department.department_number as d_department_number FROM item_editorial
+            department.department_number as d_department_number, log.* FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else if (specialCaseJoinField === "story") {
@@ -158,8 +160,9 @@ class ItemController {
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             WHERE ${where}`
             
-            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, log.*, department.name_display as department,
             department.department_number as d_department_number FROM item_editorial
+            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
@@ -167,8 +170,9 @@ class ItemController {
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
-            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, log.*, department.name_display as department,
             department.department_number as d_department_number FROM item_editorial
+            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         }
@@ -179,7 +183,7 @@ class ItemController {
             if (err) {
                 return res.status(500).json({ error: err })
             }
-
+            console.log('RESULTADO',result[0])
             res.status(200).json({
                 status: 200,
                 massage: "Items Found",

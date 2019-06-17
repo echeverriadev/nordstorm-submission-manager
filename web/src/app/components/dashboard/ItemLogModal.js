@@ -77,6 +77,13 @@ const styles = theme => ({
   },
   tableCell: {
     borderBottom: "none"
+  },
+  labelLog: {
+    color: "#929191",
+    marginLeft: "-56%"
+  },
+  divLog: {
+      padding: "2%"
   }
 });
 
@@ -98,6 +105,7 @@ class ItemLogModal extends React.Component {
     const { itemId } = this.props
     getItemlogsApi(itemId).then(response => {
       if (response.status === 200)
+      console.log(response.data)
         this.setState({
           itemLogs: response.data
         })
@@ -110,9 +118,14 @@ class ItemLogModal extends React.Component {
   };
   
   handleListItemClick = (event, index) => {
+    var details
+    if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" | this.state.itemLogs[index].event.replace(" ", "") == "created"){
+      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "0000-00-00" }
+    }
+    console.log(details)
     this.setState({
       selected: index,
-      details: this.state.itemLogs[index].details
+      details: details? details : this.state.itemLogs[index].details
     })
   }
 
@@ -136,40 +149,52 @@ class ItemLogModal extends React.Component {
             <Grid container spacing={8}>
               <Grid item xs={4}>
                 <List className={classes.list}>
-                  {itemLogs.map((item, index) => 
-                    <React.Fragment>
-                      <ListItem
-                        classes={{selected: classes.selected}}
-                        alignItems="flex-start"
-                        button
-                        selected={selected === index}
-                        onClick={event => this.handleListItemClick(event, index)}
-                      >
-                        <ListItemText
-                          primary={item.user_name}
-                          primaryTypographyProps={{
-                            color: "inherit"
-                          }}
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                component="span"
-                                variant="caption"
-                                // color="textPrimary"
-                              >
-                                {item.time_stamp}
-                              </Typography>
-                              {item.event}
-                            </React.Fragment>
-                          }
-                        />
-                      </ListItem>
-                      {index !== itemLogs.length - 1 && <Divider component="li" />}
-                    </React.Fragment>
-                  )}
+                  {
+                  (itemLogs && itemLogs.length > 0)?
+                    itemLogs.map((item, index) => 
+                      <React.Fragment key={index}>
+                        <ListItem
+                          classes={{selected: classes.selected}}
+                          alignItems="flex-start"
+                          button
+                          selected={selected === index}
+                          onClick={event => this.handleListItemClick(event, index)}
+                        >
+                          <ListItemText
+                            primary={item.user_name}
+                            primaryTypographyProps={{
+                              color: "inherit"
+                            }}
+                            secondary={
+                              <React.Fragment>
+                                <Typography
+                                  component="span"
+                                  variant="caption"
+                                  // color="textPrimary"
+                                >
+                                  {item.time_stamp}
+                                </Typography>
+                                <br/>
+                                <Typography
+                                  component="span"
+                                  variant="caption"
+                                  // color="textPrimary"
+                                >
+                                {item.event}
+                                </Typography>
+                              </React.Fragment>
+                            }
+                          />
+                        </ListItem>
+                        {index !== itemLogs.length - 1 && <Divider component="li" />}
+                      </React.Fragment>
+                    )
+                    :
+                    ""
+                  }
                 </List>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={8} style={{marginLeft: '-10%'}}>
                 <Table className={classes.table} size="small">
                   <TableHead>
                     <TableRow>
@@ -180,8 +205,8 @@ class ItemLogModal extends React.Component {
                   <TableBody>
                     {Object.keys(details).map((key, index) => 
                       <TableRow key={index}>
-                        <TableCell className={classes.tableCell}>{key}</TableCell>
-                        <TableCell className={classes.tableCell}>{details[key]}</TableCell>
+                        <TableCell style={{color: "gray"}} className={classes.tableCell}>{key}</TableCell>
+                        <TableCell style={{color: "gray"}} className={classes.tableCell}>{details[key]}</TableCell>
                       </TableRow>
                     )}
                   </TableBody>
