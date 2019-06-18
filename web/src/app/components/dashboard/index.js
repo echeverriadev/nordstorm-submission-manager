@@ -127,14 +127,18 @@ class Dashboard extends Component {
         rows.splice(index, 1, row)
         this.setState({rows}, this.fetchPatchItemApi(row.id, key, value) )
     }
-
+    
     fetchPatchItemApi = (id, key, value) => {
       console.log(id, key, value)
       patchItemApi(id,key,value).then(response => {
         if (response.status === 200)
           console.log(response)
-        if (response.refresh)
-          this.fetchItemsApi()
+        if (response.refresh){
+          console.log("ADD ITEM LOG")
+          this.fetchAddItemLog(id, 'edited')
+          console.log("SE ESTAN MODIFICANDO BIEN")
+          this.fetchItemsApi() 
+        }
       }, err => {
         console.log(err)
       })
@@ -262,7 +266,7 @@ class Dashboard extends Component {
       duplicateItemApi(id).then(response => {
         console.log('response duplicate', response);
         if (response.status === 200){
-          this.fetchAddItemLog(id, 'duplicate')
+          this.fetchAddItemLog(id, 'duplicated')
           this.fetchItemsApi()
         }
       }, err => {
