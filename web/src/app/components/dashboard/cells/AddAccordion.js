@@ -444,14 +444,16 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_missy", 0)}
+                                    onClick={() => onChange("tagged_missy", 0)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
-                                    
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_missy", 1)}
+                                    onClick={() => onChange("tagged_missy", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -463,6 +465,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_encore", 0)}
+                                    onClick={() => onChange("tagged_encore", 0)}
                                 />
                             :
                                 <Chip
@@ -471,6 +474,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_encore", 1)}
+                                    onClick={() => onChange("tagged_encore", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -482,6 +487,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_petite", 0)}
+                                    onClick={() => onChange("tagged_petite", 0)}
                                 />
                             :
                                 <Chip
@@ -490,6 +496,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_petite", 1)}
+                                    onClick={() => onChange("tagged_petite", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -501,6 +509,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_extended", 0)}
+                                    onClick={() => onChange("tagged_extended", 0)}
                                 />
                             :
                                 <Chip
@@ -509,6 +518,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_extended", 1)}
+                                    onClick={() => onChange("tagged_extended", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                     </Grid>
