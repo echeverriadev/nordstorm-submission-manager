@@ -63,7 +63,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
-    width: "95%",
+    width: "80%",
     
   },
   select: {
@@ -217,7 +217,7 @@ class CardCell extends React.Component {
 
             </Grid>
             <Grid item md={11}>
-              <Grid spacing={8} className={classes.row} container direction="row" alignContent='center' alignItems='center'>
+              <Grid spacing={11} className={classes.row} container direction="row" alignContent='center' alignItems='center'>
                   <Grid item md={1}>
                     <Select
                       inputProps= {{
