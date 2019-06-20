@@ -17,6 +17,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
+import FormControl from '@material-ui/core/FormControl';
 
 const styles = theme => ({
   root: {
@@ -101,6 +102,9 @@ const styles = theme => ({
   inputFont: {
     fontSize: '13px'
   },
+  inputBold: {
+    fontWeight: 'bold'
+  },
   labelFont: {
     fontSize: '13px'
   },
@@ -126,6 +130,10 @@ const styles = theme => ({
     color: '#9ab6cb',
   },
   track: {},
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 240,
+  }
 });
 
 function NumberFormatCustom(props) {
@@ -168,7 +176,7 @@ const Accordion = (props) => {
                         <FormHelperText className={classes.selectLabel}>Cycles</FormHelperText>
                         <Select
                             inputProps= {{
-                              className: classes.inputFont
+                              className: classNames([classes.inputFont, classes.inputBold])
                             }}
                             className={classes.select}
                             name="Cycles"
@@ -191,7 +199,6 @@ const Accordion = (props) => {
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
                         <div>
-                          <FormHelperText className={classes.selectLabel}>Ann. Sale Price</FormHelperText>
                           <TextField
                               InputProps={{
                                 className: classes.inputFont,
@@ -203,7 +210,7 @@ const Accordion = (props) => {
                                 
                               }}
                               id={"asp"+index}
-                              placeholder="Input text"
+                              label="Ann. Sale Price"
                               margin="none"
                               value={item.sale_price}
                               onChange={e => onChange(index, "sale_price", e.target.value)}
@@ -217,7 +224,6 @@ const Accordion = (props) => {
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Product Priority</FormHelperText>
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
@@ -227,7 +233,7 @@ const Accordion = (props) => {
                                     className: classes.labelFont
                                   }}
                                   id={"pp"+index}
-                                  placeholder="Input Text"
+                                  label="Product Priority"
                                   margin="none"
                                   value={item.is_priority}
                                   onChange={e => onChange(index, "is_priority", e.target.value)}
@@ -263,7 +269,6 @@ const Accordion = (props) => {
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Canada Price</FormHelperText>
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
@@ -275,9 +280,8 @@ const Accordion = (props) => {
                                   }}
                                   id={"canadaprice"+index}
                                   disabled={!(item.available_in_canada === 1)}
-                                  placeholder="Input text"
+                                  label="Canada Price"
                                   margin="none"
-                                  defaultValue={(item.price_cad && item.price_cad != "")? item.price_cad : 0}
                                   onChange={e => onChange(index, "price_cad", e.target.value)}
                               />
                             </div>
@@ -290,26 +294,25 @@ const Accordion = (props) => {
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Country of Origin</FormHelperText>
-                              <Select
-                                  inputProps= {{
-                                    className: classes.inputFont,
-                                    disableAnimation: true,
-                                  }}
-                                  className={classes.selectCountry}
-                                  value={item.country_of_origin}
-                                  onChange={e => onChange(index, "country_of_origin", e.target.value)}
-                                  name="Country of origin"
-                                  displayEmpty
-                              >
-                                  <MenuItem value={""} disabled>
-                                      Input text
-                                  </MenuItem>
-                                  <MenuItem value={"USA"}>USA</MenuItem>
-                                  <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
-                                  <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
-                                  <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
-                              </Select>
+                              <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="country-of-origin-placeholder">Country of Origin</InputLabel>
+                                <Select
+                                    inputProps= {{
+                                      className: classes.inputFont,
+                                      id: 'country-of-origin-placeholder'
+                                    }}
+                                    className={classes.selectCountry}
+                                    value={item.country_of_origin}
+                                    onChange={e => onChange(index, "country_of_origin", e.target.value)}
+                                    name="Country of Origin"
+                                >
+                                    <MenuItem value={""} disabled style={{color:"#656565"}}>None</MenuItem>
+                                    <MenuItem value={"USA"}>USA</MenuItem>
+                                    <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
+                                    <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
+                                    <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
+                                </Select>
+                              </FormControl>
                             </div>
                         :
                             <div></div>
@@ -321,7 +324,6 @@ const Accordion = (props) => {
                             (item.country_of_origin === "Imported - Specify Country") ?
                                (item.available_in_canada && item.available_in_canada === 1)?
                                     <div>
-                                      <FormHelperText className={classes.selectLabel}>Specify Country</FormHelperText>
                                       <TextField
                                           InputProps={{
                                             className: classes.inputFont
@@ -330,7 +332,7 @@ const Accordion = (props) => {
                                             className: classes.labelFont
                                           }}
                                           id={"specifycountry"+index}
-                                          placeholder="Input text"
+                                          label="Specify Country"
                                           margin="none"
                                           value={item.country_of_origin_other}
                                           onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
@@ -368,7 +370,6 @@ const Accordion = (props) => {
                         {
                             (item.request_extension === 1)?
                                 <div>
-                                  <FormHelperText className={classes.selectLabel}>Extension Reason</FormHelperText>
                                   <TextField
                                       InputProps={{
                                         className: classes.inputFont
@@ -379,7 +380,7 @@ const Accordion = (props) => {
                                       }}
                                       id={"extensionreason"+index}
                                       disabled={!(item.request_extension === 1)}
-                                      placeholder="Input text"
+                                      label="Extension Reason"
                                       margin="none"
                                       value={item.request_extension_note}
                                       onChange={e => onChange(index, "request_extension_note", e.target.value)}
@@ -415,7 +416,6 @@ const Accordion = (props) => {
                      {
                         (item.request_cancellation === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Cancelation Reason</FormHelperText>
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
@@ -426,7 +426,7 @@ const Accordion = (props) => {
                                   }}
                                   id={"cancelationreason"+index}
                                   disabled={!(item.request_cancellation === 1)}
-                                  placeholder="Input text"
+                                  label="Cancelation Reason"
                                   margin="none"
                                   value={item.request_cancellation_notes}
                                   onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
