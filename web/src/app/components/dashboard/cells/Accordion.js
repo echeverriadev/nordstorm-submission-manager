@@ -41,7 +41,7 @@ const styles = theme => ({
     width: "95%"
   },
   select: {
-    width: "95%",
+    width: "85%",
     fontSize: "13px"
   },
   selectCountry: {
@@ -133,6 +133,7 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 240,
+    marginTop: -3,
   }
 });
 
@@ -282,6 +283,7 @@ const Accordion = (props) => {
                                   disabled={!(item.available_in_canada === 1)}
                                   label="Canada Price"
                                   margin="none"
+                                  value={item.price_cad}
                                   onChange={e => onChange(index, "price_cad", e.target.value)}
                               />
                             </div>
@@ -295,7 +297,7 @@ const Accordion = (props) => {
                         (item.available_in_canada && item.available_in_canada === 1)?
                             <div>
                               <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="country-of-origin-placeholder">Country of Origin</InputLabel>
+                                <InputLabel htmlFor="country-of-origin-placeholder" style={{fontSize:"13px"}}>Country of Origin</InputLabel>
                                 <Select
                                     inputProps= {{
                                       className: classes.inputFont,
