@@ -7,8 +7,9 @@ const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 
 class ItemController {
+    
     constructor() {
-        this.connection = dbConnection()
+        this.connection = dbConnection();
         this._itemTransformer = ItemTransformer;
         this.index = this.index.bind(this);
         this.updatePatch = this.updatePatch.bind(this);
@@ -22,11 +23,55 @@ class ItemController {
         this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
     }
 
+    addItemLog(id_editorial, fields, fieldEdited, valueEdited, reason, details, user, lan_id){
+        
+        console.log(reason)
+        console.log(id_editorial)
+        
+        if(reason === "created" || reason === "duplicated"){
+            var json_details = {
+                "brand": fields.brand,
+                "live_date": fields.live_date
+            }
+            var json_details_string = String(json_details)
+            this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                if(err){
+                    console.log(result)
+                }
+                console.log("Resultado:", result)
+            })
+        }else{
+            if(reason === "edited"){
+                var json_details = {
+                    [fieldEdited]: valueEdited
+                }
+                console.log(json_details)
+                var json_details_string = String(json_details)
+                this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                    if(err){
+                        console.log(result)
+                    }
+                    console.log("Resultado:", result)
+                })
+                    
+            }
+        }
+    }
+
     escapeSansQuotes(criterion) {
       return this.connection.escape(criterion).match(/^'(\w+)'$/)[1];
     }
 
-
+    getItem(id){
+        var item_editorial = ""
+        this.connection.query('SELECT * from item_editorial where __pk_item = ' + id + ';'  ,(err, result) => {
+            if(err){
+                console.log(err)
+            }
+            item_editorial = result[0]
+        })
+        return item_editorial
+    }
 
     buildWhere(filter = {}) {
         const fieldsLikeForSearch =  {
@@ -125,9 +170,17 @@ class ItemController {
 		return orderByEscaping.length ? "ORDER BY " + orderByEscaping.join(', ') : ''
     }
 
+    getCantIds(){
+        let number_of_ids = 0
+        this.connection.query('select __pk_item from item_editorial order by __pk_item DESC limit 1', function(error, results, fields) {
+            if (error) throw error;
+            number_of_ids = results
+        });
+    }
+
     async index(req, res, next) {
         let { filter } = req.query
-        console.log('FILTER',filter)
+        //console.log('FILTER',filter)
         const range = req.query.range || "[0,9]"
         const [start, end] = JSON.parse(range)
         try {
@@ -138,7 +191,7 @@ class ItemController {
         }
         const { where, values, specialCaseJoinField } = this.buildWhere(filter)
         const orderBy = this.buildOrder(req.query)
-        console.log(orderBy)
+        //console.log(orderBy)
         const limit = end - start + 1
         const allValues = [...values, start, limit]
         let sqlCount, sqlItems
@@ -178,12 +231,12 @@ class ItemController {
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
-        console.log(sqlItems)
+        //console.log(sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: err })
             }
-            console.log('RESULTADO',result[0])
+            //console.log('RESULTADO',result[0])
             res.status(200).json({
                 status: 200,
                 massage: "Items Found",
@@ -192,49 +245,71 @@ class ItemController {
             })
         })
     }
+    
+    getLastItem(){
+        var item
+        this.connection.query('select __pk_item from item_editorial order by __pk_item DESC limit 1', (error,result) => {
+            if (error) throw error;
+            console.log(result)
+            item = result
+          });
+        
+    }
 
     async store(req, res, next){
         const data = {
-            nmg_priority: req.body.nmg_priority || "",
-            department_number: req.body.department_number || "",
-            vpn: req.body.vpn || "",
-            brand: req.body.brand || "",
-            color: req.body.color || "",
-            size: req.body.size || "",
-            description: req.body.description || "",
-            image: req.body.image || null,
-            style_group_number: req.body.style_group_number || null,
-            in_stock_week: req.body.in_stock_week || null,
-            sale_price: req.body.sale_price || 0,
-            _fk_cycle: req.body._fk_cycle || null,
-            _fk_division: req.body._fk_division || null,
-            retail_price: req.body.retail_price || 0,
-            is_priority: req.body.is_priority || null,
-            available_in_canada: req.body.available_in_canada || null,
-            price_cad: req.body.price_cad || 0,
-            country_of_origin: req.body.country_of_origin || "",
-            country_of_origin_other: req.body.country_of_origin_other || "",
-            request_extension: req.body.request_extension || null,
-            request_extension_note: req.body.request_extension_notes || "",
-            request_cancellation: req.body.request_cancellation || null,
-            request_cancellation_notes: req.body.request_cancellation_notes || "",
-            tagged_missy: req.body.tagged_missy || 0,
-            tagged_encore: req.body.tagged_encore ||0,
-            tagged_petite: req.body.tagged_petite || 0,
-            tagged_extended: req.body.tagged_extended || 0
+            'nmg_priority': req.body.nmg_priority || "",
+            'department_number': req.body.department_number || "",
+            'vpn': req.body.vpn || "",
+            'brand': req.body.brand || "",
+            'color': req.body.color || "",
+            'size': req.body.size || "",
+            'description': req.body.description || "",
+            'image': req.body.image || null,
+            'style_group_number': req.body.style_group_number || null,
+            'in_stock_week': req.body.in_stock_week || null,
+            'sale_price': req.body.sale_price || 0,
+            '_fk_cycle': req.body._fk_cycle || null,
+            '_fk_division': req.body._fk_division || null,
+            'retail_price': req.body.retail_price || 0,
+            'is_priority': req.body.is_priority || null,
+            'available_in_canada': req.body.available_in_canada || null,
+            'price_cad': req.body.price_cad || 0,
+            'country_of_origin': req.body.country_of_origin || "",
+            'country_of_origin_other': req.body.country_of_origin_other || "",
+            'request_extension': req.body.request_extension || null,
+            'request_extension_note': req.body.request_extension_notes || "",
+            'request_cancellation': req.body.request_cancellation || null,
+            'request_cancellation_notes': req.body.request_cancellation_notes || "",
+            'tagged_missy': req.body.tagged_missy || 0,
+            'tagged_encore': req.body.tagged_encore ||0,
+            //tagged_petite: req.body.tagged_petithttps://stackoverflow.com/questions/4073923/select-last-row-in-mysqle || 0,
+            'tagged_extended': req.body.tagged_extended || 0
         }
-
-        dbConnection().query('INSERT INTO item_editorial SET ?', data, function (error,        results, fields) {
+        var connection = dbConnection()
+        connection.connect()
+        connection.query('INSERT INTO item_editorial SET ?', data, (error,result) => {
             if (error) throw error;
-
             res.json({
                 code: 200,
                 message: "Item save",
                 data: {
-                    id: results.insertId,
+                    id: result.insertId,
                     ...data
                 }
             })
+                var json_details = {
+                    "brand": data.brand,
+                    "live_date": data.live_date? data.live_date : "" 
+                }
+                var json_details_string = String(json_details)
+                connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result) => {
+                    if(err){
+                        console.log(result)
+                    }
+                    console.log("Resultado:", result)
+                })
+        
           });
     }
 
@@ -269,7 +344,7 @@ class ItemController {
                 }
 
                 const data = []
-
+              //  const before_import_count_rows = this.getCantRows();
                 for (let i in result) {
                     const element = result[i];
 
@@ -284,16 +359,18 @@ class ItemController {
                         _fk_cycle,
                         _fk_division
                     };
-
-                    this.connection.query('INSERT INTO item_editorial SET ?', row, function(error, results, fields) {
-                        if (error) throw error;
-                        console.log(results)
+                    
+                    this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
+                        if(res.status(200)){
+                            this.addItemLog(result.insertId, row, null, null, "created", null, "Generic_User" , "lan_test")
+                        }
+                        if (err) throw err;
                     });
 
                     data.push(row);
                 }
-
                 res.json({ code: 200, data });
+                
             });
         }
         catch (e) {
@@ -301,7 +378,11 @@ class ItemController {
             return res.json({ code: 400, message: "Corupted excel file" });
         }
     }
-
+    
+    showIDs(IDS){
+        console.log(IDS)
+    }
+    
     async uploadImage(req, res, next) {
         if (!req.file) {
             return res.status(404).json({
@@ -331,19 +412,25 @@ class ItemController {
             this.cleanCountryOfOriginOther(id)
        // if (hasEmptyField(escaping))
          //   return res.status(400).json({ status: 400, massage: "Bad Request" })
-        
+         
         this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
             }
-
-            if (result.affectedRows)
-                res.status(200).json({
+            
+            if(res.status(200)){
+                console.log("UPDATED")
+                this.addItemLog([id], null, field, value, "edited", null, "Generic_User" , "lan_test")
+            }
+            
+            if (result.affectedRows){
+             res.status(200).json({
                     status: 200,
                     massage: "Item update",
                     refresh
                 })
+            }
             else
                 res.status(404).json({
                     status: 404,
@@ -411,6 +498,7 @@ class ItemController {
                            + 'SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; ';
 
         this.connection.query(queryStrings, escaping, (err, result) => {
+            
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
@@ -420,8 +508,15 @@ class ItemController {
                 status: 200,
                 message: "Item duplicated"
             })
+            
+            if(res.status(200)){
+                this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, "Generic_User" , "lan_test")
+            }
         })
     }
+    
+    
+  
 
 }
 

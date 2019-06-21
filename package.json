@@ -12,12 +12,13 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^4.1.0",
-    "nodemon": "^1.18.11"
+    "nodemon": "^1.19.1"
   },
   "dependencies": {
-    "@okta/okta-auth-js": "^2.5.0",
+    "@okta/okta-auth-js": "^2.6.0",
     "@okta/okta-react": "^1.2.0",
+    "react-confirm-alert": "^2.4.1",
     "react-number-format": "^4.0.8",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.1"
   }
 }

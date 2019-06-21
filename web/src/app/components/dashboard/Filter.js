@@ -10,6 +10,7 @@ import Search from './Search'
 import { uploadExcelApi } from '../../../api';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import './confirmAlert.css'
 
 const styles = theme => ({
   root: {
@@ -51,34 +52,49 @@ const styles = theme => ({
     color: 'black',
     fontSize: '13px'
     
-  },
+  }
+  
 });
 
 class Filter extends Component {
   
     handleConfirm = (e) => {
       const file = Array.from(e.target.files)[0]
-      if(file) //If there is a file selected
-        confirmAlert({
-          title: 'Import items',
-          message: 'Do you really want to continue with the Import?',
-          buttons: [
-            {
-              label: 'Ok',
-              onClick: () => this.onSubmit(file)
-            },
-            {
-              label: 'Cancel',
-            }
-          ]
-        });
+      if(file){ //If there is a file selected}
+      return(
+        <div>
+        {
+          confirmAlert({
+            title: 'Import items',
+            message: 'Do you really want to continue with the Import?',
+            buttons: [
+              {
+                label: 'Ok',
+                onClick: () => this.onSubmit(file)
+              },
+              {
+                label: 'Cancel',
+              }
+            ]
+          })
+        }
+        </div>
+      );
         this.refs.buttonFile.value = '' //Without this the same file couldn't be uploaded again
+      }
     }
 
     onClick = () => {
       this.refs.buttonFile.click()
     }
-    
+    /*
+    setItemsAsCreatedInLog = (items) => {
+      (items && items.length > 0)? 
+        items.map((item))
+      :
+      ""
+    }
+    */
     onSubmit = (file) => {
       if (['xls', 'xlsx'].indexOf(file.name.split('.')[file.name.split('.').length-1]) === -1) {
         alert('Invalid format, use xls or xlsx instead');
@@ -91,6 +107,7 @@ class Filter extends Component {
         formData.append('_fk_cycle', cycleId)
         uploadExcelApi(formData).then(res => {
           if(res.code === 200){
+            //this.setItemsAsCreatedInLog(res.data)
             this.props.onRefreshItems() //Refresh list for getting all new items
             alert('Items imported successfully')
           }else{
