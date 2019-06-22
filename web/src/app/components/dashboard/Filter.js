@@ -10,11 +10,7 @@ import Search from './Search'
 import { uploadExcelApi } from '../../../api';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
-<<<<<<< HEAD
 import '../Utils/dashboardCustom.css' 
-=======
-import './confirmAlert.css'
->>>>>>> feature/NDSM-20
 
 const styles = theme => ({
   root: {

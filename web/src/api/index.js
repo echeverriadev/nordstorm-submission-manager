@@ -1,7 +1,12 @@
 import { apiFetch } from "./apiFetch";
 
 export const getCyclesApi = () => apiFetch(`/cycles`);
-export const getItemlogsApi = (_fk_item_editorial) => apiFetch(`/itemlogs/${_fk_item_editorial}`)
+export const getItemlogsApi = (_fk_item_editorial) => apiFetch(`/itemlogs/${_fk_item_editorial}`);
+export const nauthLogin = () =>
+  apiFetch(`/nauth/login`, { method: "POST", headers: {} });
+export const nauthSetCookie = body =>
+  apiFetch(`/nauth/setCookie`, { method: "POST", body });
+export const nauthLogout = () => apiFetch(`/nauth/logout`, { method: "POST" });
 export const getDivisionsApi = () => apiFetch(`/divisions`)
 export const getItemsApi = (start, end, filter, order) => apiFetch(`/items?range=[${start},${end}]&filter=${JSON.stringify(filter)}&order=${order}`)
 export const patchItemApi = (id, field, value) => apiFetch(`/items/${id}`,{method: 'PATCH', body:{field, value}})
