@@ -94,7 +94,7 @@ const styles = theme => ({
   labelFont: {
     fontSize: '13px',
   },
-  MoreVertIcon: {
+  IconButton: {
     color: 'rgba(0, 0, 0, 0.9)',
   }
 });
@@ -408,7 +408,7 @@ class CardCell extends React.Component {
                       {popupState => (
                         <React.Fragment>
                           <IconButton variant="contained" {...bindTrigger(popupState)}>
-                            <MoreVertIcon className={classes.MoreVertIcon}/>
+                            <MoreVertIcon className={classes.IconButton}/>
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
@@ -439,7 +439,7 @@ class CardCell extends React.Component {
                   <IconButton
                     className={classnames(classes.expand, {
                       [classes.expandOpen]: this.state.expanded,
-                    })}
+                    }, classes.IconButton)}
                     onClick={this.handleExpandClick}
                     aria-expanded={this.state.expanded}
                     aria-label="Show more"
