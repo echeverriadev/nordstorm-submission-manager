@@ -1,13 +1,13 @@
 const format = (data) => {
     //SELECT _fk_item_editorial, user_name, time_stamp,`event`, details FROM fit.log
-   
+   console.log("DETAILS", data.details)
     return {
         _fk_item_editorial: data._fk_item_editorial,
         user_name: data.user_name,
         time_stamp: data.time_stamp,
         lan_id: data.lan_id,
         event: data.event,
-        details: JSON.stringify(data.details)
+        details: data.details
     };
 };
 

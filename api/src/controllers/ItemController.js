@@ -29,24 +29,31 @@ class ItemController {
         console.log(id_editorial)
         
         if(reason === "created" || reason === "duplicated"){
-            var json_details = {
-                "brand": fields.brand,
-                "live_date": fields.live_date
-            }
-            var json_details_string = String(json_details)
-            this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+            var item_editorial = ""
+            this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
                 if(err){
-                    console.log(result)
+                    console.log(err)
                 }
-                console.log("Resultado:", result)
+                item_editorial = result[0]
+                    console.log("ITEM", item_editorial.brand)
+                    var json_details = {
+                        brand: item_editorial.brand,
+                        live_date: item_editorial.live_date
+                    }
+                    var json_details_string = JSON.stringify(json_details)
+                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                        if(err){
+                            console.log(result)
+                        }
+                    })
             })
         }else{
             if(reason === "edited"){
                 var json_details = {
                     [fieldEdited]: valueEdited
                 }
-                console.log(json_details)
-                var json_details_string = String(json_details)
+                var json_details_string = JSON.stringify(json_details)
+                console.log("JSONDETAILS", json_details_string)
                 this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
                     if(err){
                         console.log(result)
@@ -258,7 +265,7 @@ class ItemController {
 
     async store(req, res, next){
         const data = {
-            'nmg_priority': req.body.nmg_priority || "",
+            'nmg_priority': req.body.nmg_priority || null,
             'department_number': req.body.department_number || "",
             'vpn': req.body.vpn || "",
             'brand': req.body.brand || "",
@@ -286,9 +293,8 @@ class ItemController {
             //tagged_petite: req.body.tagged_petithttps://stackoverflow.com/questions/4073923/select-last-row-in-mysqle || 0,
             'tagged_extended': req.body.tagged_extended || 0
         }
-        var connection = dbConnection()
-        connection.connect()
-        connection.query('INSERT INTO item_editorial SET ?', data, (error,result) => {
+        
+        dbConnection().query('INSERT INTO item_editorial SET ?', data, (error,result) => {
             if (error) throw error;
             res.json({
                 code: 200,
@@ -303,7 +309,7 @@ class ItemController {
                     "live_date": data.live_date? data.live_date : "" 
                 }
                 var json_details_string = String(json_details)
-                connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result) => {
+                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result) => {
                     if(err){
                         console.log(result)
                     }
@@ -420,7 +426,6 @@ class ItemController {
             }
             
             if(res.status(200)){
-                console.log("UPDATED")
                 this.addItemLog([id], null, field, value, "edited", null, "Generic_User" , "lan_test")
             }
             

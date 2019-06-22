@@ -11,7 +11,7 @@ class ItemLogController {
     }
     
     async addItemLog(req, res, next){
-        console.log("Hooolaaaa")
+        
         const { reason } = req.body
         const { _pk_item_editorial } = req.params
         

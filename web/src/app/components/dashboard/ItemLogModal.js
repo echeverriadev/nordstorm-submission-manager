@@ -137,18 +137,15 @@ class ItemLogModal extends React.Component {
   
   handleListItemClick = (event, index) => {
     console.log(this.state.itemLogs[index].event == " edited")
+    console.log(this.state.itemLogs[index])
     var details
-    if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" | String(this.state.itemLogs[index].event) == " created "){
+    if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" || String(this.state.itemLogs[index].event) == " created" ||String(this.state.itemLogs[index].event) == " created "){
       details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "0000-00-00" }
     }else{
-      let withoutslash = this.state.itemLogs[index].details.replace(" ", "").replace('\"', "").replace('\"', "")
-      var test = JSON.parse(JSON.stringify(withoutslash))
-
       if(String(this.state.itemLogs[index].event) == " edited"){
-        details = test
+        details = JSON.parse(this.state.itemLogs[index].details)
       }
     }
-    console.log(details)
     this.setState({
       selected: index,
       details: details? details : this.state.itemLogs[index].details
