@@ -35,10 +35,10 @@ const initialNewItem = {
   //EXTRA
   category: [],
   _fk_cycle: null,
-  retail_price: 0,
+  retail_price: null,
   is_priority: null,
   available_in_canada: null,
-  price_cad: 0,
+  price_cad: null,
   country_of_origin: "",
   country_of_origin_other: "",
   request_extension: null,

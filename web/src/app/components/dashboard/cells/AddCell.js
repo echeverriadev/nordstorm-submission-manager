@@ -57,7 +57,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
-    width: "95%",
+    width: "80%",
   },
   select: {
     marginBottom: theme.spacing.unit,
@@ -176,7 +176,7 @@ class AddCell extends React.Component {
                     </Dropzone>
               </Grid>
               <Grid item md={11}>
-                <Grid className={classes.row} spacing={8} container direction="row" alignContent='center' alignItems='center'>
+                <Grid className={classes.row} spacing={11} container direction="row" alignContent='center' alignItems='center'>
                     <Grid item md={1}>
                       <Select
                         inputProps= {{
