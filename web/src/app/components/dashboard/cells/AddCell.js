@@ -58,9 +58,10 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
     width: "80%",
+    marginTop: 32,
   },
   select: {
-    marginBottom: theme.spacing.unit,
+    marginTop: 6,
     fontSize: "13px",
      '&::placeholder': {
       color: 'grey'

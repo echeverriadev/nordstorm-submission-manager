@@ -14,6 +14,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -64,7 +65,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
     width: "80%",
-    
+    marginTop: 32,
   },
   select: {
     marginBottom: theme.spacing.unit,
@@ -83,21 +84,19 @@ const styles = theme => ({
   },
   inputFont: {
     fontSize: '13px',
-  
   },
   input: {
     '&::placeholder': {
       color: 'red',
       opacity: 0.75
     }
-    
   },
-  
   labelFont: {
     fontSize: '13px',
-    
   },
-  
+  MoreVertIcon: {
+    color: 'rgba(0, 0, 0, 0.9)',
+  }
 });
 
 function NumberFormatCustom(props) {
@@ -409,7 +408,7 @@ class CardCell extends React.Component {
                       {popupState => (
                         <React.Fragment>
                           <IconButton variant="contained" {...bindTrigger(popupState)}>
-                            <MoreVertIcon />
+                            <MoreVertIcon className={classes.MoreVertIcon}/>
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
