@@ -213,7 +213,7 @@ class ItemController {
             retail_price: req.body.retail_price || 0,
             is_priority: req.body.is_priority || null,
             available_in_canada: req.body.available_in_canada || null,
-            price_cad: req.body.price_cad || 0,
+            price_cad: req.body.price_cad || null,
             country_of_origin: req.body.country_of_origin || "",
             country_of_origin_other: req.body.country_of_origin_other || "",
             request_extension: req.body.request_extension || null,

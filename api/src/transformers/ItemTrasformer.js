@@ -15,7 +15,7 @@ const format = (data) => {
         category: [],
         _fk_cycle: data._fk_cycle || "",
         retail_price: data.retail_price || null,
-        is_priority: data.is_priority || "",
+        is_priority: data.is_priority || null,
         available_in_canada: data.available_in_canada || "",
         price_cad: data.price_cad || null,
         country_of_origin: data.country_of_origin || null,
