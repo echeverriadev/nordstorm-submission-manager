@@ -166,9 +166,10 @@ class CardCell extends React.Component {
   render() {
     
   
-    const { classes, item, index, onChange, cycles, onDeleteItem } = this.props;
+    const { classes, item, index, onChange, cycles, onDeleteItem, isChangingFilter} = this.props;
     return (
       <Card className={classes.card}>
+      {console.log("isChangingFilter?", isChangingFilter, "items", item)}
         <CardContent className={classes.cardContent}>
 
           <Grid container>
@@ -224,7 +225,7 @@ class CardCell extends React.Component {
                       }}
                       className={classes.select}
                       value={item.nmg_priority}
-                      onChange={e => onChange(index, "nmg_priority", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "nmg_priority", e.target.value) : ""}
                       name="Priority"
                       displayEmpty
                     >
@@ -253,7 +254,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.department_number}
-                      onChange={e => onChange(index, "department_number", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "department_number", e.target.value) : ""}
                       required
                       error={!item.department_number}
                     />
@@ -272,7 +273,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.vpn}
-                      onChange={e => onChange(index, "vpn", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "vpn", e.target.value) : ""}
                       required
                       error={!item.vpn}
                     />
@@ -291,7 +292,7 @@ class CardCell extends React.Component {
                       color="primary"
                       margin="normal"
                       value={item.style_group_number}
-                      onChange={e => onChange(index, "style_group_number", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "style_group_number", e.target.value) : ""}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -309,7 +310,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.brand}
-                      onChange={e => onChange(index, "brand", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "brand", e.target.value) : ""}
                       required
                       error={!item.brand}
                     />
@@ -327,7 +328,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.color}
-                      onChange={e => onChange(index, "color", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "color", e.target.value) : ""}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -343,7 +344,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.size}
-                      onChange={e => onChange(index, "size", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "size", e.target.value) : ""}
                     />
                   </Grid>
                   <Grid item md={2}>
@@ -361,7 +362,7 @@ class CardCell extends React.Component {
                       //multiline
                       //rows={2}
                       value={item.description}
-                      onChange={e => onChange(index, "description", e.target.value)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "description", e.target.value) : ""}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -371,7 +372,7 @@ class CardCell extends React.Component {
                         }}
                         className={classes.select}
                         value={item.in_stock_week}
-                        onChange={e => onChange(index, "in_stock_week", e.target.value)}
+                        onChange={(!isChangingFilter)? e => onChange(index, "in_stock_week", e.target.value) : ""}
                         name="in_stock_week"
                         displayEmpty
                       >
@@ -412,7 +413,7 @@ class CardCell extends React.Component {
                           </IconButton>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} />
+                            <ItemLogModal itemId={item.id} itemLog={item}/>
                             <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>

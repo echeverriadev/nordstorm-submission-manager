@@ -10,7 +10,8 @@ import {
   getCyclesApi,
   getDivisionsApi,
   deleteItemApi,
-  duplicateItemApi
+  duplicateItemApi,
+  addItemLog
 } from '../../../api';
 
 const styles = theme => ({
@@ -126,14 +127,15 @@ class Dashboard extends Component {
         rows.splice(index, 1, row)
         this.setState({rows}, this.fetchPatchItemApi(row.id, key, value) )
     }
-
+    
     fetchPatchItemApi = (id, key, value) => {
       console.log(id, key, value)
       patchItemApi(id,key,value).then(response => {
         if (response.status === 200)
           console.log(response)
-        if (response.refresh)
-          this.fetchItemsApi()
+        if (response.refresh){
+          this.fetchItemsApi() 
+        }
       }, err => {
         console.log(err)
       })
@@ -148,7 +150,8 @@ class Dashboard extends Component {
       filter[target.name] = target.value
       this.setState({
         filter,
-        offset: 0
+        offset: 0,
+        isChangingFilter: true
       }, this.fetchItemsApi)
     }
 
@@ -199,9 +202,12 @@ class Dashboard extends Component {
           console.log(response)
           if (response.status === 200)
             this.setState({
+              isChangingFilter: false,
               rows: response.data,
               total: response.total
             })
+          else
+            this.setState({isChangingFilter: false})
         }, err => {
           console.log(err)
         })
@@ -247,12 +253,13 @@ class Dashboard extends Component {
         console.log(err)
       })
     }
-
+    
     handleDuplicateItemApi = (id) => {
       duplicateItemApi(id).then(response => {
         console.log('response duplicate', response);
-        if (response.status === 200)
+        if (response.status === 200){
           this.fetchItemsApi()
+        }
       }, err => {
         console.log(err)
       })
@@ -260,7 +267,7 @@ class Dashboard extends Component {
 
     render() {
         const { value, cycles, divisions, rows, addItem,
-              total, offset, filter, cannedFilters, order } = this.state;
+              total, offset, filter, cannedFilters, order, isChangingFilter } = this.state;
         const { classes } = this.props;
 
         return (
@@ -269,6 +276,7 @@ class Dashboard extends Component {
               <TabMenu value={value} handleChange={this.handleTabChange}/>
                 {value === 0 &&
                   <Layaout
+                    isChangingFilter={isChangingFilter}
                     items={rows}
                     cycles={cycles}
                     divisions={divisions}
