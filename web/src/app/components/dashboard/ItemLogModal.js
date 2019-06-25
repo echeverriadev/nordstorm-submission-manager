@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {MenuItem, Modal, Typography, Grid, List, ListItem, 
         Divider, ListItemText, Table, TableHead, TableRow, TableCell, TableBody} from '@material-ui/core';
 import { getItemlogsApi } from '../../../api';
+import '../Utils/dashboardCustom.css'
 
 
 function getModalStyle() {

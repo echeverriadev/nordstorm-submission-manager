@@ -85,6 +85,11 @@ const styles = theme => ({
   },
   labelFont: {
     fontSize: '13px'
+  },
+  cardCellCustom: {
+    marginTop: "1%",
+    marginBottom: "1%",
+    paddingTop: "1%"
   }
 });
 function NumberFormatCustom(props) {
@@ -148,7 +153,7 @@ class AddCell extends React.Component {
     const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={this.canSubmit} className={classes.card}>
+      <Card onKeyPress={this.canSubmit} className={[classes.card, classes.cardCellCustom]}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 

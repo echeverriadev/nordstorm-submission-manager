@@ -86,6 +86,10 @@ const styles = theme => ({
   labelFont: {
     fontSize: '13px'
   },
+  cardCellCustom: {
+    marginTop: "1%",
+    marginBottom: "1%"
+  }
   
 });
 
@@ -158,7 +162,7 @@ class CardCell extends React.Component {
   
     const { classes, item, index, onChange, cycles, onDeleteItem } = this.props;
     return (
-      <Card className={classes.card}>
+      <Card className={[classes.card, classes.cardCellCustom]}>
         <CardContent className={classes.cardContent}>
 
           <Grid container>
