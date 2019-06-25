@@ -276,16 +276,16 @@ class ItemController {
             'vpn': req.body.vpn || "",
             'brand': req.body.brand || "",
             'color': req.body.color || "",
-            'size': req.body.size || "",
+            'size': req.body.size || 0,
             'description': req.body.description || "",
             'image': req.body.image || null,
-            'style_group_number': req.body.style_group_number || null,
+            'style_group_number': req.body.style_group_number || 0,
             'in_stock_week': req.body.in_stock_week || null,
             'sale_price': req.body.sale_price || 0,
             '_fk_cycle': req.body._fk_cycle || null,
             '_fk_division': req.body._fk_division || null,
             'retail_price': req.body.retail_price || 0,
-            'is_priority': req.body.is_priority || null,
+            'is_priority': req.body.is_priority || 0,
             'available_in_canada': req.body.available_in_canada || null,
             'price_cad': req.body.price_cad || 0,
             'country_of_origin': req.body.country_of_origin || "",
@@ -315,11 +315,11 @@ class ItemController {
                     "live_date": data.live_date? data.live_date : "" 
                 }
                 var json_details_string = String(json_details)
-                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result) => {
+                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result2) => {
                     if(err){
-                        console.log(result)
+                        console.log(result2)
                     }
-                    console.log("Resultado:", result)
+                    console.log("Resultado:", result2)
                 })
         
           });
