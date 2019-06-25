@@ -91,7 +91,7 @@ const CenteredGrid = (props) => {
         <Grid container className={classes.head}>
             <Grid item md={1}/>
             <Grid item md={11}>
-              <Grid container spacing={8} alignItems="center">
+              <Grid container spacing={11} alignContent='center' alignItems="center">
                   {fieldsHeader.map((field, i) => 
                     <Grid 
                       key={i}

@@ -57,10 +57,11 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 4,
-    width: "95%",
+    width: "80%",
+    marginTop: 32,
   },
   select: {
-    marginBottom: theme.spacing.unit,
+    marginTop: 6,
     fontSize: "13px",
      '&::placeholder': {
       color: 'grey'
@@ -85,6 +86,11 @@ const styles = theme => ({
   },
   labelFont: {
     fontSize: '13px'
+  },
+  cardCellCustom: {
+    marginTop: "1%",
+    marginBottom: "1%",
+    paddingTop: "1%"
   }
 });
 function NumberFormatCustom(props) {
@@ -151,7 +157,7 @@ class AddCell extends React.Component {
     const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={this.canSubmit} className={classes.card} key={this.state.key}>
+      <Card onKeyPress={this.canSubmit} className={[classes.card, classes.cardCellCustom]} key={this.state.key}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 
@@ -176,7 +182,7 @@ class AddCell extends React.Component {
                     </Dropzone>
               </Grid>
               <Grid item md={11}>
-                <Grid className={classes.row} spacing={8} container direction="row" alignContent='center' alignItems='center'>
+                <Grid className={classes.row} spacing={11} container direction="row" alignContent='center' alignItems='center'>
                     <Grid item md={1}>
                       <Select
                         inputProps= {{

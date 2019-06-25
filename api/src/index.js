@@ -7,7 +7,7 @@ const logRequest = require("./middlewares/logRequest");
 const cookieParser = require("cookie-parser");
 let app = express();
 
-const port = process.env.PORT || 8081;
+const port = 8081;
 app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.json());

@@ -17,6 +17,7 @@ import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
 import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
 
 const styles = theme => ({
   root: {
@@ -40,7 +41,7 @@ const styles = theme => ({
     width: "95%"
   },
   select: {
-    width: "95%",
+    width: "85%",
     fontSize: "13px"
   },
   selectCountry: {
@@ -97,6 +98,9 @@ const styles = theme => ({
   inputFont: {
     fontSize: '13px'
   },
+  inputBold: {
+    fontWeight: 'bold'
+  },
   labelFont: {
     fontSize: '13px'
   },
@@ -110,6 +114,26 @@ const styles = theme => ({
   gridContainer: {
     paddingBottom: '2%',
     paddingTop: '1%'
+  },
+  switchBase: {
+    color: '#cccccc',
+    '&$switchChecked': {
+      '& + .MuiSwitch-track': {
+        backgroundColor: '#9ab6cb',
+      }
+    },
+  },
+  switchChecked: {
+    color: '#013656',
+  },
+  switchRoot: {
+    color: '#9ab6cb',
+  },
+  track: {},
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 240,
+    marginTop: -3,
   }
 });
 function NumberFormatCustom(props) {
@@ -151,7 +175,7 @@ const Accordion = (props) => {
                         <FormHelperText className={classes.selectLabel}>Cycles</FormHelperText>
                         <Select
                             inputProps= {{
-                              className: classes.inputFont
+                              className: classNames([classes.inputFont, classes.inputBold])
                             }}
                             className={classes.select}
                             name="Cycles"
@@ -174,7 +198,6 @@ const Accordion = (props) => {
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
                         <div>
-                          <FormHelperText className={classes.selectLabel}>Ann. Sale Price</FormHelperText>
                           <TextField
                               InputProps={{
                                 className: classes.inputFont,
@@ -185,7 +208,7 @@ const Accordion = (props) => {
                                 className: classes.labelFont
                                 
                               }}
-                              placeholder="Input text"
+                              label="Ann. Sale Price"
                               margin="none"
                               value={item.sale_price}
                               onChange={e => onChange("sale_price", e.target.value)}
@@ -199,7 +222,6 @@ const Accordion = (props) => {
                     {
                         (item._fk_cycle && item._fk_cycle != -1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Product Priority</FormHelperText>
                               <TextField
                                 InputProps={{
                                   className: classes.inputFont,
@@ -208,7 +230,7 @@ const Accordion = (props) => {
                                 InputLabelProps= {{
                                   className: classes.labelFont
                                 }}
-                                placeholder="Input Text"
+                                label="Product Priority"
                                 margin="none"
                                 value={item.is_priority}
                                 onChange={e => onChange("is_priority", e.target.value)}
@@ -227,9 +249,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.available_in_canada === 1 ? true : false}
-                                    color="primary"
                                     checked={item.available_in_canada === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("available_in_canada", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
@@ -242,7 +266,6 @@ const Accordion = (props) => {
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Canada Price</FormHelperText>
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
@@ -253,9 +276,9 @@ const Accordion = (props) => {
                                     className: classes.labelFont
                                   }}
                                   disabled={!(item.available_in_canada === 1)}
-                                  placeholder="Input text"
+                                  label="Canada Price"
                                   margin="none"
-                                  defaultValue={(item.price_cad && item.price_cad != "")? item.price_cad : 0}
+                                  value={item.price_cad}
                                   onChange={e => onChange("price_cad", e.target.value)}
                               />
                             </div>
@@ -268,23 +291,25 @@ const Accordion = (props) => {
                     {
                         (item.available_in_canada && item.available_in_canada === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Country of Origin</FormHelperText>
-                              <Select
-                                  inputProps= {{
-                                    className: classes.inputFont
-                                  }}
-                                  className={classes.selectCountry}
-                                  value={item.country_of_origin}
-                                  onChange={e => onChange("country_of_origin", e.target.value)}
-                                  name="Country of origin"
-                                  displayEmpty
-                              >
-                                  <MenuItem value={""} disabled>Input text</MenuItem>
-                                  <MenuItem value={"USA"}>USA</MenuItem>
-                                  <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
-                                  <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
-                                  <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
-                              </Select>
+                              <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="country-of-origin-placeholder" style={{fontSize:"13px"}}>Country of Origin</InputLabel>
+                                <Select
+                                    inputProps= {{
+                                      className: classes.inputFont,
+                                      id: 'country-of-origin-placeholder'
+                                    }}
+                                    className={classes.selectCountry}
+                                    value={item.country_of_origin}
+                                    onChange={e => onChange("country_of_origin", e.target.value)}
+                                    name="Country of origin"
+                                >
+                                    <MenuItem value={""} disabled style={{color:"#656565"}}>None</MenuItem>
+                                    <MenuItem value={"USA"}>USA</MenuItem>
+                                    <MenuItem value={"USA and Imported Materials"}>USA and Imported Materials</MenuItem>
+                                    <MenuItem value={"Imported of American Materials"}>Imported of American Materials</MenuItem>
+                                    <MenuItem value={"Imported - Specify Country"}>Imported - Specify Country</MenuItem>
+                                </Select>
+                              </FormControl>
                             </div>
                         :
                             <div></div>
@@ -296,7 +321,6 @@ const Accordion = (props) => {
                             (item.country_of_origin === "Imported - Specify Country") ?
                                (item.available_in_canada && item.available_in_canada === 1)?
                                     <div>
-                                      <FormHelperText className={classes.selectLabel}>Specify Country</FormHelperText>
                                       <TextField
                                           InputProps={{
                                             className: classes.inputFont
@@ -304,7 +328,7 @@ const Accordion = (props) => {
                                           InputLabelProps= {{
                                             className: classes.labelFont
                                           }}
-                                          placeholder="Input text"
+                                          label="Specify Country"
                                           margin="none"
                                           value={item.country_of_origin_other}
                                           onChange={e => onChange( "country_of_origin_other", e.target.value)}
@@ -325,9 +349,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.request_extension === 1 ? true : false}
-                                    color="primary"
                                     checked={item.request_extension === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("request_extension", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
@@ -340,7 +366,6 @@ const Accordion = (props) => {
                         {
                             (item.request_extension === 1)?
                                 <div>
-                                  <FormHelperText className={classes.selectLabel}>Extension Reason</FormHelperText>
                                   <TextField
                                       InputProps={{
                                         className: classes.inputFont,
@@ -350,7 +375,7 @@ const Accordion = (props) => {
                                         className: classes.labelFont
                                       }}
                                       disabled={!(item.request_extension === 1)}
-                                      placeholder="Input text"
+                                      label="Extension Reason"
                                       margin="none"
                                       value={item.request_extension_note}
                                       onChange={e => onChange("request_extension_note", e.target.value)}
@@ -369,9 +394,11 @@ const Accordion = (props) => {
                             control={
                                 <Switch
                                     value={item.request_cancellation === 1 ? true : false}
-                                    color="primary"
                                     checked={item.request_cancellation === 1 ? true : false}
+                                    color='default'
                                     onChange={e => onChange("request_cancellation", e.target.checked ? 1 : 0)}
+                                    classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
+                                    root: classes.switchRoot}}
                                 />
                             }
                             className={classes.switch}
@@ -384,7 +411,6 @@ const Accordion = (props) => {
                      {
                         (item.request_cancellation === 1)?
                             <div>
-                              <FormHelperText className={classes.selectLabel}>Cancelation Reason</FormHelperText>
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
@@ -394,7 +420,7 @@ const Accordion = (props) => {
                                     className: classes.labelFont
                                   }}
                                   disabled={!(item.request_cancellation === 1)}
-                                  placeholder="Input text"
+                                  label="Cancelation Reason"
                                   margin="none"
                                   value={item.request_cancellation_notes}
                                   onChange={e => onChange("request_cancellation_notes", e.target.value)}
@@ -423,14 +449,16 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_missy", 0)}
+                                    onClick={() => onChange("tagged_missy", 0)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
-                                    
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_missy", 1)}
+                                    onClick={() => onChange("tagged_missy", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -442,6 +470,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_encore", 0)}
+                                    onClick={() => onChange("tagged_encore", 0)}
                                 />
                             :
                                 <Chip
@@ -450,6 +479,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_encore", 1)}
+                                    onClick={() => onChange("tagged_encore", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -461,6 +492,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_petite", 0)}
+                                    onClick={() => onChange("tagged_petite", 0)}
                                 />
                             :
                                 <Chip
@@ -469,6 +501,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_petite", 1)}
+                                    onClick={() => onChange("tagged_petite", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
@@ -480,6 +514,7 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     onDelete={() => onChange("tagged_extended", 0)}
+                                    onClick={() => onChange("tagged_extended", 0)}
                                 />
                             :
                                 <Chip
@@ -488,6 +523,8 @@ const Accordion = (props) => {
                                     clickable
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     onDelete={() => onChange("tagged_extended", 1)}
+                                    onClick={() => onChange("tagged_extended", 1)}
+                                    deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                     </Grid>

@@ -1,0 +1,22 @@
+.react-confirm-alert-overlay{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.9);
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -ms-align-items: center;
+    -webkit-align-items: center;
+    align-items: center;
+    opacity: 0;
+    -webkit-animation: react-confirm-alert-fadeIn 0.5s 0.2s forwards;
+    animation: react-confirm-alert-fadeIn 0.5s 0.2s forwards;
+    position: fixed;
+}
