@@ -96,7 +96,12 @@ const styles = theme => ({
   },
   IconButton: {
     color: 'rgba(0, 0, 0, 0.9)',
+  },
+  cardCellCustom: {
+    marginTop: "1%",
+    marginBottom: "1%"
   }
+
 });
 
 function NumberFormatCustom(props) {
@@ -168,8 +173,7 @@ class CardCell extends React.Component {
   
     const { classes, item, index, onChange, cycles, onDeleteItem, isChangingFilter} = this.props;
     return (
-      <Card className={classes.card}>
-      {console.log("isChangingFilter?", isChangingFilter, "items", item)}
+      <Card className={[classes.card, classes.cardCellCustom]}>
         <CardContent className={classes.cardContent}>
 
           <Grid container>

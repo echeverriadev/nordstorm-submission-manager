@@ -361,12 +361,12 @@ class ItemController {
                     const element = result[i];
 
                     const row = {
-                        'is_priority': element['priority'] || "",
-                        'department_number': element['dept. no'] || "",
+                        'is_priority': element['priority'] || 0,
+                        'department_number': element['dept. no'] || 0,
                         'vpn': element['vpn'] || "",
                         'brand': element['brand'] || "",
                         'color': element['color'] || "",
-                        'size': element['size'] || "",
+                        'size': element['size'] || 0,
                         'description': element['description'] || "",
                         _fk_cycle,
                         _fk_division
