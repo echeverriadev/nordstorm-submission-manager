@@ -25,6 +25,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import './PrimaryAppBar.css'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,10 +34,6 @@ const styles = (theme: Theme) =>
     },
     grow: {
       flexGrow: 1
-    },
-    menuButton: {
-      marginLeft: -12,
-      marginRight: 20
     },
     title: {
       display: "none",
@@ -90,10 +87,10 @@ const styles = (theme: Theme) =>
       }
     },
     sectionMobile: {
-      display: "flex",
-      [theme.breakpoints.up("md")]: {
-        display: "none"
-      }
+      display: 'flex',
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
     }
   });
 
@@ -194,28 +191,14 @@ class PrimaryAppBar extends React.Component<Props, State> {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Open drawer"
-            >
+            <IconButton className="menuButton buttonHeader" color="inherit" aria-label="Open drawer">
               {/* <MenuIcon /> */}
-              <Typography
-                className={classes.title}
-                variant="h6"
-                color="inherit"
-                noWrap
-              >
-                FIT
-              </Typography>
+              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                FIS
+             </Typography>
             </IconButton>
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              FEATURED ITEM TOOL v4.3.2
+            <Typography className={classes.title} variant="h6" style={{marginLeft: "1%"}} color="inherit" noWrap>
+              Featured Item Submissions v1.0
             </Typography>
 
             <div className={classes.grow} />
