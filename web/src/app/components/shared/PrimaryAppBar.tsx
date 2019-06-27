@@ -189,7 +189,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className="bar">
           <Toolbar>
             <IconButton className="menuButton buttonHeader" color="inherit" aria-label="Open drawer">
               {/* <MenuIcon /> */}
