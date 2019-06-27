@@ -139,6 +139,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    let VERSION=process.env.REACT_APP_VERSION;
 
     const renderMenu = (
       <Menu
@@ -198,7 +199,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
              </Typography>
             </IconButton>
             <Typography className={classes.title} variant="h6" style={{marginLeft: "1%"}} color="inherit" noWrap>
-              Featured Item Submissions v1.0
+              Featured Item Submissions {VERSION}
             </Typography>
 
             <div className={classes.grow} />
