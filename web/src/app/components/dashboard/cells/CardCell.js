@@ -69,6 +69,7 @@ const styles = theme => ({
   },
   select: {
     marginBottom: theme.spacing.unit,
+    paddingBottom:'2px',
     fontSize: '13px'
   },
   tagLabel: {
@@ -100,7 +101,11 @@ const styles = theme => ({
   cardCellCustom: {
     marginTop: "1%",
     marginBottom: "1%"
-  }
+  },
+  extPadding:{
+    paddingLeft:"25px"
+
+  },
 
 });
 
@@ -222,7 +227,7 @@ class CardCell extends React.Component {
             </Grid>
             <Grid item md={11}>
               <Grid spacing={11} className={classes.row} container direction="row" alignContent='center' alignItems='center'>
-                  <Grid item md={1}>
+                  <Grid item md={1} className={classes.extPadding}>
                     <Select
                       inputProps= {{
                         className: classes.inputFont
