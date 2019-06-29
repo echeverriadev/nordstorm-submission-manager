@@ -117,6 +117,8 @@ function NumberFormatCustom(props) {
       {...other}
       getInputRef={inputRef}
       onValueChange={values => {
+        if(values.value=="")
+           values.value=null
         onChange({
           target: {
             value: values.value,

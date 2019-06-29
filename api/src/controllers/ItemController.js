@@ -284,7 +284,7 @@ class ItemController {
             'sale_price': req.body.sale_price || 0,
             '_fk_cycle': req.body._fk_cycle || null,
             '_fk_division': req.body._fk_division || null,
-            'retail_price': req.body.retail_price || 0,
+            'retail_price': req.body.retail_price || null,
             'is_priority': req.body.is_priority || 0,
             'available_in_canada': req.body.available_in_canada || null,
             'price_cad': req.body.price_cad || 0,
