@@ -49,18 +49,54 @@ class ItemController {
             })
         }else{
             if(reason === "edited"){
-                var json_details = {
-                    [fieldEdited]: valueEdited
-                }
-                var json_details_string = JSON.stringify(json_details)
-                console.log("JSONDETAILS", json_details_string)
-                this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
                     if(err){
-                        console.log(result)
+                        console.log(err)
                     }
-                    console.log("Resultado:", result)
-                })
-                    
+                    item_editorial = result[0]
+                    var item_fields = {
+                        nmg_priority: item_editorial.nmg_priority,
+                        department_number: item_editorial.department_number,
+                        size: item_editorial.size,
+                        in_stock_week: item_editorial.in_stock_week,
+                        retail_price: item_editorial.retail_price,
+                        brand: item_editorial.brand,
+                        style_group_number: item_editorial.style_group_number,
+                        vpn: item_editorial.vpn,
+                        size: item_editorial.size,
+                        color: item_editorial.color,
+                        color_code: item_editorial.color_code,
+                        description: item_editorial.description,
+                        live_date: item_editorial.live_date? item_editorial.live_date : "0000-00-00",
+                        pc_sample_status: item_editorial.pc_sample_status,
+                        _fk_cycle: item_editorial._fk_cycle,
+                        sale_price: item_editorial.sale_price,
+                        is_priority: item_editorial.is_priority,
+                        tagged_missy: item_editorial.tagged_missy,
+                        available_in_canada: item_editorial.available_in_canada,
+                        price_cad: item_editorial.price_cad,
+                        country_of_origin: item_editorial.country_of_origin,
+                        country_of_origin_other: item_editorial.country_of_origin_other,
+                        request_extension: item_editorial.request_extension,
+                        request_extension_note: item_editorial.request_extension_note,
+                        request_cancellation: item_editorial.request_cancellation,
+                        request_cancellation_note: item_editorial.request_cancellation_note
+                    }
+
+                    for (var key in item_fields) {
+                        if(fieldEdited != key){
+                            item_fields[key] = "Null"
+                        }
+                    }
+                    var json_details_string = JSON.stringify(item_fields)
+                    console.log("JSONDETAILS", json_details_string)
+                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                        if(err){
+                            console.log(result)
+                        }
+                        console.log("Resultado:", result)
+                    })
+                })  
             }
         }
     }
@@ -309,13 +345,21 @@ class ItemController {
                     "live_date": data.live_date? data.live_date : "" 
                 }
                 var json_details_string = String(json_details)
-                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result2) => {
-                    if(err){
-                        console.log(result2)
-                    }
-                    console.log("Resultado:", result2)
-                })
-        
+                if(process.env.NA_BYPASS){
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID  + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' ' +  process.env.BYPASS_USER_NAME + ' \')' ,(err, result2) => {
+                        if(err){
+                            console.log(result2)
+                        }
+                        console.log("Resultado:", result2)
+                    })
+                }else{
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_USER \')' ,(err, result2) => {
+                        if(err){
+                            console.log(result2)
+                        }
+                        console.log("Resultado:", result2)
+                    })
+                }
           });
     }
 
@@ -368,7 +412,11 @@ class ItemController {
                     
                     this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
                         if(res.status(200)){
-                            this.addItemLog(result.insertId, row, null, null, "created", null, "Generic_User" , "lan_test")
+                            if(process.env.NA_BYPASS){
+                                this.addItemLog(result.insertId, row, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                            }else{
+                                this.addItemLog(result.insertId, row, null, null, "created", null, "GENERIC USER" , "LAN_TEST")
+                            }
                         }
                         if (err) throw err;
                     });
@@ -413,6 +461,7 @@ class ItemController {
         const { field, value } = req.body
         const escaping = [field, value, id]
         const refresh = this.updateRelatedField(field);
+        console.log("ESCAPING:", escaping)
         //if country_of_origin was update to another value distinct to Imported - Specify Country, It must clean the field country_of_origin_other
         if(field === "country_of_origin" && value !== "Imported - Specify Country") 
             this.cleanCountryOfOriginOther(id)
@@ -426,7 +475,11 @@ class ItemController {
             }
             
             if(res.status(200)){
-                this.addItemLog([id], null, field, value, "edited", null, "Generic_User" , "lan_test")
+                if(process.env.NA_BYPASS){
+                    this.addItemLog([id], null, field, value, "edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                }else{
+                    this.addItemLog([id], null, field, value, "edited", null, "GENERIC USER" , "LAN TEST")
+                }
             }
             
             if (result.affectedRows){
@@ -515,7 +568,11 @@ class ItemController {
             })
             
             if(res.status(200)){
-                this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, "Generic_User" , "lan_test")
+                if(process.env.NA_BYPASS){
+                    this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                }else{
+                    this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, "GENERIC USER" , "LAN TEST")
+                }
             }
         })
     }
