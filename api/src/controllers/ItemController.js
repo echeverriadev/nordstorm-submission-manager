@@ -361,13 +361,16 @@ class ItemController {
                     const element = result[i];
 
                     const row = {
-                        'is_priority': element['priority'] || 0,
-                        'department_number': element['dept. no'] || 0,
+                        'nmg_priority': element['priority'] || null,
+                        'department_number': element['dept. no'] || null,
                         'vpn': element['vpn'] || "",
                         'brand': element['brand'] || "",
                         'color': element['color'] || "",
-                        'size': element['size'] || 0,
+                        'size': element['size'] || "",
                         'description': element['description'] || "",
+                        'style_group_number': element['sgn'] || "",
+                        'retail_price': element['retail_price'] || null,
+                        'in_stock_week': element['in_stock'] || 0,
                         _fk_cycle,
                         _fk_division
                     };
