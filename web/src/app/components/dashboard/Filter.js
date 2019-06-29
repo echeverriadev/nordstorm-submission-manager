@@ -59,7 +59,8 @@ class Filter extends Component {
   
     handleConfirm = (e) => {
       const file = Array.from(e.target.files)[0]
-      if(file) //If there is a file selected
+      if(file){  //If there is a file selected
+      this.refs.buttonFile.value = '' //Without this the same file couldn't be uploaded again
         confirmAlert({
           title: 'Import items',
           message: 'Do you really want to continue with the Import?',
@@ -73,7 +74,7 @@ class Filter extends Component {
             }
           ]
         });
-        this.refs.buttonFile.value = '' //Without this the same file couldn't be uploaded again
+      }
     }
 
     onClick = () => {
