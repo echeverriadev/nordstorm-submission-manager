@@ -78,7 +78,8 @@ const fieldsHeader = [
   },{
    label: "Retail Price",
    name: "retail_price",
-   grids: 1
+   grids: 1,
+   paddingLeft:11
   },
 ]
 
@@ -105,9 +106,11 @@ const CenteredGrid = (props) => {
                               <Icon fontSize="small">{iconCriterion[order.criterion]}</Icon>
                             }
                         </div>
+                    <div style={{paddingLeft:field.paddingLeft}}>
                       <Typography align="left" className={classes.title} variant="body2">
                         {field.label}
                       </Typography>
+                    </div>
                     </Grid>
                   )}
                   <Grid item md={1}/>

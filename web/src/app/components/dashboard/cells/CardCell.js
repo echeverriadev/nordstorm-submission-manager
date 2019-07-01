@@ -103,7 +103,7 @@ const styles = theme => ({
     marginBottom: "1%"
   },
   extPadding:{
-    paddingLeft:"25px"
+    paddingLeft:"21px"
 
   },
 
