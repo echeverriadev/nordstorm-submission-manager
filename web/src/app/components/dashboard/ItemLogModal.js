@@ -88,7 +88,7 @@ const styles = theme => ({
   },
   itemLogsScroll: {
     position: 'relative',
-    height: 'calc(72vh - 25px - 40px - 40px)',
+    height: 'calc(90vh - 25px - 40px - 40px)',
     overflowY: 'auto',
     overflowX: 'hidden',
     background: '#fff',
@@ -102,7 +102,14 @@ const styles = theme => ({
     width: '88%'
   },
   throws: {
-   paddingRight: '193px'
+   paddingRight: '165px'
+  },
+  fixed_header_tbody: {
+    display: 'block',
+    overflow: 'auto',
+    height: '200px',
+    width: '100%',
+    height: 'calc(90vh - 25px - 40px - 40px)'
   }
 });
 
@@ -220,16 +227,16 @@ class ItemLogModal extends React.Component {
               </Grid>
               <Grid item xs={8} style={{marginLeft: '-10%'}}>
                 <Table className={classes.table} size="small">
-                  <TableHead className={classes.thead}>
+                  <TableHead className={classes.thead} style={{display: "block"}}>
                     <TableRow>
                       <TableCell className={`${classes.headTable} ${classes.throws}`}>Field</TableCell>
                       <TableCell className={classes.headTable}>New Value</TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={classes.fixed_header_tbody} style={{display: "block"}}>
                     {Object.keys(details).map((key, index) => 
-                      <TableRow key={index}>
-                        <TableCell style={{color: "gray", paddingLeft: "54px"}} className={classes.tableCell}>{key}</TableCell>
+                      <TableRow style={{display: "block"}} key={index}>
+                        <TableCell style={{color: "gray", paddingLeft: "54px"}} className={`${classes.tableCell} ${classes.throws}`}>{key}</TableCell>
                         <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>{details[key]}</TableCell>
                       </TableRow>
                     )}
