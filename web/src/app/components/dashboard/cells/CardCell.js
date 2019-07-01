@@ -103,7 +103,7 @@ const styles = theme => ({
     marginBottom: "1%"
   },
   extPadding:{
-    paddingLeft:"25px"
+    paddingLeft:"21px"
 
   },
 
@@ -117,6 +117,8 @@ function NumberFormatCustom(props) {
       {...other}
       getInputRef={inputRef}
       onValueChange={values => {
+        if(values.value=="")
+           values.value=null
         onChange({
           target: {
             value: values.value,

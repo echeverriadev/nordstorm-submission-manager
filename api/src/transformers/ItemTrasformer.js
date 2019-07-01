@@ -14,7 +14,7 @@ const format = (data) => {
         sale_price: data.sale_price || null,
         category: [],
         _fk_cycle: data._fk_cycle || "",
-        retail_price: data.retail_price || 0,
+        retail_price: data.retail_price || null,
         is_priority: data.is_priority || 0,
         available_in_canada: data.available_in_canada || "",
         price_cad: data.price_cad || null,
