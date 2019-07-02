@@ -67,6 +67,17 @@ const styles = theme => ({
       color: 'grey'
     }
   },
+  selectStock: {
+    marginBottom: theme.spacing.unit,
+    width:'81px',
+    marginTop: '17px',
+    fontSize: '13px'
+  },
+  selectNGM: {
+    marginBottom: theme.spacing.unit,
+    marginTop: '17px',
+    fontSize: '13px'
+  },
   tagLabel: {
     padding: 1,
     margin: 0,
@@ -91,7 +102,11 @@ const styles = theme => ({
     marginTop: "1%",
     marginBottom: "1%",
     paddingTop: "1%"
-  }
+  },
+  extPadding:{
+    paddingLeft:"21px"
+
+  },
 });
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -183,23 +198,19 @@ class AddCell extends React.Component {
               </Grid>
               <Grid item md={11}>
                 <Grid className={classes.row} spacing={11} container direction="row" alignContent='center' alignItems='center'>
-                    <Grid item md={1}>
+                    <Grid item md={1} className={classes.extPadding}>
                       <Select
                         inputProps= {{
                           className: classes.inputFont
                         }}
-                        className={classes.select}
+                        className={classes.selectNGM}
                         value={item.nmg_priority}
                         onChange={e => onChange("nmg_priority", e.target.value)}
                         name="Priority"
                         displayEmpty
                       >
                         <MenuItem value={0} disabled>
-                         <InputLabel
-                            FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                         >Priority</InputLabel>
+                       <div style={{color:'grey'}}>  Priority</div>
                         </MenuItem>
                         <MenuItem value={1}>1</MenuItem>
                         <MenuItem value={2}>2</MenuItem>
@@ -333,19 +344,15 @@ class AddCell extends React.Component {
                           inputProps= {{
                             className: classes.inputFont
                           }}
-                          className={classes.select}
+                          className={classes.selectStock}
                           value={item.in_stock_week}
                           onChange={e => onChange("in_stock_week", e.target.value)}
                           name="in_stock_week"
                           displayEmpty
                         >
                           <MenuItem value={""} disabled>
-                          <InputLabel
-                            FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                           >In Stock
-                          </InputLabel>
+                          <div style={{color:'grey'}}>In Stock</div>
+                        
                             
                           </MenuItem>
                           <MenuItem value={1}>1</MenuItem>

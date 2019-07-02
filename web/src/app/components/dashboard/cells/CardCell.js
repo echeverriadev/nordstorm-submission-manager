@@ -67,7 +67,13 @@ const styles = theme => ({
     width: "80%",
     marginTop: 32,
   },
-  select: {
+  selectStock: {
+    marginBottom: theme.spacing.unit,
+    width:'81px',
+    paddingBottom:'2px',
+    fontSize: '13px'
+  },
+  selectNGM: {
     marginBottom: theme.spacing.unit,
     paddingBottom:'2px',
     fontSize: '13px'
@@ -234,7 +240,7 @@ class CardCell extends React.Component {
                       inputProps= {{
                         className: classes.inputFont
                       }}
-                      className={classes.select}
+                      className={classes.selectNGM}
                       value={item.nmg_priority}
                       onChange={(!isChangingFilter)? e => onChange(index, "nmg_priority", e.target.value) : ""}
                       name="Priority"
@@ -381,7 +387,7 @@ class CardCell extends React.Component {
                         inputProps= {{
                           className: classes.inputFont
                         }}
-                        className={classes.select}
+                        className={classes.selectStock}
                         value={item.in_stock_week}
                         onChange={(!isChangingFilter)? e => onChange(index, "in_stock_week", e.target.value) : ""}
                         name="in_stock_week"
