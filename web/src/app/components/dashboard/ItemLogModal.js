@@ -164,6 +164,16 @@ class ItemLogModal extends React.Component {
   render() {
     const { classes } = this.props;
     const {open, selected, details, itemLogs} = this.state
+    const closeIcon = {
+      cursor: 'pointer',
+      float: 'right',
+      marginTop: '15px',
+      width: '30px',
+      position: 'relative',
+      color: 'white',
+      fontWeight: 'bold',
+      marginRight: '8px'
+    };
 
     return (
       <div>
@@ -175,11 +185,16 @@ class ItemLogModal extends React.Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
+            <div>
+                <label onClick={this.handleClose} style={closeIcon}>
+                X
+                </label>
+            </div>
             <Typography className={classes.titleModal} variant="h6" id="modal-title">
               Item Edit Log
             </Typography>        
             <Grid container spacing={8}>
-              <Grid item xs={4} className={classes.itemLogsScroll}>
+              <Grid item xs={4} className={classes.itemLogsScroll} style={{marginTop: '17px'}}>
                 <List className={classes.list}>
                   {
                   (itemLogs && itemLogs.length > 0)?
@@ -226,7 +241,7 @@ class ItemLogModal extends React.Component {
                   }
                 </List>
               </Grid>
-              <Grid item xs={8} style={{marginLeft: '-10%'}}>
+              <Grid item xs={8} style={{marginLeft: '-10%', marginTop: '-18px'}}>
                 <Table className={classes.table} size="small" style={{width: "109%"}}>
                   <TableHead className={classes.thead} style={{display: "block"}}>
                     <TableRow>
