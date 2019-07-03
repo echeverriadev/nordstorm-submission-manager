@@ -14,6 +14,7 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
+    width: "50%",
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
@@ -93,8 +94,8 @@ const styles = theme => ({
     overflowX: 'hidden',
     background: '#fff',
     padding: '0px !important',
-    marginLeft: '4.9%',
-    marginTop: '5%',
+    marginLeft: '32px',
+    marginTop: '32px',
     marginBottom: '5%'
   },
   thead: {
@@ -226,18 +227,22 @@ class ItemLogModal extends React.Component {
                 </List>
               </Grid>
               <Grid item xs={8} style={{marginLeft: '-10%'}}>
-                <Table className={classes.table} size="small">
+                <Table className={classes.table} size="small" style={{width: "109%"}}>
                   <TableHead className={classes.thead} style={{display: "block"}}>
                     <TableRow>
-                      <TableCell className={`${classes.headTable} ${classes.throws}`}>Field</TableCell>
+                      <TableCell className={classes.headTable } style={{width: "218px", paddingRight: "0 !important"}}>Field</TableCell>
                       <TableCell className={classes.headTable}>New Value</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody className={classes.fixed_header_tbody} style={{display: "block"}}>
                     {Object.keys(details).map((key, index) => 
                       <TableRow style={{display: "block"}} key={index}>
-                        <TableCell style={{color: "gray", paddingLeft: "54px"}} className={`${classes.tableCell} ${classes.throws}`}>{key}</TableCell>
-                        <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>{details[key]}</TableCell>
+                        <TableCell style={{color: "gray", paddingLeft: "54px", width: "298px"}} className={classes.tableCell}>{key}</TableCell>
+                        <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>
+                          <p style={{textAlign: "left"}}>
+                            {details[key]}
+                          </p>
+                        </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
