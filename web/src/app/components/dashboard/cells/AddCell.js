@@ -265,7 +265,7 @@ class AddCell extends React.Component {
                           className: classes.labelFont
                         }}
                         id="style_group_number"
-                        label="SG"
+                        label="SG#"
                         className={classes.textField}
                         margin="normal"
                         value={item.style_group_number}
