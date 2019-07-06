@@ -1,7 +1,7 @@
 import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
   tabsRoot: {
@@ -16,7 +16,7 @@ const styles = theme => ({
     minWidth: 72,
     fontWeight: '500',
     fontSize: '13.9px',
-    marginRight: theme.spacing.unit * 4,
+    marginRight: theme.spacing(4),
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -43,7 +43,7 @@ const styles = theme => ({
   },
   tabSelected: {},
   typography: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
 });
 

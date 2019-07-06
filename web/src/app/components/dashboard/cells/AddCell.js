@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -43,8 +43,8 @@ const styles = theme => ({
   img: {
     margin: 'auto',
     display: 'block',
-    maxWidth: theme.spacing.unit * 12,
-    Maxheight: theme.spacing.unit * 13,
+    maxWidth: theme.spacing(12),
+    Maxheight: theme.spacing(13),
   },
   row: {
     maxHeight: "50%",
@@ -54,9 +54,9 @@ const styles = theme => ({
     margin: 0
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit * 4,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    paddingBottom: theme.spacing(4),
     width: "80%",
     marginTop: 32,
   },
@@ -68,13 +68,13 @@ const styles = theme => ({
     }
   },
   selectStock: {
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(1),
     width:'81px',
     marginTop: '17px',
     fontSize: '13px'
   },
   selectNGM: {
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(1),
     marginTop: '17px',
     fontSize: '13px'
   },
@@ -99,6 +99,7 @@ const styles = theme => ({
     fontSize: '13px'
   },
   cardCellCustom: {
+    width: "100%",
     marginTop: "1%",
     marginBottom: "1%",
     paddingTop: "1%"
@@ -172,7 +173,7 @@ class AddCell extends React.Component {
     const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={this.canSubmit} className={[classes.card, classes.cardCellCustom]} key={this.state.key}>
+      <Card onKeyPress={this.canSubmit} className={classes.cardCellCustom} key={this.state.key}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 
@@ -197,7 +198,7 @@ class AddCell extends React.Component {
                     </Dropzone>
               </Grid>
               <Grid item md={11}>
-                <Grid className={classes.row} spacing={11} container direction="row" alignContent='center' alignItems='center'>
+                <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
                     <Grid item md={1} className={classes.extPadding}>
                       <Select
                         inputProps= {{

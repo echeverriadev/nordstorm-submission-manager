@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {Grid, Chip} from '@material-ui/core';
 
 import Head from './cells/Head';
@@ -22,7 +22,7 @@ const styles = theme => ({
   },
    chip: {
     marginTop: 20,
-    margin: theme.spacing.unit / 2,
+    margin: theme.spacing(0.5),
     backgroundColor: '#4daff2'
   },
   head:{

@@ -468,6 +468,10 @@ class ItemController {
                     else{
                         set += `${field} = ${item[field]}, `
                     }
+                } else {
+                    if(field === "is_priority"){
+                        set += `${field} = null, `
+                    }
                 }
             }
         }
@@ -527,6 +531,14 @@ class ItemController {
             }
         }
         return false;
+    }
+
+    preventEmptyStringValue(field, value) {
+        const preventFields = [''];
+        if (preventFields.indexOf(field) !== -1) {
+            return null;
+        }
+        return value;
     }
     
     cleanCountryOfOriginOther(_pk_item) {
