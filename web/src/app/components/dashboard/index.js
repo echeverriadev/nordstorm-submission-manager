@@ -122,17 +122,43 @@ class Dashboard extends Component {
 
     onChange = (index, key, value) => {
         const rows = this.state.rows
-        const row = rows[index]
+        const noKeyPressed = ['nmg_priority', 'in_stock_week', '_fk_cycle', 'tagged_missy', 'available_in_canada', 'request_extension', 'request_cancellation']
+        var row = rows[index]
         row[key] = value
+        row = Object.assign({}, row, {
+            fieldModified: Object.assign({}, row.fieldModified,{
+              [key]: value
+            })
+        })
         rows.splice(index, 1, row)
-        this.setState({rows}, this.fetchPatchItemApi(row.id, key, value) )
+        this.setState({rows})
+        if(noKeyPressed.indexOf(key) !== -1){
+          this.fetchPatchItemApi(row.id, row, index)
+        }
+        
+    }
+
+    onEditKeyPress = ({charCode}, index) => {
+      if(charCode === 13 || charCode === 10){
+        const rows = this.state.rows
+        const row = rows[index]
+        console.log("ITEM", row)
+        this.fetchPatchItemApi(row.id, row, index)
+      }
     }
     
-    fetchPatchItemApi = (id, key, value) => {
-      console.log(id, key, value)
-      patchItemApi(id,key,value).then(response => {
-        if (response.status === 200)
+    fetchPatchItemApi = (id, item, index) => {
+      console.log(id, item)
+      patchItemApi(id,item).then(response => {
+        if (response.status === 200){
           console.log(response)
+          const rows = this.state.rows
+          const row = Object.assign({}, rows[index], {
+              fieldModified: null
+          })
+          rows.splice(index, 1, row)
+          this.setState({rows})
+        }
         if (response.refresh){
           this.fetchItemsApi() 
         }
@@ -287,6 +313,7 @@ class Dashboard extends Component {
                     filter={filter}
                     order={order}
                     onChange={this.onChange}
+                    onEditKeyPress={this.onEditKeyPress}
                     onAddChange={this.onAddChange}
                     onSubmit={this.onSubmit}
                     onChangePagination = {this.changePagination}

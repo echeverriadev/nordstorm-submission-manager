@@ -1,6 +1,8 @@
 const format = (data) => {
+    //console.log(data)
     return {
         id: data.__pk_item || null,
+        live_date: data.live_date || null,
         image: data.image || "https://www.knittedhome.com/communities/5/004/012/872/235/images/4628207884.jpg",
         nmg_priority: data.nmg_priority || null,
         department_number: data.department_number || "",
@@ -34,8 +36,18 @@ const format = (data) => {
 };
 
 exports.transform = (data) => {
+    console.log("DATAAA", data)
     if(Array.isArray(data)){
-        return data.map(item => {
+        var resArr = []
+
+        data.filter(function(item){
+            var i = resArr.findIndex(x => x.__pk_item == item.__pk_item);
+            if(i <= -1){
+                resArr.push(item);
+            }
+        });
+
+        return resArr.map(item => {
             return format(item);
         })
     }
