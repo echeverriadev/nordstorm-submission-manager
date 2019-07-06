@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
 import TabMenu from './TabMenu';
 import Layaout from './Layaout';

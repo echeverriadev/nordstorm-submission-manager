@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Icon from '@material-ui/core/Icon';
@@ -14,14 +14,14 @@ const styles = theme => ({
     marginTop:'30px'
   },
   head: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   title: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     fontWeight: 'bold',
     fontSize: '13px'
   },
@@ -92,7 +92,7 @@ const CenteredGrid = (props) => {
         <Grid container className={classes.head}>
             <Grid item md={1}/>
             <Grid item md={11}>
-              <Grid container spacing={11} alignContent='center' alignItems="center">
+              <Grid container alignContent='center' alignItems="center">
                   {fieldsHeader.map((field, i) => 
                     <Grid 
                       key={i}

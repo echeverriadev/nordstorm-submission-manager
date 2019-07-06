@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {Grid, MenuItem} from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
@@ -26,7 +26,7 @@ const styles = theme => ({
     color: 'black',
   },
   leftIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   input: {
     marginLeft: 8,
@@ -127,11 +127,7 @@ class Filter extends Component {
                   displayEmpty={true}
                 >
                   <MenuItem value="" disabled>
-                    <InputLabel
-                            FormLabelClasses={{
-                            root: classes.fontBolt,
-                            }}
-                         >
+                    <InputLabel>
                       Cycle / Month
                       </InputLabel>
                   </MenuItem>
@@ -152,11 +148,7 @@ class Filter extends Component {
                   displayEmpty={true}
                 >
                   <MenuItem value="" disabled>
-                  <InputLabel
-                    FormLabelClasses={{
-                      root: classes.fontBolt,
-                      }}
-                      >
+                  <InputLabel>
                       Division
                       </InputLabel>
                   </MenuItem>

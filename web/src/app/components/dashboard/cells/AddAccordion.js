@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -28,16 +28,16 @@ const styles = theme => ({
     padding: 0
   },
   column: {
-      paddingTop: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit
+      paddingTop: theme.spacing(1),
+      paddingLeft: theme.spacing(1)
   },
   helperText: {
     textAlign: 'center',
-    paddingLeft: theme.spacing.unit
+    paddingLeft: theme.spacing(1)
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: "95%"
   },
   select: {
@@ -60,7 +60,7 @@ const styles = theme => ({
     textAlign: "left"
   },
   tagItemOn: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     color: '#fff',
     fontWeight: 'bold',
     '&:hover, &:focus': {
@@ -73,7 +73,7 @@ const styles = theme => ({
     backgroundColor: '#4278a9'
   },
   tagItemOff: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     color: '#fff',
     fontWeight: 'bold',
     '&:hover, &:focus': {
@@ -202,10 +202,10 @@ const Accordion = (props) => {
                               InputProps={{
                                 className: classes.inputFont,
                                 inputComponent: NumberFormatCustom,
-                                disableAnimation: true,
                               }}
                               InputLabelProps= {{
-                                className: classes.labelFont
+                                className: classes.labelFont,
+                                disableAnimation: true,
                                 
                               }}
                               label="Ann. Sale Price"
@@ -225,15 +225,16 @@ const Accordion = (props) => {
                               <TextField
                                 InputProps={{
                                   className: classes.inputFont,
-                                  disableAnimation: true,
                                 }}
                                 InputLabelProps= {{
-                                  className: classes.labelFont
+                                  className: classes.labelFont,
+                                  disableAnimation: true,
                                 }}
                                 label="Product Priority"
                                 margin="none"
                                 value={item.is_priority}
                                 onChange={e => onChange("is_priority", e.target.value)}
+                                type="number"
                             />
                             </div>
                         :
@@ -270,10 +271,10 @@ const Accordion = (props) => {
                                   InputProps={{
                                     className: classes.inputFont,
                                     inputComponent: NumberFormatCustom,
-                                    disableAnimation: true,
                                   }}
                                   InputLabelProps= {{
-                                    className: classes.labelFont
+                                    className: classes.labelFont,
+                                    disableAnimation: true,
                                   }}
                                   disabled={!(item.available_in_canada === 1)}
                                   label="Canada Price"
@@ -369,10 +370,10 @@ const Accordion = (props) => {
                                   <TextField
                                       InputProps={{
                                         className: classes.inputFont,
-                                        disableAnimation: true,
                                       }}
                                       InputLabelProps= {{
-                                        className: classes.labelFont
+                                        className: classes.labelFont,
+                                        disableAnimation: true,
                                       }}
                                       disabled={!(item.request_extension === 1)}
                                       label="Extension Reason"
@@ -414,10 +415,10 @@ const Accordion = (props) => {
                               <TextField
                                   InputProps={{
                                     className: classes.inputFont,
-                                    disableAnimation: true,
                                   }}
                                   InputLabelProps= {{
-                                    className: classes.labelFont
+                                    className: classes.labelFont,
+                                    disableAnimation: true,
                                   }}
                                   disabled={!(item.request_cancellation === 1)}
                                   label="Cancelation Reason"

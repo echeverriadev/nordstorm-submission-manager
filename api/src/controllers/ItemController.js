@@ -467,7 +467,8 @@ class ItemController {
 
     async updatePatch(req, res, next) {
         const { id } = req.params
-        const { field, value } = req.body
+        let { field, value } = req.body
+        value = this.preventEmptyStringValue(field, value);
         const escaping = [field, value, id]
         const refresh = this.updateRelatedField(field);
         console.log("ESCAPING:", escaping)
@@ -515,6 +516,14 @@ class ItemController {
             return true;
         }
         return false;
+    }
+
+    preventEmptyStringValue(field, value) {
+        const preventFields = ['is_priority'];
+        if (preventFields.indexOf(field) !== -1) {
+            return null;
+        }
+        return value;
     }
     
     cleanCountryOfOriginOther(_pk_item) {

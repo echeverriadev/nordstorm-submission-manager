@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {MenuItem, Modal, Typography, Grid, List, ListItem, 
         Divider, ListItemText, Table, TableHead, TableRow, TableCell, TableBody} from '@material-ui/core';
 import { getItemlogsApi } from '../../../api';
@@ -55,7 +55,7 @@ function getModalStyle() {
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 75,
+    width: theme.spacing(75),
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     outline: 'none',
