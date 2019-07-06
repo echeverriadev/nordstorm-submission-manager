@@ -162,7 +162,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const Accordion = (props) => {
-  const { classes, item, index, onChange, cycles } = props;
+  const { classes, item, onEditKeyPress, index, onChange, cycles } = props;
 
   return (
     <CardContent className={classes.root}>
@@ -214,6 +214,7 @@ const Accordion = (props) => {
                               label="Ann. Sale Price"
                               margin="none"
                               value={item.sale_price}
+                              onKeyPress={(e) => onEditKeyPress(e, index)}
                               onChange={e => onChange(index, "sale_price", e.target.value)}
                           />
                         </div>
@@ -237,6 +238,7 @@ const Accordion = (props) => {
                                   label="Product Priority"
                                   margin="none"
                                   value={item.is_priority}
+                                  onKeyPress={(e) => onEditKeyPress(e, index)}
                                   onChange={e => onChange(index, "is_priority", e.target.value)}
                               />
                             </div>
@@ -284,6 +286,7 @@ const Accordion = (props) => {
                                   label="Canada Price"
                                   margin="none"
                                   value={item.price_cad}
+                                  onKeyPress={(e) => onEditKeyPress(e, index)}
                                   onChange={e => onChange(index, "price_cad", e.target.value)}
                               />
                             </div>
@@ -337,6 +340,7 @@ const Accordion = (props) => {
                                           label="Specify Country"
                                           margin="none"
                                           value={item.country_of_origin_other}
+                                          onKeyPress={(e) => onEditKeyPress(e, index)}
                                           onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
                                       />
                                     </div>
@@ -385,6 +389,7 @@ const Accordion = (props) => {
                                       label="Extension Reason"
                                       margin="none"
                                       value={item.request_extension_note}
+                                      onKeyPress={(e) => onEditKeyPress(e, index)}
                                       onChange={e => onChange(index, "request_extension_note", e.target.value)}
                                   />
                                 </div>
@@ -431,6 +436,7 @@ const Accordion = (props) => {
                                   label="Cancelation Reason"
                                   margin="none"
                                   value={item.request_cancellation_notes}
+                                  onKeyPress={(e) => onEditKeyPress(e, index)}
                                   onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
                               />
                             </div>

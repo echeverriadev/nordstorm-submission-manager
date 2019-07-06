@@ -22,28 +22,29 @@ class ItemController {
         this.duplicateItem = this.duplicateItem.bind(this);
         this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
     }
-
+    
     addItemLog(id_editorial, fields, fieldEdited, valueEdited, reason, details, user, lan_id){
         
-        console.log(reason)
+        console.log("REASON", reason)
         console.log(id_editorial)
         
         if(reason === "created" || reason === "duplicated"){
             var item_editorial = ""
-            this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
+            this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ' limit 1;'  ,(err, result) => {
                 if(err){
                     console.log(err)
                 }
                 item_editorial = result[0]
-                    console.log("ITEM", item_editorial.brand)
+                   // console.log("ITEM", item_editorial.brand)
                     var json_details = {
                         brand: item_editorial.brand,
                         live_date: item_editorial.live_date
                     }
                     var json_details_string = JSON.stringify(json_details)
-                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
-                        if(err){
-                            console.log(result)
+                    console.log("ID_EDITORIAL", id_editorial)
+                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES( '+ id_editorial + ',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \');' ,(err2, result2) => {
+                        if(err2){
+                            console.log(err2)
                         }
                     })
             })
@@ -53,42 +54,8 @@ class ItemController {
                     if(err){
                         console.log(err)
                     }
-                    item_editorial = result[0]
-                    var item_fields = {
-                        nmg_priority: item_editorial.nmg_priority,
-                        department_number: item_editorial.department_number,
-                        size: item_editorial.size,
-                        in_stock_week: item_editorial.in_stock_week,
-                        retail_price: item_editorial.retail_price,
-                        brand: item_editorial.brand,
-                        style_group_number: item_editorial.style_group_number,
-                        vpn: item_editorial.vpn,
-                        size: item_editorial.size,
-                        color: item_editorial.color,
-                        color_code: item_editorial.color_code,
-                        description: item_editorial.description,
-                        live_date: item_editorial.live_date? item_editorial.live_date : "0000-00-00",
-                        pc_sample_status: item_editorial.pc_sample_status,
-                        _fk_cycle: item_editorial._fk_cycle,
-                        sale_price: item_editorial.sale_price,
-                        is_priority: item_editorial.is_priority,
-                        tagged_missy: item_editorial.tagged_missy,
-                        available_in_canada: item_editorial.available_in_canada,
-                        price_cad: item_editorial.price_cad,
-                        country_of_origin: item_editorial.country_of_origin,
-                        country_of_origin_other: item_editorial.country_of_origin_other,
-                        request_extension: item_editorial.request_extension,
-                        request_extension_note: item_editorial.request_extension_note,
-                        request_cancellation: item_editorial.request_cancellation,
-                        request_cancellation_note: item_editorial.request_cancellation_note
-                    }
-
-                    for (var key in item_fields) {
-                        if(fieldEdited != key){
-                            item_fields[key] = "Null"
-                        }
-                    }
-                    var json_details_string = JSON.stringify(item_fields)
+                    var json_details_string = JSON.stringify(fields)
+                    console.log(json_details_string)
                     console.log("JSONDETAILS", json_details_string)
                     this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
                         if(err){
@@ -465,29 +432,71 @@ class ItemController {
         });
     }
 
+    convertDateYMD(date) {
+        var year, month, day;
+        year = String(date.getFullYear());
+        month = String(date.getMonth() + 1);
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        day = String(date.getDate());
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        return year + "-" + month + "-" + day;
+    }
+
     async updatePatch(req, res, next) {
         const { id } = req.params
-        const { field, value } = req.body
-        const escaping = [field, value, id]
-        const refresh = this.updateRelatedField(field);
-        console.log("ESCAPING:", escaping)
+        const { item } = req.body
+        const refresh = this.updateRelatedField(item.fieldModified);
+        const fieldModified = ['fieldModified', 'category', , 'id', 'department'];
+        const fieldString = ['live_date', 'vpn', 'country_of_origin', 'country_of_origin_other', 'style_group_number', 'image', 'color' , 'size', 'brand', 'description', 'department_number']
+        var set = 'SET ';
+       
+        for(var field in item){
+            if(fieldModified.indexOf(field) === -1){
+                if(item[field] !== null && item[field] !== "" ){
+                    if(fieldString.indexOf(field) !== -1)  {
+                        if(field === "live_date"){
+                            const date = this.convertDateYMD(new Date(item[field]))
+                            set += `${field} = \'${date}\',`
+                        }else{
+                            set += `${field} = \"${item[field]}\" ,`
+                        }
+                    }
+                    else{
+                        set += `${field} = ${item[field]}, `
+                    }
+                }
+            }
+        }
+
+        var set = set.substring(0, set.length-2)
+
+        console.log("SET", set)
+       
         //if country_of_origin was update to another value distinct to Imported - Specify Country, It must clean the field country_of_origin_other
-        if(field === "country_of_origin" && value !== "Imported - Specify Country") 
-            this.cleanCountryOfOriginOther(id)
+        for(var field in item){
+            if(field === "country_of_origin" && item[field] !== "Imported - Specify Country") 
+                this.cleanCountryOfOriginOther(id)
+        }
        // if (hasEmptyField(escaping))
          //   return res.status(400).json({ status: 400, massage: "Bad Request" })
          
-        this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
+        this.connection.query('UPDATE item_editorial '+ set + ' WHERE __pk_item = ?', item.id, (err, result) => {
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
             }
             
             if(res.status(200)){
-                if(process.env.NA_BYPASS){
-                    this.addItemLog([id], null, field, value, "edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
-                }else{
-                    this.addItemLog([id], null, field, value, "edited", null, "GENERIC USER" , "LAN TEST")
+                if(item.fieldModified != null && item.fieldEdited != ""){
+                    if(process.env.NA_BYPASS){
+                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                    }else{
+                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, "GENERIC USER" , "LAN TEST")
+                    }
                 }
             }
             
@@ -498,21 +507,24 @@ class ItemController {
                     refresh
                 })
             }
-            else
+            else{
                 res.status(404).json({
                     status: 404,
                     massage: "Item not found",
                 })
+            }
         })
     }
 
-    updateRelatedField(field) {
+    updateRelatedField(fields) {
         const relatedFields = ['department_number'];
-        if (!field) {
+        if (!fields) {
             return false;
         }
-        if (relatedFields.indexOf(field) !== -1) {
-            return true;
+        for(var field in fields){
+            if (relatedFields.indexOf(field) !== -1) {
+                return true;
+            }
         }
         return false;
     }
@@ -551,6 +563,7 @@ class ItemController {
     }
 
     async duplicateItem(req, res, next) {
+        console.log("DUPLICAAAAANDO")
         const { id } = req.params
         const escaping = [id]
         if (hasEmptyField(escaping))
@@ -565,7 +578,7 @@ class ItemController {
                            + 'SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; ';
 
         this.connection.query(queryStrings, escaping, (err, result) => {
-            
+            console.log("RESULT", result)
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
@@ -575,13 +588,11 @@ class ItemController {
                 status: 200,
                 message: "Item duplicated"
             })
-            
-            if(res.status(200)){
-                if(process.env.NA_BYPASS){
-                    this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
-                }else{
-                    this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, "GENERIC USER" , "LAN TEST")
-                }
+
+            if(process.env.NA_BYPASS){
+                this.addItemLog(id, null, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+            }else{
+                this.addItemLog(id, null, null, null, "created", null, "GENERIC USER" , "LAN TEST")
             }
         })
     }

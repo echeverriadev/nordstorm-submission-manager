@@ -111,6 +111,9 @@ const styles = theme => ({
     height: '200px',
     width: '100%',
     height: 'calc(90vh - 25px - 40px - 40px)'
+  },
+  textBold: {
+    fontWeight: "bold !important"
   }
 });
 
@@ -146,10 +149,10 @@ class ItemLogModal extends React.Component {
   
   handleListItemClick = (event, index) => {
     console.log(this.state.itemLogs[index].event == " edited")
-    console.log(this.state.itemLogs[index])
+    console.log(this.props.itemLog)
     var details
     if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" || String(this.state.itemLogs[index].event) == " created" ||String(this.state.itemLogs[index].event) == " created "){
-      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "0000-00-00" }
+      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "NULL" }
     }else{
       if(String(this.state.itemLogs[index].event) == " edited"){
         details = JSON.parse(this.state.itemLogs[index].details)
@@ -209,9 +212,11 @@ class ItemLogModal extends React.Component {
                         >
                           <ListItemText
                             primary={item.user_name}
+                            classes={{primary: classes.textBold}}
                             primaryTypographyProps={{
-                              color: "inherit"
+                              color: "inherit",
                             }}
+                            style={{}}
                             secondary={
                               <React.Fragment>
                                 <Typography
@@ -252,7 +257,7 @@ class ItemLogModal extends React.Component {
                   <TableBody className={classes.fixed_header_tbody} style={{display: "block"}}>
                     {Object.keys(details).map((key, index) => 
                       <TableRow style={{display: "block"}} key={index}>
-                        <TableCell style={{color: "gray", paddingLeft: "54px", width: "298px"}} className={classes.tableCell}>{key}</TableCell>
+                        <TableCell style={{color: "gray", paddingLeft: "73px", width: "291px"}} className={classes.tableCell}>{key}</TableCell>
                         <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>
                           <p style={{textAlign: "left"}}>
                             {details[key]}
