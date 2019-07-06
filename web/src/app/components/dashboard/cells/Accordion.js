@@ -14,6 +14,7 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
+import SelectAllIcon from '@material-ui/icons/SelectAll';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
@@ -33,7 +34,8 @@ const styles = theme => ({
   },
   helperText: {
     textAlign: 'center',
-    paddingLeft: theme.spacing(1)
+    paddingLeft: theme.spacing(1),
+    textDecoration: 'underline',
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -134,6 +136,12 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 240,
     marginTop: -3,
+  },
+  selectAllIcon: {
+    width: 'auto',
+    height: 13,
+    marginBottom: -2,
+    marginRight: 1,
   }
 });
 
@@ -168,7 +176,9 @@ const Accordion = (props) => {
     <CardContent className={classes.root}>
         <Grid container>
             <Grid item md={1}>
-                <FormHelperText className={classes.helperText}>Drop the image to replace</FormHelperText>
+                <FormHelperText className={classes.helperText}>
+                  <SelectAllIcon className={classes.selectAllIcon} />Drop new image to replace
+                </FormHelperText>
             </Grid>
             <Grid item className={classes.column} md={9}>
             
