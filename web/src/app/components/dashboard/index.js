@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import PrimaryAppBar from '../../components/shared/PrimaryAppBar';
-import TabMenu from './TabMenu';
-import Layaout from './Layaout';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import PrimaryAppBar from "../../components/shared/PrimaryAppBar";
+import TabMenu from "./TabMenu";
+import Layaout from "./Layaout";
 import {
   getItemsApi,
   patchItemApi,
@@ -11,14 +11,15 @@ import {
   getDivisionsApi,
   deleteItemApi,
   duplicateItemApi,
-  addItemLog
-} from '../../../api';
+  addItemLog,
+  getSubDivisionsApi
+} from "../../../api";
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
+    backgroundColor: theme.palette.background.paper
+  }
 });
 
 const initialNewItem = {
@@ -50,259 +51,317 @@ const initialNewItem = {
   tagged_encore: 0,
   tagged_petite: 0,
   tagged_extended: 0
-}
+};
 
 class Dashboard extends Component {
-    constructor(props){
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            value: 0,
-            cycles: [],
-            divisions: [],
-            rows: [],
-            addItem: initialNewItem,
-            total: 0,
-            offset: 0,
-            filter: {
-              cycleId: "",
-              divisionId: "",
-              search: "",
-            },
-            cannedFilters: [],
-            order: {
-              field: '',
-              criterion: ''
-            }
-        };
-
-    }
-
-    componentWillMount = () => {
-      this.fetchCyclesApi()
-      this.fetchDivisionsApi()
-    }
-
-    handleTabChange = (event, value) => {
-      this.setState({ value });
-    }
-
-    onAddChange = (key, value) => {
-      this.setState({
-        addItem: {
-          ...this.state.addItem,
-          [key]: value
-        }
-      })
-    }
-
-    onSubmit = () => {
-      const {filter, addItem} = this.state
-      const {divisionId, cycleId} = filter
-      const addItemApi = {
-        ...addItem,
-        _fk_division: divisionId,
-        _fk_cycle: cycleId
+    this.state = {
+      value: 0,
+      cycles: [],
+      divisions: [],
+      subdivisions: [],
+      rows: [],
+      addItem: initialNewItem,
+      total: 0,
+      offset: 0,
+      filter: {
+        cycleId: "",
+        divisionId: "",
+        subdivisionId: "",
+        search: ""
+      },
+      cannedFilters: [],
+      order: {
+        field: "",
+        criterion: ""
       }
-      storeItemApi(addItemApi).then(response => {
-        if(response.code === 200){
+    };
+  }
+
+  componentWillMount = () => {
+    this.fetchCyclesApi();
+    this.fetchDivisionsApi();
+  };
+
+  handleTabChange = (event, value) => {
+    this.setState({ value });
+  };
+
+  onAddChange = (key, value) => {
+    this.setState({
+      addItem: {
+        ...this.state.addItem,
+        [key]: value
+      }
+    });
+  };
+
+  onSubmit = () => {
+    const { filter, addItem } = this.state;
+    const { divisionId, cycleId } = filter;
+    const addItemApi = {
+      ...addItem,
+      _fk_division: divisionId,
+      _fk_cycle: cycleId
+    };
+    storeItemApi(addItemApi).then(
+      response => {
+        if (response.code === 200) {
           this.setState({
             addItem: initialNewItem
           });
-          this.fetchItemsApi()
+          this.fetchItemsApi();
           // alert(response.message);
-        }else{
-          console.error(response.message)
+        } else {
+          console.error(response.message);
         }
-        console.log(response)
-      }, err => {
-        console.error(err)
-      } )
-    }
+        console.log(response);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  };
 
-    onChange = (index, key, value) => {
-        const rows = this.state.rows
-        const row = rows[index]
-        row[key] = value
-        rows.splice(index, 1, row)
-        this.setState({rows}, this.fetchPatchItemApi(row.id, key, value) )
-    }
-    
-    fetchPatchItemApi = (id, key, value) => {
-      console.log(id, key, value)
-      patchItemApi(id,key,value).then(response => {
-        if (response.status === 200)
-          console.log(response)
-        if (response.refresh){
-          this.fetchItemsApi() 
+  onChange = (index, key, value) => {
+    const rows = this.state.rows;
+    const row = rows[index];
+    row[key] = value;
+    rows.splice(index, 1, row);
+    this.setState({ rows }, this.fetchPatchItemApi(row.id, key, value));
+  };
+
+  fetchPatchItemApi = (id, key, value) => {
+    console.log(id, key, value);
+    patchItemApi(id, key, value).then(
+      response => {
+        if (response.status === 200) console.log(response);
+        if (response.refresh) {
+          this.fetchItemsApi();
         }
-      }, err => {
-        console.log(err)
-      })
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
+
+  changePagination = offset => {
+    this.setState({ offset }, this.fetchItemsApi);
+  };
+
+  changeFilter = ({ target }) => {
+    const filter = { ...this.state.filter };
+    filter[target.name] = target.value;
+
+    // Getting division subdivisions
+    if (target.name === "divisionId") {
+      let divisionId = target.value;
+      this.fetchSubDivisions(divisionId);
     }
 
-    changePagination = (offset) => {
-      this.setState({offset}, this.fetchItemsApi)
-    }
-
-    changeFilter = ({target}) => {
-      const filter = {...this.state.filter}
-      filter[target.name] = target.value
-      this.setState({
+    this.setState(
+      {
         filter,
         offset: 0,
         isChangingFilter: true
-      }, this.fetchItemsApi)
-    }
+      },
+      this.fetchItemsApi
+    );
+  };
 
-    changeOrder = (fieldClicked) => {
-      const { order } = this.state
-      if(order.field === fieldClicked)
-        order.criterion = order.criterion === "ASC" ? "DESC" : "ASC"
-      else{
-        order.criterion = "ASC"
-        order.field = fieldClicked
-      }
-      this.setState({order}, this.fetchItemsApi)
-    }
-
-    addCannedFilter = (value) => {
-      let cannedFilters = [...this.state.cannedFilters]
-      cannedFilters.push(value)
-      this.setState({
-        cannedFilters
-      }, this.fetchItemsApi)
-    }
-
-    removeCannedFilter = (index) => {
-      let cannedFilters = [...this.state.cannedFilters]
-      cannedFilters.splice(index, 1)
-      this.setState({
-        cannedFilters
-      }, this.fetchItemsApi)
-    }
-
-    fetchItemsApi = () => {
-      const {offset, filter, order} = this.state
-      const {divisionId, cycleId} = filter
-      let orderString = ""
-      if(order.field && order.criterion) //If they aren't empty
-        orderString = Object.values(order).toString()
-      console.log(orderString)
-      if(divisionId && cycleId){
-        const limit = 10
-        const end = (limit - 1) + offset
-        const parseCannedFilters = this.parseCannedFilters()
-        console.log(filter)
-        const parsedFilter = {
-          ...filter, //object
-          parseCannedFilters //array of string
+  fetchSubDivisions(divisionId) {
+    getSubDivisionsApi(divisionId).then(
+      response => {
+        console.log(response);
+        if (response.status === 200) {
+          this.setState({ subdivisions: response.data });
         }
-        getItemsApi(offset, end, parsedFilter, orderString).then(response => {
-          console.log(response)
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  changeOrder = fieldClicked => {
+    const { order } = this.state;
+    if (order.field === fieldClicked)
+      order.criterion = order.criterion === "ASC" ? "DESC" : "ASC";
+    else {
+      order.criterion = "ASC";
+      order.field = fieldClicked;
+    }
+    this.setState({ order }, this.fetchItemsApi);
+  };
+
+  addCannedFilter = value => {
+    let cannedFilters = [...this.state.cannedFilters];
+    cannedFilters.push(value);
+    this.setState(
+      {
+        cannedFilters
+      },
+      this.fetchItemsApi
+    );
+  };
+
+  removeCannedFilter = index => {
+    let cannedFilters = [...this.state.cannedFilters];
+    cannedFilters.splice(index, 1);
+    this.setState(
+      {
+        cannedFilters
+      },
+      this.fetchItemsApi
+    );
+  };
+
+  fetchItemsApi = () => {
+    const { offset, filter, order } = this.state;
+    const { divisionId, cycleId } = filter;
+    let orderString = "";
+    if (order.field && order.criterion)
+      //If they aren't empty
+      orderString = Object.values(order).toString();
+    if (divisionId && cycleId) {
+      const limit = 10;
+      const end = limit - 1 + offset;
+      const parseCannedFilters = this.parseCannedFilters();
+      const parsedFilter = {
+        ...filter, //object
+        parseCannedFilters //array of string
+      };
+      getItemsApi(offset, end, parsedFilter, orderString).then(
+        response => {
+          console.log(response);
           if (response.status === 200)
             this.setState({
               isChangingFilter: false,
               rows: response.data,
               total: response.total
-            })
-          else
-            this.setState({isChangingFilter: false})
-        }, err => {
-          console.log(err)
-        })
-      }
+            });
+          else this.setState({ isChangingFilter: false });
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
+  };
 
-
-    /*Parse array of cannedFilters to an array of strings like this:
+  /*Parse array of cannedFilters to an array of strings like this:
         [where1, where2, where3,...]
     */
-    parseCannedFilters = () => {
-      const { cannedFilters } = this.state
-      let parsedFilters = []
-      for(let filter of cannedFilters)
-        parsedFilters.push(filter.where)
-      return parsedFilters
-    }
+  parseCannedFilters = () => {
+    const { cannedFilters } = this.state;
+    let parsedFilters = [];
+    for (let filter of cannedFilters) parsedFilters.push(filter.where);
+    return parsedFilters;
+  };
 
-    fetchCyclesApi = () => {
-      getCyclesApi().then(response => {
-        if (response.status === 200)
-          this.setState({cycles: response.data})
-      }, err => {
-        console.log(err)
-      })
-    }
+  fetchCyclesApi = () => {
+    getCyclesApi().then(
+      response => {
+        if (response.status === 200) this.setState({ cycles: response.data });
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
 
-    fetchDivisionsApi = () => {
-      getDivisionsApi().then(response => {
+  fetchDivisionsApi = () => {
+    getDivisionsApi().then(
+      response => {
         if (response.status === 200)
-          this.setState({divisions: response.data})
-      }, err => {
-        console.log(err)
-      })
-    }
+          this.setState({ divisions: response.data });
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
 
-    handleDeleteItemApi = (id) => {
-      deleteItemApi(id).then(response => {
-        console.log('response delete', response);
-        if (response.status === 200)
-          this.fetchItemsApi()
-      }, err => {
-        console.log(err)
-      })
-    }
-    
-    handleDuplicateItemApi = (id) => {
-      duplicateItemApi(id).then(response => {
-        console.log('response duplicate', response);
-        if (response.status === 200){
-          this.fetchItemsApi()
+  handleDeleteItemApi = id => {
+    deleteItemApi(id).then(
+      response => {
+        console.log("response delete", response);
+        if (response.status === 200) this.fetchItemsApi();
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
+
+  handleDuplicateItemApi = id => {
+    duplicateItemApi(id).then(
+      response => {
+        console.log("response duplicate", response);
+        if (response.status === 200) {
+          this.fetchItemsApi();
         }
-      }, err => {
-        console.log(err)
-      })
-    }
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
 
-    render() {
-        const { value, cycles, divisions, rows, addItem,
-              total, offset, filter, cannedFilters, order, isChangingFilter } = this.state;
-        const { classes } = this.props;
+  render() {
+    const {
+      value,
+      cycles,
+      divisions,
+      rows,
+      addItem,
+      total,
+      offset,
+      filter,
+      cannedFilters,
+      order,
+      isChangingFilter,
+      subdivisions
+    } = this.state;
+    const { classes } = this.props;
 
-        return (
-            <div className={classes.root}>
-              <PrimaryAppBar />
-              <TabMenu value={value} handleChange={this.handleTabChange}/>
-                {value === 0 &&
-                  <Layaout
-                    isChangingFilter={isChangingFilter}
-                    items={rows}
-                    cycles={cycles}
-                    divisions={divisions}
-                    addItem={addItem}
-                    total={total}
-                    offset={offset}
-                    cannedFilters={cannedFilters}
-                    filter={filter}
-                    order={order}
-                    onChange={this.onChange}
-                    onAddChange={this.onAddChange}
-                    onSubmit={this.onSubmit}
-                    onChangePagination = {this.changePagination}
-                    onChangeFilter = {this.changeFilter}
-                    onChangeOrder = {this.changeOrder}
-                    onAddCannedFilter = {this.addCannedFilter}
-                    onRemoveCannedFilter = {this.removeCannedFilter}
-                    onRefreshItems = {this.fetchItemsApi}
-                    onDeleteItem = {this.handleDeleteItemApi}
-                    onDuplicateItem = {this.handleDuplicateItemApi}
-                  />
-                }
-                {value === 1 && <h1>SAMPLE</h1>}
-            </div>
-        );
-    }
+    return (
+      <div className={classes.root}>
+        <PrimaryAppBar />
+        <TabMenu value={value} handleChange={this.handleTabChange} />
+        {value === 0 && (
+          <Layaout
+            isChangingFilter={isChangingFilter}
+            items={rows}
+            cycles={cycles}
+            divisions={divisions}
+            subdivisions={subdivisions}
+            addItem={addItem}
+            total={total}
+            offset={offset}
+            cannedFilters={cannedFilters}
+            filter={filter}
+            order={order}
+            onChange={this.onChange}
+            onAddChange={this.onAddChange}
+            onSubmit={this.onSubmit}
+            onChangePagination={this.changePagination}
+            onChangeFilter={this.changeFilter}
+            onChangeOrder={this.changeOrder}
+            onAddCannedFilter={this.addCannedFilter}
+            onRemoveCannedFilter={this.removeCannedFilter}
+            onRefreshItems={this.fetchItemsApi}
+            onDeleteItem={this.handleDeleteItemApi}
+            onDuplicateItem={this.handleDuplicateItemApi}
+          />
+        )}
+        {value === 1 && <h1>SAMPLE</h1>}
+      </div>
+    );
+  }
 }
 
 export default withStyles(styles, { withTheme: true })(Dashboard);

@@ -2,7 +2,7 @@ import fetch from "isomorphic-fetch";
 import queryString from "query-string";
 
 export function apiFetch(endpoint, options = {}, query = false) {
-  console.log(endpoint)
+  console.log(endpoint);
   let qs;
 
   if (query) {
