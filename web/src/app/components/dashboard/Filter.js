@@ -212,7 +212,8 @@ class Filter extends Component {
         <Grid item>
           {filter.cycleId !== "" &&
             filter.divisionId !== "" &&
-            filter.divisionId !== "ALL" && (
+            filter.divisionId !== "ALL" &&
+            filter.subdivisionId !== "" && (
               <Button
                 color="primary"
                 variant="contained"

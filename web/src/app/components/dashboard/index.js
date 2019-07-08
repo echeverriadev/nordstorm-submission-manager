@@ -100,11 +100,12 @@ class Dashboard extends Component {
 
   onSubmit = () => {
     const { filter, addItem } = this.state;
-    const { divisionId, cycleId } = filter;
+    const { divisionId, cycleId, subdivisionId } = filter;
     const addItemApi = {
       ...addItem,
       _fk_division: divisionId,
-      _fk_cycle: cycleId
+      _fk_cycle: cycleId,
+      _fk_subdivision: subdivisionId
     };
     storeItemApi(addItemApi).then(
       response => {
@@ -175,7 +176,6 @@ class Dashboard extends Component {
   fetchSubDivisions(divisionId) {
     getSubDivisionsApi(divisionId).then(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.setState({ subdivisions: response.data });
         }
@@ -221,12 +221,12 @@ class Dashboard extends Component {
 
   fetchItemsApi = () => {
     const { offset, filter, order } = this.state;
-    const { divisionId, cycleId } = filter;
+    const { divisionId, cycleId, subdivisionId } = filter;
     let orderString = "";
     if (order.field && order.criterion)
       //If they aren't empty
       orderString = Object.values(order).toString();
-    if (divisionId && cycleId) {
+    if (divisionId && cycleId && subdivisionId) {
       const limit = 10;
       const end = limit - 1 + offset;
       const parseCannedFilters = this.parseCannedFilters();
@@ -234,9 +234,9 @@ class Dashboard extends Component {
         ...filter, //object
         parseCannedFilters //array of string
       };
+
       getItemsApi(offset, end, parsedFilter, orderString).then(
         response => {
-          console.log(response);
           if (response.status === 200)
             this.setState({
               isChangingFilter: false,

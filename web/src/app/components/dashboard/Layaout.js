@@ -105,7 +105,8 @@ const Layaout = props => {
           ))}
           {filter.cycleId === "" ||
           filter.divisionId === "" ||
-          filter.divisionId === "ALL" ? null : (
+          filter.divisionId === "ALL" ||
+          filter.subdivisionId === "" ? null : (
             <AddCell
               item={addItem}
               onChange={onAddChange}

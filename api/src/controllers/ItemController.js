@@ -113,9 +113,16 @@ class ItemController {
             conditions.push("_fk_division = ?")
             values.push(filter.divisionId)
         }
+
         if(filter.hasOwnProperty('cycleId')){
             conditions.push("_fk_cycle = ?")
             values.push(filter.cycleId)
+        }
+
+        // Subdivision
+        if (filter.hasOwnProperty('subdivisionId')) {
+            conditions.push("_fk_subdivision = ?");
+            values.push(filter.subdivisionId);
         }
 
         if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
@@ -202,7 +209,9 @@ class ItemController {
         catch (err) {
             filter = {}
         }
+     
         const { where, values, specialCaseJoinField } = this.buildWhere(filter)
+        console.log(where);
         const orderBy = this.buildOrder(req.query)
         //console.log(orderBy)
         const limit = end - start + 1
