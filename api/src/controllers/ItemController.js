@@ -22,45 +22,48 @@ class ItemController {
         this.duplicateItem = this.duplicateItem.bind(this);
         this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
     }
-
+    
     addItemLog(id_editorial, fields, fieldEdited, valueEdited, reason, details, user, lan_id){
         
-        console.log(reason)
+        console.log("REASON", reason)
         console.log(id_editorial)
         
         if(reason === "created" || reason === "duplicated"){
             var item_editorial = ""
-            this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
+            this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ' limit 1;'  ,(err, result) => {
                 if(err){
                     console.log(err)
                 }
                 item_editorial = result[0]
-                    console.log("ITEM", item_editorial.brand)
+                   // console.log("ITEM", item_editorial.brand)
                     var json_details = {
                         brand: item_editorial.brand,
                         live_date: item_editorial.live_date
                     }
                     var json_details_string = JSON.stringify(json_details)
-                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
-                        if(err){
-                            console.log(result)
+                    console.log("ID_EDITORIAL", id_editorial)
+                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES( '+ id_editorial + ',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \');' ,(err2, result2) => {
+                        if(err2){
+                            console.log(err2)
                         }
                     })
             })
         }else{
             if(reason === "edited"){
-                var json_details = {
-                    [fieldEdited]: valueEdited
-                }
-                var json_details_string = JSON.stringify(json_details)
-                console.log("JSONDETAILS", json_details_string)
-                this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
                     if(err){
-                        console.log(result)
+                        console.log(err)
                     }
-                    console.log("Resultado:", result)
-                })
-                    
+                    var json_details_string = JSON.stringify(fields)
+                    console.log(json_details_string)
+                    console.log("JSONDETAILS", json_details_string)
+                    this.connection.query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + id_editorial + ' \',\' ' + lan_id + '\',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' ' + reason + '\',\' ' + json_details_string + '\',\' '+ user + ' \')' ,(err, result) => {
+                        if(err){
+                            console.log(result)
+                        }
+                        console.log("Resultado:", result)
+                    })
+                })  
             }
         }
     }
@@ -293,7 +296,7 @@ class ItemController {
             'sale_price': req.body.sale_price || 0,
             '_fk_cycle': req.body._fk_cycle || null,
             '_fk_division': req.body._fk_division || null,
-            'retail_price': req.body.retail_price || 0,
+            'retail_price': req.body.retail_price || null,
             'is_priority': req.body.is_priority || 0,
             'available_in_canada': req.body.available_in_canada || null,
             'price_cad': req.body.price_cad || 0,
@@ -324,13 +327,21 @@ class ItemController {
                     "live_date": data.live_date? data.live_date : "" 
                 }
                 var json_details_string = String(json_details)
-                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_User \')' ,(err, result2) => {
-                    if(err){
-                        console.log(result2)
-                    }
-                    console.log("Resultado:", result2)
-                })
-        
+                if(process.env.NA_BYPASS){
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID  + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' ' +  process.env.BYPASS_USER_NAME + ' \')' ,(err, result2) => {
+                        if(err){
+                            console.log(result2)
+                        }
+                        console.log("Resultado:", result2)
+                    })
+                }else{
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_USER \')' ,(err, result2) => {
+                        if(err){
+                            console.log(result2)
+                        }
+                        console.log("Resultado:", result2)
+                    })
+                }
           });
     }
 
@@ -370,20 +381,27 @@ class ItemController {
                     const element = result[i];
 
                     const row = {
-                        'is_priority': element['priority'] || 0,
-                        'department_number': element['dept. no'] || 0,
+                        'nmg_priority': element['priority'] || null,
+                        'department_number': element['dept. no'] || null,
                         'vpn': element['vpn'] || "",
                         'brand': element['brand'] || "",
                         'color': element['color'] || "",
-                        'size': element['size'] || 0,
+                        'size': element['size'] || "",
                         'description': element['description'] || "",
+                        'style_group_number': element['sgn'] || "",
+                        'retail_price': element['retail_price'] || null,
+                        'in_stock_week': element['in_stock'] || 0,
                         _fk_cycle,
                         _fk_division
                     };
                     
                     this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
                         if(res.status(200)){
-                            this.addItemLog(result.insertId, row, null, null, "created", null, "Generic_User" , "lan_test")
+                            if(process.env.NA_BYPASS){
+                                this.addItemLog(result.insertId, row, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                            }else{
+                                this.addItemLog(result.insertId, row, null, null, "created", null, "GENERIC USER" , "LAN_TEST")
+                            }
                         }
                         if (err) throw err;
                     });
@@ -423,25 +441,76 @@ class ItemController {
         });
     }
 
+    convertDateYMD(date) {
+        var year, month, day;
+        year = String(date.getFullYear());
+        month = String(date.getMonth() + 1);
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        day = String(date.getDate());
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        return year + "-" + month + "-" + day;
+    }
+
     async updatePatch(req, res, next) {
         const { id } = req.params
-        const { field, value } = req.body
-        const escaping = [field, value, id]
-        const refresh = this.updateRelatedField(field);
+        const { item } = req.body
+        const refresh = this.updateRelatedField(item.fieldModified);
+        const fieldModified = ['fieldModified', 'category', , 'id', 'department'];
+        const fieldString = ['request_cancellation_notes', 'request_extension_note', 'live_date', 'vpn', 'country_of_origin', 'country_of_origin_other', 'style_group_number', 'image', 'color' , 'size', 'brand', 'description', 'department_number']
+        var set = 'SET ';
+       
+        for(var field in item){
+            if(fieldModified.indexOf(field) === -1){
+                if(item[field] !== null && item[field] !== "" ){
+                    if(fieldString.indexOf(field) !== -1)  {
+                        if(field === "live_date"){
+                            const date = this.convertDateYMD(new Date(item[field]))
+                            set += `${field} = \'${date}\',`
+                        }else{
+                            set += `${field} = \"${item[field]}\" ,`
+                        }
+                    }
+                    else{
+                        set += `${field} = ${item[field]}, `
+                    }
+                } else {
+                    if(field === "is_priority"){
+                        set += `${field} = null, `
+                    }
+                }
+            }
+        }
+
+        var set = set.substring(0, set.length-2)
+
+        console.log("SET", set)
+       
         //if country_of_origin was update to another value distinct to Imported - Specify Country, It must clean the field country_of_origin_other
-        if(field === "country_of_origin" && value !== "Imported - Specify Country") 
-            this.cleanCountryOfOriginOther(id)
+        for(var field in item){
+            if(field === "country_of_origin" && item[field] !== "Imported - Specify Country") 
+                this.cleanCountryOfOriginOther(id)
+        }
        // if (hasEmptyField(escaping))
          //   return res.status(400).json({ status: 400, massage: "Bad Request" })
          
-        this.connection.query('UPDATE item_editorial SET ?? = ? WHERE __pk_item = ?', escaping, (err, result) => {
+        this.connection.query('UPDATE item_editorial '+ set + ' WHERE __pk_item = ?', item.id, (err, result) => {
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
             }
             
             if(res.status(200)){
-                this.addItemLog([id], null, field, value, "edited", null, "Generic_User" , "lan_test")
+                if(item.fieldModified != null && item.fieldEdited != ""){
+                    if(process.env.NA_BYPASS){
+                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                    }else{
+                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, "GENERIC USER" , "LAN TEST")
+                    }
+                }
             }
             
             if (result.affectedRows){
@@ -451,23 +520,34 @@ class ItemController {
                     refresh
                 })
             }
-            else
+            else{
                 res.status(404).json({
                     status: 404,
                     massage: "Item not found",
                 })
+            }
         })
     }
 
-    updateRelatedField(field) {
+    updateRelatedField(fields) {
         const relatedFields = ['department_number'];
-        if (!field) {
+        if (!fields) {
             return false;
         }
-        if (relatedFields.indexOf(field) !== -1) {
-            return true;
+        for(var field in fields){
+            if (relatedFields.indexOf(field) !== -1) {
+                return true;
+            }
         }
         return false;
+    }
+
+    preventEmptyStringValue(field, value) {
+        const preventFields = [''];
+        if (preventFields.indexOf(field) !== -1) {
+            return null;
+        }
+        return value;
     }
     
     cleanCountryOfOriginOther(_pk_item) {
@@ -504,6 +584,7 @@ class ItemController {
     }
 
     async duplicateItem(req, res, next) {
+        console.log("DUPLICAAAAANDO")
         const { id } = req.params
         const escaping = [id]
         if (hasEmptyField(escaping))
@@ -518,7 +599,7 @@ class ItemController {
                            + 'SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; ';
 
         this.connection.query(queryStrings, escaping, (err, result) => {
-            
+            console.log("RESULT", result)
             if (err) {
                 console.log(err)
                 return res.status(500).json({ error: err })
@@ -528,9 +609,11 @@ class ItemController {
                 status: 200,
                 message: "Item duplicated"
             })
-            
-            if(res.status(200)){
-                this.addItemLog([id], this.getItem([id]), null, null, "duplicated", null, "Generic_User" , "lan_test")
+
+            if(process.env.NA_BYPASS){
+                this.addItemLog(id, null, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+            }else{
+                this.addItemLog(id, null, null, null, "created", null, "GENERIC USER" , "LAN TEST")
             }
         })
     }

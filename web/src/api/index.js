@@ -32,6 +32,5 @@ export const addItemLog = (_pk_item_editorial, reason) =>
     method: "POST",
     body: { reason }
   });
-
 export const getSubDivisionsApi = divisionId =>
   apiFetch(`/subdivisions/${divisionId}`);

@@ -26,7 +26,7 @@ const styles = theme => ({
     color: "black"
   },
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   input: {
     marginLeft: 8,

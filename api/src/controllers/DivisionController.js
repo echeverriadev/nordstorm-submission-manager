@@ -14,7 +14,6 @@ class DivisionController {
             if(err){
                 res.status(500).json({error: err})
             }
-
             res.status(200).json({
                 status: 200,
                 massage: "Divisions Found",

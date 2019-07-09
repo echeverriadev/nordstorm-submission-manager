@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -50,8 +50,8 @@ const styles = theme => ({
   img: {
     margin: 'auto',
     display: 'block',
-    maxWidth: theme.spacing.unit * 12,
-    Maxheight: theme.spacing.unit * 13,
+    maxWidth: theme.spacing(12),
+    Maxheight: theme.spacing(13),
   },
   row: {
     maxHeight: "50%",
@@ -61,14 +61,21 @@ const styles = theme => ({
     margin: 0
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit * 4,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    paddingBottom: theme.spacing(4),
     width: "80%",
     marginTop: 32,
   },
-  select: {
-    marginBottom: theme.spacing.unit,
+  selectStock: {
+    marginBottom: theme.spacing(1),
+    width:'81px',
+    paddingBottom:'2px',
+    fontSize: '13px'
+  },
+  selectNGM: {
+    marginBottom: theme.spacing(1),
+    paddingBottom:'2px',
     fontSize: '13px'
   },
   tagLabel: {
@@ -98,9 +105,14 @@ const styles = theme => ({
     color: 'rgba(0, 0, 0, 0.9)',
   },
   cardCellCustom: {
+    width: "100%",
     marginTop: "1%",
     marginBottom: "1%"
-  }
+  },
+  extPadding:{
+    paddingLeft:"21px"
+
+  },
 
 });
 
@@ -112,6 +124,8 @@ function NumberFormatCustom(props) {
       {...other}
       getInputRef={inputRef}
       onValueChange={values => {
+        if(values.value==="")
+           values.value=""
         onChange({
           target: {
             value: values.value,
@@ -129,6 +143,7 @@ NumberFormatCustom.propTypes = {
 };
 
 class CardCell extends React.Component {
+
   state = { expanded: false, isOpen: false, preview: null };
 
   duplicate = (close) => {
@@ -166,14 +181,17 @@ class CardCell extends React.Component {
     popupState.close();
     onDuplicateItem(id);
   }
-  
 
+  handleOpenModal = (popupState) => {
+    popupState.close();
+  }
+  
   render() {
     
   
-    const { classes, item, index, onChange, cycles, onDeleteItem, isChangingFilter} = this.props;
+    const { classes, item, index, onChange, cycles, onDeleteItem, onEditKeyPress, isChangingFilter} = this.props;
     return (
-      <Card className={[classes.card, classes.cardCellCustom]}>
+      <Card className={classes.cardCellCustom}>
         <CardContent className={classes.cardContent}>
 
           <Grid container>
@@ -221,15 +239,15 @@ class CardCell extends React.Component {
 
             </Grid>
             <Grid item md={11}>
-              <Grid spacing={11} className={classes.row} container direction="row" alignContent='center' alignItems='center'>
-                  <Grid item md={1}>
+              <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
+                  <Grid item md={1} className={classes.extPadding}>
                     <Select
                       inputProps= {{
                         className: classes.inputFont
                       }}
-                      className={classes.select}
-                      value={item.nmg_priority}
-                      onChange={(!isChangingFilter)? e => onChange(index, "nmg_priority", e.target.value) : ""}
+                      className={classes.selectNGM}
+                      value={item.nmg_priority === null ? 0 : item.nmg_priority}
+                      onChange={(!isChangingFilter)? e => onChange(index, "nmg_priority", e.target.value) : null}
                       name="Priority"
                       displayEmpty
                     >
@@ -258,7 +276,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.department_number}
-                      onChange={(!isChangingFilter)? e => onChange(index, "department_number", e.target.value) : ""}
+                      onChange={(!isChangingFilter)? e => onChange(index, "department_number", e.target.value) : null}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
                       required
                       error={!item.department_number}
                     />
@@ -277,7 +296,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.vpn}
-                      onChange={(!isChangingFilter)? e => onChange(index, "vpn", e.target.value) : ""}
+                      onChange={(!isChangingFilter)? e => onChange(index, "vpn", e.target.value) : null}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
                       required
                       error={!item.vpn}
                     />
@@ -291,12 +311,13 @@ class CardCell extends React.Component {
                         className: classes.labelFont
                       }}
                       id={"style_group_number"+index}
-                      placeholder="SG"
+                      placeholder="SG#"
                       className={classes.textField}
                       color="primary"
                       margin="normal"
                       value={item.style_group_number}
-                      onChange={(!isChangingFilter)? e => onChange(index, "style_group_number", e.target.value) : ""}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "style_group_number", e.target.value) : null}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -314,7 +335,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.brand}
-                      onChange={(!isChangingFilter)? e => onChange(index, "brand", e.target.value) : ""}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "brand", e.target.value) : null}
                       required
                       error={!item.brand}
                     />
@@ -332,7 +354,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.color}
-                      onChange={(!isChangingFilter)? e => onChange(index, "color", e.target.value) : ""}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "color", e.target.value) : null}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -348,7 +371,8 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.size}
-                      onChange={(!isChangingFilter)? e => onChange(index, "size", e.target.value) : ""}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "size", e.target.value) : null}
                     />
                   </Grid>
                   <Grid item md={2}>
@@ -366,7 +390,8 @@ class CardCell extends React.Component {
                       //multiline
                       //rows={2}
                       value={item.description}
-                      onChange={(!isChangingFilter)? e => onChange(index, "description", e.target.value) : ""}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onChange={(!isChangingFilter)? e => onChange(index, "description", e.target.value) : null}
                     />
                   </Grid>
                   <Grid item md={1}>
@@ -374,9 +399,9 @@ class CardCell extends React.Component {
                         inputProps= {{
                           className: classes.inputFont
                         }}
-                        className={classes.select}
-                        value={item.in_stock_week}
-                        onChange={(!isChangingFilter)? e => onChange(index, "in_stock_week", e.target.value) : ""}
+                        className={classes.selectStock}
+                        value={item.in_stock_week === null ? 0 : item.in_stock_week}
+                        onChange={(!isChangingFilter)? e => onChange(index, "in_stock_week", e.target.value) : null}
                         name="in_stock_week"
                         displayEmpty
                       >
@@ -404,6 +429,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.retail_price}
+                      onKeyPress={(e) => onEditKeyPress(e, index)}
                       onChange={e => onChange(index, "retail_price", e.target.value)}
                      
                     />
@@ -415,9 +441,9 @@ class CardCell extends React.Component {
                           <IconButton variant="contained" {...bindTrigger(popupState)}>
                             <MoreVertIcon className={classes.IconButton}/>
                           </IconButton>
-                          <Menu {...bindMenu(popupState)}>
+                          <Menu {...bindMenu(popupState)} >
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} itemLog={item}/>
+                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState} onHandleOpenModal={this.handleOpenModal}/>
                             <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>
@@ -458,7 +484,7 @@ class CardCell extends React.Component {
 
         </CardContent>
         <Collapse className={classes.collapse} in={this.state.expanded} timeout="auto" unmountOnExit>
-          <Accordion index={index} item={item} onChange={onChange} cycles={cycles}/>
+          <Accordion index={index} item={item} onEditKeyPress={onEditKeyPress} onChange={onChange} cycles={cycles}/>
         </Collapse>
       </Card>
     );

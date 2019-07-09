@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -43,8 +43,8 @@ const styles = theme => ({
   img: {
     margin: 'auto',
     display: 'block',
-    maxWidth: theme.spacing.unit * 12,
-    Maxheight: theme.spacing.unit * 13,
+    maxWidth: theme.spacing(12),
+    Maxheight: theme.spacing(13),
   },
   row: {
     maxHeight: "50%",
@@ -54,9 +54,9 @@ const styles = theme => ({
     margin: 0
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit * 4,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    paddingBottom: theme.spacing(4),
     width: "80%",
     marginTop: 32,
   },
@@ -66,6 +66,17 @@ const styles = theme => ({
      '&::placeholder': {
       color: 'grey'
     }
+  },
+  selectStock: {
+    marginBottom: theme.spacing(1),
+    width:'81px',
+    marginTop: '17px',
+    fontSize: '13px'
+  },
+  selectNGM: {
+    marginBottom: theme.spacing(1),
+    marginTop: '17px',
+    fontSize: '13px'
   },
   tagLabel: {
     padding: 1,
@@ -88,10 +99,15 @@ const styles = theme => ({
     fontSize: '13px'
   },
   cardCellCustom: {
+    width: "100%",
     marginTop: "1%",
     marginBottom: "1%",
     paddingTop: "1%"
-  }
+  },
+  extPadding:{
+    paddingLeft:"21px"
+
+  },
 });
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -157,7 +173,7 @@ class AddCell extends React.Component {
     const { classes, item, onChange, cycles } = this.props;
 
     return (
-      <Card onKeyPress={this.canSubmit} className={[classes.card, classes.cardCellCustom]} key={this.state.key}>
+      <Card onKeyPress={this.canSubmit} className={classes.cardCellCustom} key={this.state.key}>
           <FormHelperText className={classes.helperText}>(*) Fill in the fields and press enter to save</FormHelperText>
           <CardContent className={classes.cardContent}>
 
@@ -182,24 +198,20 @@ class AddCell extends React.Component {
                     </Dropzone>
               </Grid>
               <Grid item md={11}>
-                <Grid className={classes.row} spacing={11} container direction="row" alignContent='center' alignItems='center'>
-                    <Grid item md={1}>
+                <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
+                    <Grid item md={1} className={classes.extPadding}>
                       <Select
                         inputProps= {{
                           className: classes.inputFont
                         }}
-                        className={classes.select}
+                        className={classes.selectNGM}
                         value={item.nmg_priority}
                         onChange={e => onChange("nmg_priority", e.target.value)}
                         name="Priority"
                         displayEmpty
                       >
                         <MenuItem value={0} disabled>
-                         <InputLabel
-                            FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                         >Priority</InputLabel>
+                       <div style={{color:'grey'}}>  Priority</div>
                         </MenuItem>
                         <MenuItem value={1}>1</MenuItem>
                         <MenuItem value={2}>2</MenuItem>
@@ -253,7 +265,7 @@ class AddCell extends React.Component {
                           className: classes.labelFont
                         }}
                         id="style_group_number"
-                        label="SG"
+                        label="SG#"
                         className={classes.textField}
                         margin="normal"
                         value={item.style_group_number}
@@ -333,19 +345,15 @@ class AddCell extends React.Component {
                           inputProps= {{
                             className: classes.inputFont
                           }}
-                          className={classes.select}
+                          className={classes.selectStock}
                           value={item.in_stock_week}
                           onChange={e => onChange("in_stock_week", e.target.value)}
                           name="in_stock_week"
                           displayEmpty
                         >
                           <MenuItem value={""} disabled>
-                          <InputLabel
-                            FormLabelClasses={{
-                            root: classes.inputFont,
-                            }}
-                           >In Stock
-                          </InputLabel>
+                          <div style={{color:'grey'}}>In Stock</div>
+                        
                             
                           </MenuItem>
                           <MenuItem value={1}>1</MenuItem>

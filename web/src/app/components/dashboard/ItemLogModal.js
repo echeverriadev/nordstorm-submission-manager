@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {MenuItem, Modal, Typography, Grid, List, ListItem, 
         Divider, ListItemText, Table, TableHead, TableRow, TableCell, TableBody} from '@material-ui/core';
 import { getItemlogsApi } from '../../../api';
@@ -14,6 +14,7 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
+    width: "50%",
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
@@ -54,7 +55,7 @@ function getModalStyle() {
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 75,
+    width: theme.spacing(75),
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     outline: 'none',
@@ -88,13 +89,13 @@ const styles = theme => ({
   },
   itemLogsScroll: {
     position: 'relative',
-    height: 'calc(72vh - 25px - 40px - 40px)',
+    height: 'calc(90vh - 25px - 40px - 40px)',
     overflowY: 'auto',
     overflowX: 'hidden',
     background: '#fff',
     padding: '0px !important',
-    marginLeft: '4.9%',
-    marginTop: '5%',
+    marginLeft: '32px',
+    marginTop: '32px',
     marginBottom: '5%'
   },
   thead: {
@@ -102,7 +103,17 @@ const styles = theme => ({
     width: '88%'
   },
   throws: {
-   paddingRight: '193px'
+   paddingRight: '165px'
+  },
+  fixed_header_tbody: {
+    display: 'block',
+    overflow: 'auto',
+    height: '200px',
+    width: '100%',
+    height: 'calc(90vh - 25px - 40px - 40px)'
+  },
+  textBold: {
+    fontWeight: "bold !important"
   }
 });
 
@@ -138,10 +149,10 @@ class ItemLogModal extends React.Component {
   
   handleListItemClick = (event, index) => {
     console.log(this.state.itemLogs[index].event == " edited")
-    console.log(this.state.itemLogs[index])
+    console.log(this.props.itemLog)
     var details
     if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" || String(this.state.itemLogs[index].event) == " created" ||String(this.state.itemLogs[index].event) == " created "){
-      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "0000-00-00" }
+      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "NULL" }
     }else{
       if(String(this.state.itemLogs[index].event) == " edited"){
         details = JSON.parse(this.state.itemLogs[index].details)
@@ -156,6 +167,16 @@ class ItemLogModal extends React.Component {
   render() {
     const { classes } = this.props;
     const {open, selected, details, itemLogs} = this.state
+    const closeIcon = {
+      cursor: 'pointer',
+      float: 'right',
+      marginTop: '15px',
+      width: '30px',
+      position: 'relative',
+      color: 'white',
+      fontWeight: 'bold',
+      marginRight: '8px'
+    };
 
     return (
       <div>
@@ -167,11 +188,16 @@ class ItemLogModal extends React.Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
+            <div>
+                <label onClick={this.handleClose} style={closeIcon}>
+                X
+                </label>
+            </div>
             <Typography className={classes.titleModal} variant="h6" id="modal-title">
               Item Edit Log
             </Typography>        
             <Grid container spacing={8}>
-              <Grid item xs={4} className={classes.itemLogsScroll}>
+              <Grid item xs={4} className={classes.itemLogsScroll} style={{marginTop: '17px'}}>
                 <List className={classes.list}>
                   {
                   (itemLogs && itemLogs.length > 0)?
@@ -186,9 +212,11 @@ class ItemLogModal extends React.Component {
                         >
                           <ListItemText
                             primary={item.user_name}
+                            classes={{primary: classes.textBold}}
                             primaryTypographyProps={{
-                              color: "inherit"
+                              color: "inherit",
                             }}
+                            style={{}}
                             secondary={
                               <React.Fragment>
                                 <Typography
@@ -218,19 +246,23 @@ class ItemLogModal extends React.Component {
                   }
                 </List>
               </Grid>
-              <Grid item xs={8} style={{marginLeft: '-10%'}}>
-                <Table className={classes.table} size="small">
-                  <TableHead className={classes.thead}>
+              <Grid item xs={8} style={{marginLeft: '-10%', marginTop: '-18px'}}>
+                <Table className={classes.table} size="small" style={{width: "109%"}}>
+                  <TableHead className={classes.thead} style={{display: "block"}}>
                     <TableRow>
-                      <TableCell className={`${classes.headTable} ${classes.throws}`}>Field</TableCell>
+                      <TableCell className={classes.headTable } style={{width: "218px", paddingRight: "0 !important"}}>Field</TableCell>
                       <TableCell className={classes.headTable}>New Value</TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={classes.fixed_header_tbody} style={{display: "block"}}>
                     {Object.keys(details).map((key, index) => 
-                      <TableRow key={index}>
-                        <TableCell style={{color: "gray", paddingLeft: "54px"}} className={classes.tableCell}>{key}</TableCell>
-                        <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>{details[key]}</TableCell>
+                      <TableRow style={{display: "block"}} key={index}>
+                        <TableCell style={{color: "gray", paddingLeft: "73px", width: "291px"}} className={classes.tableCell}>{key}</TableCell>
+                        <TableCell style={{color: "gray", paddingLeft: "0"}} className={classes.tableCell}>
+                          <p style={{textAlign: "left"}}>
+                            {details[key]}
+                          </p>
+                        </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
