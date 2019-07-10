@@ -28,7 +28,7 @@ class ItemController {
         console.log("REASON", reason)
         console.log(id_editorial)
         
-        if(reason === "created" || reason === "duplicated"){
+        if(reason === "Created" || reason === "duplicated"){
             var item_editorial = ""
             this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ' limit 1;'  ,(err, result) => {
                 if(err){
@@ -49,7 +49,7 @@ class ItemController {
                     })
             })
         }else{
-            if(reason === "edited"){
+            if(reason === "Edited"){
                 this.connection.query('SELECT * from item_editorial where __pk_item = ' + id_editorial + ';'  ,(err, result) => {
                     if(err){
                         console.log(err)
@@ -123,11 +123,12 @@ class ItemController {
         }
 
         // Subdivision
+        /*
         if (filter.hasOwnProperty('subdivisionId')) {
             conditions.push("_fk_subdivision = ?");
             values.push(filter.subdivisionId);
         }
-
+        */
         if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
 
@@ -309,7 +310,7 @@ class ItemController {
             'tagged_missy': req.body.tagged_missy || 0,
             'tagged_encore': req.body.tagged_encore ||0,
             //tagged_petite: req.body.tagged_petithttps://stackoverflow.com/questions/4073923/select-last-row-in-mysqle || 0,
-            'tagged_extended': req.body.tagged_extended || 0
+            'tagged_extended': req.body.tagged_extended || 0,
         }
         
         dbConnection().query('INSERT INTO item_editorial SET ?', data, (error,result) => {
@@ -324,18 +325,20 @@ class ItemController {
             })
                 var json_details = {
                     "brand": data.brand,
-                    "live_date": data.live_date? data.live_date : "" 
+                    "live_date": (data.live_date != "NULL" && data.live_date != null)? data.live_date : " " 
                 }
+
+                console.log("CREATE ITEM LOG", json_details)
                 var json_details_string = String(json_details)
                 if(process.env.NA_BYPASS){
-                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID  + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' ' +  process.env.BYPASS_USER_NAME + ' \')' ,(err, result2) => {
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID  + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' ' +  process.env.BYPASS_USER_NAME + ' \')' ,(err, result2) => {
                         if(err){
                             console.log(result2)
                         }
                         console.log("Resultado:", result2)
                     })
                 }else{
-                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' created \',\' ' + json_details_string + '\',\' GENERIC_USER \')' ,(err, result2) => {
+                    dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' GENERIC_USER \')' ,(err, result2) => {
                         if(err){
                             console.log(result2)
                         }
@@ -398,9 +401,9 @@ class ItemController {
                     this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
                         if(res.status(200)){
                             if(process.env.NA_BYPASS){
-                                this.addItemLog(result.insertId, row, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                                this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
                             }else{
-                                this.addItemLog(result.insertId, row, null, null, "created", null, "GENERIC USER" , "LAN_TEST")
+                                this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
                             }
                         }
                         if (err) throw err;
@@ -506,9 +509,9 @@ class ItemController {
             if(res.status(200)){
                 if(item.fieldModified != null && item.fieldEdited != ""){
                     if(process.env.NA_BYPASS){
-                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
                     }else{
-                        this.addItemLog([id], item.fieldModified, null, null, "edited", null, "GENERIC USER" , "LAN TEST")
+                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, "GENERIC USER" , "LAN TEST")
                     }
                 }
             }
@@ -611,9 +614,9 @@ class ItemController {
             })
 
             if(process.env.NA_BYPASS){
-                this.addItemLog(id, null, null, null, "created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                this.addItemLog(id, null, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
             }else{
-                this.addItemLog(id, null, null, null, "created", null, "GENERIC USER" , "LAN TEST")
+                this.addItemLog(id, null, null, null, "Created", null, "GENERIC USER" , "LAN TEST")
             }
         })
     }

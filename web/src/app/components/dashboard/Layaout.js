@@ -34,33 +34,10 @@ const styles = theme => ({
   }
 });
 
-const Layaout = props => {
-  const {
-    isChangingFilter,
-    classes,
-    onChange,
-    items,
-    addItem,
-    onAddChange,
-    onSubmit,
-    onChangeFilter,
-    total,
-    offset,
-    filter,
-    onChangePagination,
-    order,
-    onChangeOrder,
-    onRefreshItems,
-    cannedFilters,
-    onAddCannedFilter,
-    onRemoveCannedFilter,
-    cycles,
-    divisions,
-    onDeleteItem,
-    onDuplicateItem,
-    subdivisions
-  } = props;
-
+const Layaout = (props) => {
+  const { isChangingFilter, classes, onBlurItem, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
+    total, offset, filter, onChangePagination, order, onChangeOrder, onRefreshItems,
+    cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions, onDeleteItem, onDuplicateItem, subdivisions } = props;
   return (
     <div className={classes.root}>
       <div className={classes.head}>
@@ -90,31 +67,17 @@ const Layaout = props => {
       </div>
       <div className={classes.body}>
         <Grid>
-          {items.map((item, index) => (
-            <CardCell
-              key={index}
-              index={index}
-              item={item}
-              isChangingFilter={isChangingFilter}
-              onChange={onChange}
-              cycles={cycles}
-              onDeleteItem={onDeleteItem}
-              onDuplicateItem={onDuplicateItem}
-            />
-          ))}
-          {filter.cycleId === "" ||
-          filter.divisionId === "" ||
-          filter.divisionId === "ALL" ||
-          filter.subdivisionId === "" ? null : (
-            <AddCell
-              item={addItem}
-              onChange={onAddChange}
-              onSubmit={onSubmit}
-              cycles={cycles}
-            />
-          )}
-          {total > 0 && (
-            <Pagination
+              {
+                items.map((item, index) => (
+                  <CardCell key={index} index={index} item={item} isChangingFilter={isChangingFilter} onBlurItem={onBlurItem} onChange={onChange} cycles={cycles} onDeleteItem={onDeleteItem} onDuplicateItem={onDuplicateItem} />
+                ))
+              }
+              {
+                (filter.cycleId === "" || filter.divisionId === "" || filter.divisionId === "ALL" || filter.subdivisionId === "")?
+                null:
+                <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit} cycles={cycles}/>
+              }
+            {total > 0 && (<Pagination
               limit={10}
               offset={offset}
               total={total}

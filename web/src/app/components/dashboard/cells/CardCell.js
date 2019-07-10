@@ -14,7 +14,6 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -182,14 +181,19 @@ class CardCell extends React.Component {
     onDuplicateItem(id);
   }
 
-  handleOpenModal = (popupState) => {
+  onHandleOpenModal = (popupState) => {
     popupState.close();
+  }
+
+  onBlurInput = () => {
+    console.log(this.props.index)
+    this.props.onBlurItem(this.props.index)
   }
   
   render() {
     
   
-    const { classes, item, index, onChange, cycles, onDeleteItem, onEditKeyPress, isChangingFilter} = this.props;
+    const { classes, item, index, onChange, cycles, onDeleteItem, isChangingFilter} = this.props;
     return (
       <Card className={classes.cardCellCustom}>
         <CardContent className={classes.cardContent}>
@@ -277,7 +281,7 @@ class CardCell extends React.Component {
                       margin="normal"
                       value={item.department_number}
                       onChange={(!isChangingFilter)? e => onChange(index, "department_number", e.target.value) : null}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       required
                       error={!item.department_number}
                     />
@@ -297,7 +301,7 @@ class CardCell extends React.Component {
                       margin="normal"
                       value={item.vpn}
                       onChange={(!isChangingFilter)? e => onChange(index, "vpn", e.target.value) : null}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       required
                       error={!item.vpn}
                     />
@@ -316,7 +320,7 @@ class CardCell extends React.Component {
                       color="primary"
                       margin="normal"
                       value={item.style_group_number}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={(!isChangingFilter)? e => onChange(index, "style_group_number", e.target.value) : null}
                     />
                   </Grid>
@@ -335,7 +339,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.brand}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={(!isChangingFilter)? e => onChange(index, "brand", e.target.value) : null}
                       required
                       error={!item.brand}
@@ -354,7 +358,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.color}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={(!isChangingFilter)? e => onChange(index, "color", e.target.value) : null}
                     />
                   </Grid>
@@ -371,7 +375,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.size}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={(!isChangingFilter)? e => onChange(index, "size", e.target.value) : null}
                     />
                   </Grid>
@@ -390,7 +394,7 @@ class CardCell extends React.Component {
                       //multiline
                       //rows={2}
                       value={item.description}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={(!isChangingFilter)? e => onChange(index, "description", e.target.value) : null}
                     />
                   </Grid>
@@ -429,7 +433,7 @@ class CardCell extends React.Component {
                       className={classes.textField}
                       margin="normal"
                       value={item.retail_price}
-                      onKeyPress={(e) => onEditKeyPress(e, index)}
+                      onBlur={this.onBlurInput}
                       onChange={e => onChange(index, "retail_price", e.target.value)}
                      
                     />
@@ -441,9 +445,9 @@ class CardCell extends React.Component {
                           <IconButton variant="contained" {...bindTrigger(popupState)}>
                             <MoreVertIcon className={classes.IconButton}/>
                           </IconButton>
-                          <Menu {...bindMenu(popupState)} >
+                          <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState} onHandleOpenModal={this.handleOpenModal}/>
+                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState}/>
                             <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>
@@ -484,7 +488,7 @@ class CardCell extends React.Component {
 
         </CardContent>
         <Collapse className={classes.collapse} in={this.state.expanded} timeout="auto" unmountOnExit>
-          <Accordion index={index} item={item} onEditKeyPress={onEditKeyPress} onChange={onChange} cycles={cycles}/>
+          <Accordion index={index} item={item} onBlurInput={this.onBlurInput} onChange={onChange} cycles={cycles}/>
         </Collapse>
       </Card>
     );

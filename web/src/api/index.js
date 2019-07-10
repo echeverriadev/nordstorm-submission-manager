@@ -15,8 +15,8 @@ export const getItemsApi = (start, end, filter, order) =>
       filter
     )}&order=${order}`
   );
-export const patchItemApi = (id, field, value) =>
-  apiFetch(`/items/${id}`, { method: "PATCH", body: { field, value } });
+export const patchItemApi = (id, item) =>
+  apiFetch(`/items/${id}`, { method: "PATCH", body: { item } });
 export const storeItemApi = body =>
   apiFetch(`/items`, { method: "POST", body });
 export const uploadImageApi = body =>
