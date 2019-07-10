@@ -35,7 +35,7 @@ class ItemLogController {
         // this.connection.query('SELECT * FROM division WHERE active_fs = 1', (err, result) => {
 
         // this.connection.query('SELECT _fk_item_editorial, user_name, time_stamp,`event`, details FROM fit.log', (err, result) => {
-        this.connection.query('SELECT DATE_FORMAT(log.time_stamp, \'%Y-%m-%d %T\') as time_stamp, _fk_item_editorial, lan_id, event, user_name, details FROM log WHERE _fk_item_editorial=?', [_fk_item_editorial] ,(err, result) => {
+        this.connection.query('SELECT DATE_FORMAT(log.time_stamp, \'%Y-%m-%d %T\') as time_stamp, _fk_item_editorial, lan_id, event, user_name, details FROM log WHERE _fk_item_editorial=? ORDER BY time_stamp DESC', [_fk_item_editorial] ,(err, result) => {
                 if(err){
                 res.status(500).json({error: err})
             }

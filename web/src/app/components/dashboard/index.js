@@ -12,7 +12,6 @@ import {
   getDivisionsApi,
   deleteItemApi,
   duplicateItemApi,
-  addItemLog,
   getSubDivisionsApi
 } from "../../../api";
 

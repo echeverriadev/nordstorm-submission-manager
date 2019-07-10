@@ -19,39 +19,6 @@ function getModalStyle() {
   };
 }
 
-// const itemLogs = [
-//   {
-//     user_name: "User Name",
-//     time_stamp: "2019-01-31 10:32",
-//     event: "Edited",
-//     details: {
-//       "Your Field": "AbC",
-//       "My Field": "123",
-//       "His Field": "Lorem ipsum"
-//     }
-//   },
-//   {
-//     user_name: "User Name",
-//     time_stamp: "2019-01-31 10:32",
-//     event: "Edited",
-//     details: {
-//       "His Field": "Lorem ipsum",
-//       "Your Field": "AbC",
-//       "My Field": "123",
-//     }
-//   },
-//   {
-//     user_name: "User Name",
-//     time_stamp: "2019-01-31 10:32",
-//     event: "Edited",
-//     details: {
-//       "My Field": "123",
-//       "His Field": "Lorem ipsum",
-//       "Your Field": "AbC",
-//     }
-//   }
-// ]
-
 const styles = theme => ({
   paper: {
     position: 'absolute',
@@ -125,6 +92,13 @@ class ItemLogModal extends React.Component {
     itemLogs: []
   };
 
+  componentWillUnmount(){
+    var menu = document.getElementById('menu_dot')
+    if(menu != null){
+      menu.style.display = "none"
+    }
+  }
+
   handleOpen = () => {
     this.setState({ open: true });
     this.fetchPatchItemApi()
@@ -144,17 +118,18 @@ class ItemLogModal extends React.Component {
   }
   
   handleClose = () => {
+    this.props.popupState.close();
     this.setState({ open: false });
   };
   
   handleListItemClick = (event, index) => {
-    console.log(this.state.itemLogs[index].event == " edited")
-    console.log(this.props.itemLog)
+    console.log(this.state.itemLogs[index].event == " Edited")
+    console.log("ITEM_LOG", this.state.itemLogs[index])
     var details
-    if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" || String(this.state.itemLogs[index].event) == " created" ||String(this.state.itemLogs[index].event) == " created "){
-      details = {"brand":this.props.itemLog.brand,"live_date": this.props.itemLog.live_date? this.props.itemLog.live_date : "NULL" }
+    if(this.state.itemLogs[index].event.replace(" ", "") == "duplicated" || String(this.state.itemLogs[index].event) == " Created" ||String(this.state.itemLogs[index].event) == " Created "){
+      details = {"brand":this.props.itemLog.brand,"live_date": (this.props.itemLog.live_date != " " && this.props.itemLog.live_date != "NULL" && this.props.itemLog.live_date != null )? this.props.itemLog.live_date : " " }
     }else{
-      if(String(this.state.itemLogs[index].event) == " edited"){
+      if(String(this.state.itemLogs[index].event) == " Edited"){
         details = JSON.parse(this.state.itemLogs[index].details)
       }
     }
@@ -216,13 +191,13 @@ class ItemLogModal extends React.Component {
                             primaryTypographyProps={{
                               color: "inherit",
                             }}
-                            style={{}}
                             secondary={
                               <React.Fragment>
                                 <Typography
                                   component="span"
                                   variant="caption"
-                                  // color="textPrimary"
+                                  style={(selected === index)? {color: "white"} : {color: "black"} }
+                                  
                                 >
                                   {item.time_stamp}
                                 </Typography>
@@ -230,7 +205,7 @@ class ItemLogModal extends React.Component {
                                 <Typography
                                   component="span"
                                   variant="caption"
-                                  // color="textPrimary"
+                                  style={(selected === index)? {color: "white"} : {color: "black"} }
                                 >
                                 {item.event}
                                 </Typography>

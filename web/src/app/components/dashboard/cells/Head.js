@@ -20,8 +20,9 @@ const styles = theme => ({
     paddingBottom: theme.spacing(1),
   },
   title: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    whiteSpace: 'pre-line',
     fontWeight: 'bold',
     fontSize: '13px'
   },
@@ -40,7 +41,7 @@ const iconCriterion = {
 
 const fieldsHeader = [
   {
-   label: "NMG Priority",
+   label: "NMG \n Priority",
    name: "nmg_priority",
    grids: 1
   },{
@@ -52,7 +53,7 @@ const fieldsHeader = [
    name: "vpn",
    grids: 1
   },{
-   label: "SG#",
+   label: "SG#",  
    name: "style_group_number",
    grids: 1
   },{
@@ -64,7 +65,7 @@ const fieldsHeader = [
    name: "color",
    grids: 1
   },{
-   label: "Sample Size",
+   label: "Sample \n Size",
    name: "size",
    grids: 1
   },{
@@ -76,7 +77,7 @@ const fieldsHeader = [
    name: "in_stock_week",
    grids: 1
   },{
-   label: "Retail Price",
+   label: "Retail \n Price",
    name: "retail_price",
    grids: 1,
    paddingLeft:11

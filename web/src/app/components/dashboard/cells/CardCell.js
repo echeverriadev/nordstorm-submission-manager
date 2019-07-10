@@ -14,7 +14,6 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
 import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -182,7 +181,7 @@ class CardCell extends React.Component {
     onDuplicateItem(id);
   }
 
-  handleOpenModal = (popupState) => {
+  onHandleOpenModal = (popupState) => {
     popupState.close();
   }
 
@@ -446,9 +445,9 @@ class CardCell extends React.Component {
                           <IconButton variant="contained" {...bindTrigger(popupState)}>
                             <MoreVertIcon className={classes.IconButton}/>
                           </IconButton>
-                          <Menu {...bindMenu(popupState)} >
+                          <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState} onHandleOpenModal={this.handleOpenModal}/>
+                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState}/>
                             <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
                           </Menu>
                         </React.Fragment>

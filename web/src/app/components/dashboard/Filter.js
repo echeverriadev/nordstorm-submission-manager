@@ -59,6 +59,7 @@ class Filter extends Component {
     const file = Array.from(e.target.files)[0];
     if (file) {
       //If there is a file selected}
+      this.refs.buttonFile.value = "";
       return (
         <div>
           {confirmAlert({
@@ -76,7 +77,6 @@ class Filter extends Component {
           })}
         </div>
       );
-      this.refs.buttonFile.value = ""; //Without this the same file couldn't be uploaded again
     }
   };
 
