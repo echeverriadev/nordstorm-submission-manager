@@ -613,14 +613,21 @@ class ItemController {
                 message: "Item duplicated"
             })
 
-            if(process.env.NA_BYPASS){
-                this.addItemLog(id, null, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
-            }else{
-                this.addItemLog(id, null, null, null, "Created", null, "GENERIC USER" , "LAN TEST")
-            }
+            
+            this.connection.query('select __pk_item from item_editorial order by __pk_item DESC limit 1', (error,result) => {
+                if (error) throw error;
+                var id_new = parseInt(result[0].__pk_item)
+                
+                console.log("ID", id_new)
+
+                if(process.env.NA_BYPASS){
+                    this.addItemLog(id_new, null, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                }else{
+                    this.addItemLog(id_new, null, null, null, "Created", null, "GENERIC USER" , "LAN TEST")
+                }
+            });
         })
     }
-    
     
   
 
