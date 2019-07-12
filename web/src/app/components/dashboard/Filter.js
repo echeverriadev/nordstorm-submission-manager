@@ -144,11 +144,7 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel
-                FormLabelClasses={{
-                  root: classes.fontBolt
-                }}
-              >
+              <InputLabel>
                 Cycle / Month
               </InputLabel>
             </MenuItem>
@@ -169,11 +165,7 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel
-                FormLabelClasses={{
-                  root: classes.fontBolt
-                }}
-              >
+              <InputLabel>
                 Division
               </InputLabel>
             </MenuItem>
@@ -194,11 +186,7 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel
-                FormLabelClasses={{
-                  root: classes.fontBolt
-                }}
-              >
+              <InputLabel>
                 Subdivision
               </InputLabel>
             </MenuItem>
