@@ -189,7 +189,7 @@ const Accordion = (props) => {
                             }}
                             className={classes.select}
                             name="Cycles"
-                            value={item._fk_cycle}
+                            value={item._fk_cycle === null ? 0 : item._fk_cycle}
                             onChange={e => onChange("_fk_cycle", e.target.value)}
                         >
                             <MenuItem value={-1} disabled>
@@ -242,7 +242,7 @@ const Accordion = (props) => {
                                 }}
                                 label="Product Priority"
                                 margin="none"
-                                value={item.is_priority}
+                                value={item.is_priority === null ? "" : item.is_priority}
                                 onChange={e => onChange("is_priority", e.target.value)}
                                 type="number"
                             />
@@ -310,7 +310,7 @@ const Accordion = (props) => {
                                       id: 'country-of-origin-placeholder'
                                     }}
                                     className={classes.selectCountry}
-                                    value={item.country_of_origin}
+                                    value={item.country_of_origin === null ? 0 : item.country_of_origin}
                                     onChange={e => onChange("country_of_origin", e.target.value)}
                                     name="Country of origin"
                                 >
