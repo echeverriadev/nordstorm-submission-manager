@@ -123,12 +123,11 @@ class ItemController {
         }
 
         // Subdivision
-        /*
         if (filter.hasOwnProperty('subdivisionId')) {
             conditions.push("_fk_subdivision = ?");
             values.push(filter.subdivisionId);
         }
-        */
+        
         if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
 
@@ -204,7 +203,6 @@ class ItemController {
 
     async index(req, res, next) {
         let { filter } = req.query
-        //console.log('FILTER',filter)
         const range = req.query.range || "[0,9]"
         const [start, end] = JSON.parse(range)
         try {
@@ -215,9 +213,7 @@ class ItemController {
         }
      
         const { where, values, specialCaseJoinField } = this.buildWhere(filter)
-        console.log(where);
         const orderBy = this.buildOrder(req.query)
-        //console.log(orderBy)
         const limit = end - start + 1
         const allValues = [...values, start, limit]
         let sqlCount, sqlItems
@@ -257,12 +253,12 @@ class ItemController {
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
-        //console.log(sqlItems)
+        console.log(sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: err })
             }
-            //console.log('RESULTADO',result[0])
+
             res.status(200).json({
                 status: 200,
                 massage: "Items Found",
