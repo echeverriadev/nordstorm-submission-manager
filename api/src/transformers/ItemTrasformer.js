@@ -36,7 +36,7 @@ const format = (data) => {
 };
 
 exports.transform = (data) => {
-    console.log("DATAAA", data)
+    //console.log("DATAAA", data)
     if(Array.isArray(data)){
         var resArr = []
 

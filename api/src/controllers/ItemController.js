@@ -122,6 +122,11 @@ class ItemController {
             conditions.push("_fk_cycle = ?")
             values.push(filter.cycleId)
         }
+        
+        if (filter.hasOwnProperty('subdivisionId')) {
+            conditions.push("_fk_subdivision = ?")
+            values.push(filter.subdivisionId)
+        }
 
         if (filter.hasOwnProperty('parseCannedFilters') && filter.parseCannedFilters.length)
             conditions = conditions.concat(filter.parseCannedFilters)
@@ -219,9 +224,8 @@ class ItemController {
             WHERE ${where}`
 
             sqlItems = `SELECT item_editorial.*, department.name_display as department,
-            department.department_number as d_department_number, log.* FROM item_editorial
+            department.department_number as d_department_number FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
-            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else if (specialCaseJoinField === "story") {
@@ -231,19 +235,17 @@ class ItemController {
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             WHERE ${where}`
 
-            sqlItems = `SELECT item_editorial.*, log.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, department.name_display as department,
             department.department_number as d_department_number FROM item_editorial
-            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         } else {
-            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial WHERE ${where}`
-            sqlItems = `SELECT item_editorial.*, log.*, department.name_display as department,
+            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial  WHERE ${where}`
+            sqlItems = `SELECT item_editorial.*, department.name_display as department,
             department.department_number as d_department_number FROM item_editorial
-            LEFT JOIN log ON item_editorial.__pk_item = log._fk_item_editorial
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} ${orderBy} LIMIT ?, ?`
         }
