@@ -170,7 +170,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const Accordion = (props) => {
-  const { classes, item, onBlurInput, index, onChange, cycles } = props;
+  const { classes, item, onBlurInput, index, onChange, onKeyPressItem, cycles } = props;
 
   return (
     <CardContent className={classes.root}>
@@ -247,9 +247,9 @@ const Accordion = (props) => {
                                   id={"pp"+index}
                                   label="Product Priority"
                                   margin="none"
-                                  value={item.is_priority === null ? "" : item.is_priority}
+                                  defaultValue={item.is_priority === null ? 0 : item.is_priority}
                                   onBlur={onBlurInput}
-                                  onChange={e => onChange(index, "is_priority", e.target.value)}
+                                  onKeyPress={e => onKeyPressItem(index, "is_priority", e)}
                                   type="number"
                               />
                             </div>

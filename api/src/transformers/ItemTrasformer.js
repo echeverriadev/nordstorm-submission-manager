@@ -36,8 +36,7 @@ const format = (data) => {
 };
 
 exports.transform = (data) => {
-    //console.log("DATAAA", data)
-    if(Array.isArray(data)){
+        if(Array.isArray(data)){
         var resArr = []
 
         data.filter(function(item){

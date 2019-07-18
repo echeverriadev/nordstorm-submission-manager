@@ -193,7 +193,7 @@ class CardCell extends React.Component {
   render() {
     
   
-    const { classes, item, index, onChange, cycles, onDeleteItem, isChangingFilter} = this.props;
+    const { classes, item, index, onChange, onKeyPressItem, cycles, onDeleteItem, isChangingFilter} = this.props;
     return (
       <Card className={classes.cardCellCustom}>
         <CardContent className={classes.cardContent}>
@@ -488,7 +488,7 @@ class CardCell extends React.Component {
 
         </CardContent>
         <Collapse className={classes.collapse} in={this.state.expanded} timeout="auto" unmountOnExit>
-          <Accordion index={index} item={item} onBlurInput={this.onBlurInput} onChange={onChange} cycles={cycles}/>
+          <Accordion index={index} item={item} onBlurInput={this.onBlurInput} onKeyPressItem={onKeyPressItem} onChange={onChange} cycles={cycles}/>
         </Collapse>
       </Card>
     );

@@ -251,6 +251,7 @@ class ItemController {
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
+        console.log("QUERY:", sqlItems)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
             if (err) {
                 return res.status(500).json({

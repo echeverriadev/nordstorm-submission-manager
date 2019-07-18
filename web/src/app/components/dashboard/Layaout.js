@@ -35,7 +35,7 @@ const styles = theme => ({
 });
 
 const Layaout = (props) => {
-  const { isChangingFilter, classes, onBlurItem, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
+  const { isChangingFilter, classes, onBlurItem, onChange, onKeyPressItem, items, addItem, onAddChange, onSubmit, onChangeFilter,
     total, offset, filter, onChangePagination, order, onChangeOrder, onRefreshItems,
     cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions, onDeleteItem, onDuplicateItem, subdivisions } = props;
   return (
@@ -69,7 +69,7 @@ const Layaout = (props) => {
         <Grid>
               {
                 items.map((item, index) => (
-                  <CardCell key={index} index={index} item={item} isChangingFilter={isChangingFilter} onBlurItem={onBlurItem} onChange={onChange} cycles={cycles} onDeleteItem={onDeleteItem} onDuplicateItem={onDuplicateItem} />
+                  <CardCell key={index} index={index} item={item} isChangingFilter={isChangingFilter} onBlurItem={onBlurItem} onChange={onChange} onKeyPressItem={onKeyPressItem} cycles={cycles} onDeleteItem={onDeleteItem} onDuplicateItem={onDuplicateItem} />
                 ))
               }
               {

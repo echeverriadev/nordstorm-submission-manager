@@ -142,6 +142,26 @@ class Dashboard extends Component {
         }
   };
 
+  onKeyPressItem = (index, key, event) => {
+      const rows = this.state.rows
+      var row = rows[index]
+      row[key] = event.target.value
+      row = Object.assign({}, row, {
+          fieldModified: Object.assign({}, row.fieldModified,{
+            [key]: event.target.value
+          })
+      })
+      rows.splice(index, 1, row)
+      this.setState({rows})
+
+      if(key === "is_priority"){
+        console.log(event.keyCode)
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode === 13){
+          this.fetchPatchItemApi(row.id, row, index)
+        }
+      }
+  }
 
   onBlurItem = (index) => {
     if(index!=null && index!=undefined){
@@ -152,6 +172,7 @@ class Dashboard extends Component {
   };
 
   fetchPatchItemApi = (id, item, index) => {
+    console.log("PATCH", item)
     patchItemApi(id, item).then(
       response => {
         if (response.status === 200) {
@@ -265,6 +286,7 @@ class Dashboard extends Component {
               total: response.total
             });
           else this.setState({ isChangingFilter: false });
+          console.log(response.data.length)
         },
         err => {
           console.log(err);
@@ -361,6 +383,7 @@ class Dashboard extends Component {
                     filter={filter}
                     order={order}
                     onChange={this.onChange}
+                    onKeyPressItem={this.onKeyPressItem}
                     onBlurItem={this.onBlurItem}
                     onAddChange={this.onAddChange}
                     onSubmit={this.onSubmit}
