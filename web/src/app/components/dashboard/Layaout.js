@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Grid, Chip } from "@material-ui/core";
+import { Grid, Chip, Input } from "@material-ui/core";
 import Head from "./cells/Head";
 import CardCell from "./cells/CardCell";
 import AddCell from "./cells/AddCell";
@@ -10,7 +10,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Pagination from "material-ui-flat-pagination";
 import Typography from "@material-ui/core/Typography";
-
+import InputLabel from "@material-ui/core/InputLabel";
+import ListItem from "@material-ui/core/ListItem";
 const theme = createMuiTheme();
 
 const styles = theme => ({
@@ -34,10 +35,34 @@ const styles = theme => ({
   }
 });
 
-const Layaout = (props) => {
-  const { isChangingFilter, classes, onBlurItem, onChange, items, addItem, onAddChange, onSubmit, onChangeFilter,
-    total, offset, filter, onChangePagination, order, onChangeOrder, onRefreshItems,
-    cannedFilters, onAddCannedFilter, onRemoveCannedFilter, cycles, divisions, onDeleteItem, onDuplicateItem, subdivisions } = props;
+const Layaout = props => {
+  const {
+    isChangingFilter,
+    classes,
+    onBlurItem,
+    onChange,
+    items,
+    addItem,
+    onAddChange,
+    onSubmit,
+    onChangeFilter,
+    total,
+    offset,
+    filter,
+    onChangePagination,
+    order,
+    onChangeOrder,
+    onRefreshItems,
+    cannedFilters,
+    onAddCannedFilter,
+    onRemoveCannedFilter,
+    cycles,
+    divisions,
+    onDeleteItem,
+    onDuplicateItem,
+    subdivisions,
+    cycleSubDivisionItemsLimit
+  } = props;
   return (
     <div className={classes.root}>
       <div className={classes.head}>
@@ -67,17 +92,43 @@ const Layaout = (props) => {
       </div>
       <div className={classes.body}>
         <Grid>
-              {
-                items.map((item, index) => (
-                  <CardCell key={index} index={index} item={item} isChangingFilter={isChangingFilter} onBlurItem={onBlurItem} onChange={onChange} cycles={cycles} onDeleteItem={onDeleteItem} onDuplicateItem={onDuplicateItem} />
-                ))
-              }
-              {
-                (filter.cycleId === "" || filter.divisionId === "" || filter.divisionId === "ALL" || filter.subdivisionId === "")?
-                null:
-                <AddCell item={addItem} onChange={onAddChange} onSubmit={onSubmit} cycles={cycles}/>
-              }
-            {total > 0 && (<Pagination
+          {items.map((item, index) => (
+            <CardCell
+              key={index}
+              index={index}
+              item={item}
+              isChangingFilter={isChangingFilter}
+              onBlurItem={onBlurItem}
+              onChange={onChange}
+              cycles={cycles}
+              onDeleteItem={onDeleteItem}
+              onDuplicateItem={onDuplicateItem}
+            />
+          ))}
+          {filter.cycleId === "" ||
+          filter.divisionId === "" ||
+          filter.divisionId === "ALL" ||
+          filter.subdivisionId === "" ? null : total <
+            cycleSubDivisionItemsLimit ? (
+            <AddCell
+              item={addItem}
+              onChange={onAddChange}
+              onSubmit={onSubmit}
+              cycles={cycles}
+            />
+          ) : (
+            <div>
+              <InputLabel variant={"standard"}>
+                Item limit for this subdivision has been reached. Click{" "}
+                <a href="mailto:someone@example.com" target="_top">
+                  here
+                </a>{" "}
+                to request an increase to the limit{" "}
+              </InputLabel>
+            </div>
+          )}
+          {total > 0 && (
+            <Pagination
               limit={10}
               offset={offset}
               total={total}

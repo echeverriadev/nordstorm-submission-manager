@@ -12,7 +12,8 @@ import {
   getDivisionsApi,
   deleteItemApi,
   duplicateItemApi,
-  getSubDivisionsApi
+  getSubDivisionsApi,
+  postCycleSubDivisionApi
 } from "../../../api";
 
 const styles = theme => ({
@@ -76,7 +77,10 @@ class Dashboard extends Component {
       order: {
         field: "",
         criterion: ""
-      }
+      },
+      // We set a default limit in case an error ocurred when fetching
+      //  the cycle_subdivision items limit in question
+      cycleSubDivisionItemsLimit: 0
     };
   }
 
@@ -127,29 +131,41 @@ class Dashboard extends Component {
   };
 
   onChange = (index, key, value) => {
-        const rows = this.state.rows
-        const noKeyPressed = ['nmg_priority', 'in_stock_week', '_fk_cycle', 'tagged_missy', 'tagged_encore', 'country_of_origin' ,'tagged_encore', 'tagged_petite', 'tagged_extended', 'available_in_canada', 'request_extension', 'request_cancellation']
-        var row = rows[index]
-        row[key] = value
-        row = Object.assign({}, row, {
-            fieldModified: Object.assign({}, row.fieldModified,{
-              [key]: value
-            })
-        })
-        rows.splice(index, 1, row)
-        this.setState({rows})
-        if(noKeyPressed.indexOf(key) !== -1){
-          this.fetchPatchItemApi(row.id, row, index)
-        }
+    const rows = this.state.rows;
+    const noKeyPressed = [
+      "nmg_priority",
+      "in_stock_week",
+      "_fk_cycle",
+      "tagged_missy",
+      "tagged_encore",
+      "country_of_origin",
+      "tagged_encore",
+      "tagged_petite",
+      "tagged_extended",
+      "available_in_canada",
+      "request_extension",
+      "request_cancellation"
+    ];
+    var row = rows[index];
+    row[key] = value;
+    row = Object.assign({}, row, {
+      fieldModified: Object.assign({}, row.fieldModified, {
+        [key]: value
+      })
+    });
+    rows.splice(index, 1, row);
+    this.setState({ rows });
+    if (noKeyPressed.indexOf(key) !== -1) {
+      this.fetchPatchItemApi(row.id, row, index);
+    }
   };
 
-
-  onBlurItem = (index) => {
-    if(index!=null && index!=undefined){
-      const rows = this.state.rows
-      const row = rows[index]
-      console.log("ITEM", row)
-      this.fetchPatchItemApi(row.id, row, index)
+  onBlurItem = index => {
+    if (index != null && index != undefined) {
+      const rows = this.state.rows;
+      const row = rows[index];
+      console.log("ITEM", row);
+      this.fetchPatchItemApi(row.id, row, index);
     }
   };
 
@@ -190,6 +206,13 @@ class Dashboard extends Component {
       this.fetchSubDivisions(divisionId);
     }
 
+    const { cycleId, divisionId, subdivisionId } = filter;
+
+    // We check if the row for the chosen cycle and subdivision exists, if not, we created it
+    if (cycleId && divisionId && subdivisionId) {
+      this.addCycleSubDivisionRow(cycleId, subdivisionId);
+    }
+
     this.setState(
       {
         filter,
@@ -199,6 +222,27 @@ class Dashboard extends Component {
       this.fetchItemsApi
     );
   };
+
+  addCycleSubDivisionRow(cycleId, subdivisionId) {
+    let data = {
+      cycleId,
+      subdivisionId
+    };
+
+    postCycleSubDivisionApi(data).then(
+      response => {
+        if (response.code === 200) {
+          let model = response.model;
+          this.setState({
+            cycleSubDivisionItemsLimit: model.submissions_limit
+          });
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 
   fetchSubDivisions(divisionId) {
     getSubDivisionsApi(divisionId).then(
@@ -351,44 +395,46 @@ class Dashboard extends Component {
       cannedFilters,
       order,
       isChangingFilter,
-      subdivisions
+      subdivisions,
+      cycleSubDivisionItemsLimit
     } = this.state;
     const { classes } = this.props;
-        return (
-            <div className={classes.root}>
-              <PrimaryAppBar />
-              <TabMenu value={value} handleChange={this.handleTabChange}/>
-                {value === 0 &&
-                  <Layaout
-                    isChangingFilter={isChangingFilter}
-                    items={rows}
-                    cycles={cycles}
-                    divisions={divisions}
-                    subdivisions={subdivisions}
-                    addItem={addItem}
-                    total={total}
-                    offset={offset}
-                    cannedFilters={cannedFilters}
-                    filter={filter}
-                    order={order}
-                    onChange={this.onChange}
-                    onBlurItem={this.onBlurItem}
-                    onAddChange={this.onAddChange}
-                    onSubmit={this.onSubmit}
-                    onChangePagination = {this.changePagination}
-                    onChangeFilter = {this.changeFilter}
-                    onChangeOrder = {this.changeOrder}
-                    onAddCannedFilter = {this.addCannedFilter}
-                    onRemoveCannedFilter = {this.removeCannedFilter}
-                    onRefreshItems = {this.fetchItemsApi}
-                    onDeleteItem = {this.handleDeleteItemApi}
-                    onDuplicateItem = {this.handleDuplicateItemApi}
-                  />
-                }
-                {value === 1 && <h1>SAMPLE</h1>}
-            </div>
-        );
-    }
+    return (
+      <div className={classes.root}>
+        <PrimaryAppBar />
+        <TabMenu value={value} handleChange={this.handleTabChange} />
+        {value === 0 && (
+          <Layaout
+            isChangingFilter={isChangingFilter}
+            items={rows}
+            cycles={cycles}
+            divisions={divisions}
+            subdivisions={subdivisions}
+            addItem={addItem}
+            total={total}
+            offset={offset}
+            cannedFilters={cannedFilters}
+            filter={filter}
+            order={order}
+            onChange={this.onChange}
+            onBlurItem={this.onBlurItem}
+            onAddChange={this.onAddChange}
+            onSubmit={this.onSubmit}
+            onChangePagination={this.changePagination}
+            onChangeFilter={this.changeFilter}
+            onChangeOrder={this.changeOrder}
+            onAddCannedFilter={this.addCannedFilter}
+            onRemoveCannedFilter={this.removeCannedFilter}
+            onRefreshItems={this.fetchItemsApi}
+            onDeleteItem={this.handleDeleteItemApi}
+            onDuplicateItem={this.handleDuplicateItemApi}
+            cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
+          />
+        )}
+        {value === 1 && <h1>SAMPLE</h1>}
+      </div>
+    );
+  }
 }
 
 export default withStyles(styles, { withTheme: true })(Dashboard);
