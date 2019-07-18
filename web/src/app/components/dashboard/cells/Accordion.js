@@ -249,6 +249,7 @@ const Accordion = (props) => {
                                   margin="none"
                                   defaultValue={item.is_priority === null ? 0 : item.is_priority}
                                   onBlur={onBlurInput}
+                                  onChange={e => onChange(index, "is_priority", e.target.value)}
                                   onKeyPress={e => onKeyPressItem(index, "is_priority", e)}
                                   type="number"
                               />
