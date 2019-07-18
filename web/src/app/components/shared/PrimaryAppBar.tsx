@@ -149,8 +149,6 @@ class PrimaryAppBar extends React.Component<Props, State> {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
         <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
       </Menu>
     );
@@ -165,7 +163,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
       >
         <MenuItem onClick={this.handleMobileMenuClose}>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge color="secondary">
               <MailIcon />
             </Badge>
           </IconButton>
@@ -205,12 +203,12 @@ class PrimaryAppBar extends React.Component<Props, State> {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
+                <Badge color="secondary">
                   <MailIcon />
                 </Badge>
               </IconButton>
               <IconButton color="inherit">
-                <Badge badgeContent={2} color="secondary">
+                <Badge color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>

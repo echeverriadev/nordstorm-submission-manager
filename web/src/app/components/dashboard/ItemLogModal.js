@@ -101,8 +101,8 @@ class ItemLogModal extends React.Component {
 
   handleOpen = () => {
     this.setState({ open: true });
-    this.fetchPatchItemApi()
-    
+    this.fetchPatchItemApi();
+    document.getElementsByClassName('MuiMenu-paper')[0].hidden=true;
   };
   
   fetchPatchItemApi = () => {

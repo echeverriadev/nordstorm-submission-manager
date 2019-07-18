@@ -170,7 +170,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const Accordion = (props) => {
-  const { classes, item, onBlurInput, index, onChange, cycles } = props;
+  const { classes, item, onBlurInput, index, onChange, onKeyPressItem, cycles } = props;
 
   return (
     <CardContent className={classes.root}>
@@ -191,7 +191,7 @@ const Accordion = (props) => {
                             }}
                             className={classes.select}
                             name="Cycles"
-                            value={item._fk_cycle}
+                            value={item._fk_cycle === null ? 0 : item._fk_cycle}
                             onChange={e => onChange(index, "_fk_cycle", e.target.value)}
                         >
                             <MenuItem value={-1} disabled>
@@ -232,32 +232,7 @@ const Accordion = (props) => {
                         <div></div>
                     }
                     </Grid>
-                    <Grid style={{marginTop: "4px", marginLeft: "-4%"}} item md={3}>
-                    {
-                        (item._fk_cycle && item._fk_cycle != -1)?
-                            <div>
-                              <TextField
-                                  InputProps={{
-                                    className: classes.inputFont,
-                                  }}
-                                  InputLabelProps= {{
-                                    className: classes.labelFont,
-                                    disableAnimation: true,
-                                  }}
-                                  id={"pp"+index}
-                                  label="Product Priority"
-                                  margin="none"
-                                  value={item.is_priority}
-                                  onBlur={onBlurInput}
-                                  onChange={e => onChange(index, "is_priority", e.target.value)}
-                                  type="number"
-                              />
-                            </div>
-                        :
-                        <div></div>
-                    }
-                        
-                    </Grid>
+                    
                 </Grid>
                 <Divider/>
                 <Grid className={classes.gridContainer} container>
@@ -318,7 +293,7 @@ const Accordion = (props) => {
                                       id: 'country-of-origin-placeholder'
                                     }}
                                     className={classes.selectCountry}
-                                    value={item.country_of_origin}
+                                    value={item.country_of_origin === null ? 0 : item.country_of_origin}
                                     onChange={e => onChange(index, "country_of_origin", e.target.value)}
                                     name="Country of Origin"
                                 >

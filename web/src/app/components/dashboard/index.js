@@ -122,7 +122,6 @@ class Dashboard extends Component {
             addItem: initialNewItem
           });
           this.fetchItemsApi();
-          // alert(response.message);
         } else {
           console.error(response.message);
         }
@@ -170,15 +169,63 @@ class Dashboard extends Component {
       const row = rows[index];
       console.log("ITEM", row);
       this.fetchPatchItemApi(row.id, row, index);
+      const rows = this.state.rows;
+      const noKeyPressed = [
+        "nmg_priority",
+        "in_stock_week",
+        "_fk_cycle",
+        "tagged_missy",
+        "tagged_encore",
+        "country_of_origin",
+        "tagged_encore",
+        "tagged_petite",
+        "tagged_extended",
+        "available_in_canada",
+        "request_extension",
+        "request_cancellation",
+        "image"
+      ];
+      var row = rows[index];
+      row[key] = value;
+      row = Object.assign({}, row, {
+        fieldModified: Object.assign({}, row.fieldModified, {
+          [key]: value
+        })
+      });
+      rows.splice(index, 1, row);
+      this.setState({ rows });
+      if (noKeyPressed.indexOf(key) !== -1) {
+        this.fetchPatchItemApi(row.id, row, index);
+      }
+    }
+  };
+
+  onKeyPressItem = (index, key, event) => {
+    const rows = this.state.rows;
+    var row = rows[index];
+    row[key] = event.target.value;
+    row = Object.assign({}, row, {
+      fieldModified: Object.assign({}, row.fieldModified, {
+        [key]: event.target.value
+      })
+    });
+    rows.splice(index, 1, row);
+    this.setState({ rows });
+
+    if (key === "is_priority") {
+      console.log(event.keyCode);
+      var keycode = event.keyCode ? event.keyCode : event.which;
+      if (keycode === 13) {
+        this.fetchPatchItemApi(row.id, row, index);
+      }
     }
   };
 
   fetchPatchItemApi = (id, item, index) => {
-    console.log(id, item);
+    console.log("PATCH", item);
     patchItemApi(id, item).then(
       response => {
         if (response.status === 200) {
-          console.log(response);
           const rows = this.state.rows;
           const row = Object.assign({}, rows[index], {
             fieldModified: null
@@ -204,7 +251,6 @@ class Dashboard extends Component {
     const filter = { ...this.state.filter };
     filter[target.name] = target.value;
 
-    // Getting division subdivisions
     if (target.name === "divisionId") {
       let divisionId = target.value;
       this.fetchSubDivisions(divisionId);
@@ -300,15 +346,14 @@ class Dashboard extends Component {
     const { divisionId, cycleId, subdivisionId } = filter;
     let orderString = "";
     if (order.field && order.criterion)
-      //If they aren't empty
       orderString = Object.values(order).toString();
     if (divisionId && cycleId && subdivisionId) {
       const limit = 10;
       const end = limit - 1 + offset;
       const parseCannedFilters = this.parseCannedFilters();
       const parsedFilter = {
-        ...filter, //object
-        parseCannedFilters //array of string
+        ...filter,
+        parseCannedFilters
       };
 
       getItemsApi(offset, end, parsedFilter, orderString).then(
@@ -320,6 +365,7 @@ class Dashboard extends Component {
               total: response.total
             });
           else this.setState({ isChangingFilter: false });
+          console.log(response.data.length);
         },
         err => {
           console.log(err);
@@ -328,9 +374,6 @@ class Dashboard extends Component {
     }
   };
 
-  /*Parse array of cannedFilters to an array of strings like this:
-        [where1, where2, where3,...]
-    */
   parseCannedFilters = () => {
     const { cannedFilters } = this.state;
     let parsedFilters = [];
@@ -364,7 +407,6 @@ class Dashboard extends Component {
   handleDeleteItemApi = id => {
     deleteItemApi(id).then(
       response => {
-        console.log("response delete", response);
         if (response.status === 200) this.fetchItemsApi();
       },
       err => {
@@ -376,7 +418,6 @@ class Dashboard extends Component {
   handleDuplicateItemApi = id => {
     duplicateItemApi(id).then(
       response => {
-        console.log("response duplicate", response);
         if (response.status === 200) {
           this.fetchItemsApi();
         }
@@ -405,6 +446,7 @@ class Dashboard extends Component {
       email
     } = this.state;
     const { classes } = this.props;
+
     return (
       <div className={classes.root}>
         <PrimaryAppBar />
