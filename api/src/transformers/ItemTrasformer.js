@@ -31,7 +31,10 @@ const format = (data) => {
         tagged_encore: data.tagged_encore ||0,
         tagged_petite: data.tagged_petite || 0,
         tagged_extended: data.tagged_extended || 0,
-        department: data.department || ""
+        department: data.department || "",
+        type: data.type || "",
+        creative_story_name: data.creative_story_name || "",
+        shot_name: data.shot_name || "",
     };
 };
 
