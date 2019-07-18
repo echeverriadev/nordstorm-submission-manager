@@ -80,7 +80,11 @@ class Dashboard extends Component {
       },
       // We set a default limit in case an error ocurred when fetching
       //  the cycle_subdivision items limit in question
-      cycleSubDivisionItemsLimit: 0
+      cycleSubDivisionItemsLimit: 0,
+      email: {
+        address: "",
+        subject: ""
+      }
     };
   }
 
@@ -234,7 +238,8 @@ class Dashboard extends Component {
         if (response.code === 200) {
           let model = response.model;
           this.setState({
-            cycleSubDivisionItemsLimit: model.submissions_limit
+            cycleSubDivisionItemsLimit: model.submissions_limit,
+            email: response.emailData
           });
         }
       },
@@ -396,7 +401,8 @@ class Dashboard extends Component {
       order,
       isChangingFilter,
       subdivisions,
-      cycleSubDivisionItemsLimit
+      cycleSubDivisionItemsLimit,
+      email
     } = this.state;
     const { classes } = this.props;
     return (
@@ -429,6 +435,7 @@ class Dashboard extends Component {
             onDeleteItem={this.handleDeleteItemApi}
             onDuplicateItem={this.handleDuplicateItemApi}
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
+            email={email}
           />
         )}
         {value === 1 && <h1>SAMPLE</h1>}

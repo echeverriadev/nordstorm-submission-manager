@@ -2,6 +2,7 @@
 
 const knex = require("../../config/database");
 const CycleSubDivisionTransformer = require("../transformers/CycleSubDivisionTransformer");
+const helper = require("../helpers/Helper");
 
 class CycleSubDivisionController {
   constructor() {
@@ -36,7 +37,8 @@ class CycleSubDivisionController {
                   res.json({
                     code: 200,
                     message: "Row saved successfully.",
-                    model
+                    model,
+                    emailData: helper.getEmailData()
                   });
                 })
                 .catch(error => {
@@ -56,13 +58,23 @@ class CycleSubDivisionController {
           res.json({
             code: 200,
             message: "Row already exists.",
-            model: data[0]
+            model: data[0],
+            emailData: helper.getEmailData()
           });
         }
       })
       .catch(error => {
         console.error(error);
       });
+  }
+
+  getEmailData() {
+    let email = {
+      address: process.env.EMAIL_ADDRESS,
+      subject: process.env.EMAIL_SUBJECT
+    };
+
+    return email;
   }
 }
 

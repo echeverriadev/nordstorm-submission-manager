@@ -61,8 +61,47 @@ const Layaout = props => {
     onDeleteItem,
     onDuplicateItem,
     subdivisions,
-    cycleSubDivisionItemsLimit
+    cycleSubDivisionItemsLimit,
+    email
   } = props;
+
+  let filterTextValues = {
+    cycle: "",
+    division: "",
+    subdivision: ""
+  };
+
+  if (
+    total > 0 &&
+    cycleSubDivisionItemsLimit > 0 &&
+    total === cycleSubDivisionItemsLimit
+  ) {
+    let filteredCycle = cycles.filter(cycle => {
+      return cycle.id === filter.cycleId;
+    });
+
+    let filteredDivision = divisions.filter(division => {
+      return division.id === filter.divisionId;
+    });
+
+    let filteredSubDivision = subdivisions.filter(subdivision => {
+      return subdivision.id === filter.subdivisionId;
+    });
+
+    filterTextValues.cycle =
+      filteredCycle[0] !== undefined ? filteredCycle[0].name : "";
+
+    filterTextValues.division =
+      filteredDivision[0] !== undefined ? filteredDivision[0].name : "";
+
+    filterTextValues.subdivision =
+      filteredSubDivision[0] !== undefined ? filteredSubDivision[0].name : "";
+
+    email.body = `FIT item limit increase request.\n${
+      filterTextValues.cycle
+    }\n${filterTextValues.division}\n${filterTextValues.subdivision}`;
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.head}>
@@ -108,24 +147,29 @@ const Layaout = props => {
           {filter.cycleId === "" ||
           filter.divisionId === "" ||
           filter.divisionId === "ALL" ||
-          filter.subdivisionId === "" ? null : total <
+          filter.subdivisionId === "" ? null : total ===
             cycleSubDivisionItemsLimit ? (
+            <div>
+              <InputLabel variant={"standard"}>
+                Item limit for this subdivision has been reached. Click{" "}
+                <a
+                  href={`mailto:${email.address}?subject=${
+                    email.subject
+                  }&body=${encodeURIComponent(email.body)}`}
+                  target="_top"
+                >
+                  here
+                </a>{" "}
+                to request an increase to the limit{" "}
+              </InputLabel>
+            </div>
+          ) : (
             <AddCell
               item={addItem}
               onChange={onAddChange}
               onSubmit={onSubmit}
               cycles={cycles}
             />
-          ) : (
-            <div>
-              <InputLabel variant={"standard"}>
-                Item limit for this subdivision has been reached. Click{" "}
-                <a href="mailto:someone@example.com" target="_top">
-                  here
-                </a>{" "}
-                to request an increase to the limit{" "}
-              </InputLabel>
-            </div>
           )}
           {total > 0 && (
             <Pagination
