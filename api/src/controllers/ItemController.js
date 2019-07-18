@@ -223,7 +223,7 @@ class ItemController {
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             WHERE ${where}`
 
-            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, ANY_VALUE(department.name_display) as department,
             department.department_number as d_department_number, shot.name as shot_name, 
             creative_story.name as creative_story_name FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
@@ -231,7 +231,7 @@ class ItemController {
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
-            WHERE ${where} ${orderBy} LIMIT ?, ?`
+            WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         } else if (specialCaseJoinField === "story") {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
@@ -239,24 +239,24 @@ class ItemController {
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             WHERE ${where}`
 
-            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, ANY_VALUE(department.name_display) as department,
             department.department_number as d_department_number,  shot.name as shot_name, 
             creative_story.name as creative_story_name FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
-            WHERE ${where} ${orderBy} LIMIT ?, ?`
+            WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         } else {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial  WHERE ${where}`
-            sqlItems = `SELECT item_editorial.*, department.name_display as department,
+            sqlItems = `SELECT item_editorial.*, ANY_VALUE(department.name_display) as department,
             department.department_number as d_department_number,  shot.name as shot_name, 
             creative_story.name as creative_story_name FROM item_editorial
             INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
             INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
             INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
-            WHERE ${where} ${orderBy} LIMIT ?, ?`
+            WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
