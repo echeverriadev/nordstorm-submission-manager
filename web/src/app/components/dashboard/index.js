@@ -169,34 +169,6 @@ class Dashboard extends Component {
       const row = rows[index];
       console.log("ITEM", row);
       this.fetchPatchItemApi(row.id, row, index);
-      const rows = this.state.rows;
-      const noKeyPressed = [
-        "nmg_priority",
-        "in_stock_week",
-        "_fk_cycle",
-        "tagged_missy",
-        "tagged_encore",
-        "country_of_origin",
-        "tagged_encore",
-        "tagged_petite",
-        "tagged_extended",
-        "available_in_canada",
-        "request_extension",
-        "request_cancellation",
-        "image"
-      ];
-      var row = rows[index];
-      row[key] = value;
-      row = Object.assign({}, row, {
-        fieldModified: Object.assign({}, row.fieldModified, {
-          [key]: value
-        })
-      });
-      rows.splice(index, 1, row);
-      this.setState({ rows });
-      if (noKeyPressed.indexOf(key) !== -1) {
-        this.fetchPatchItemApi(row.id, row, index);
-      }
     }
   };
 
