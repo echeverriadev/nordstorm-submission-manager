@@ -83,10 +83,12 @@ const styles = theme => ({
     display: 'inline',
   },
   tagField: {
-    padding: "2px 4px",
-    margin: 0,
-    backgroundColor: "#E6E4E4",
-    color: "#199EB9",
+    padding: "2px 7px",
+    margin: "0 0 0 9px",
+    backgroundColor: "#EFEFEF",
+    color: "#85aed5",
+    borderRadius: 3,
+    textTransform: "capitalize",
   },
   inputFont: {
     fontSize: '13px',
@@ -188,6 +190,21 @@ class CardCell extends React.Component {
   onBlurInput = () => {
     console.log(this.props.index)
     this.props.onBlurItem(this.props.index)
+  }
+
+  renderTag(data, tagName = "") {
+    const { classes } = this.props;
+    if (data !== null && data !== "") {
+      return (
+        <div key={1} className={classes.tagLabel}>
+          <p className={classes.tagField}>
+            {tagName + data.toLowerCase()}
+          </p>
+        </div>
+      )
+    } else {
+      return ( <div /> )
+    }
   }
   
   render() {
@@ -459,15 +476,10 @@ class CardCell extends React.Component {
               <Grid container>
                 <Grid item md={11}>
                   <Grid container >
-                    {
-                      item.category.map((data, i) => (
-                          <div key={i} className={classes.tagLabel}>
-                            <p className={classes.tagField}>
-                              {data}
-                            </p>
-                          </div>
-                      ))
-                    }
+                    { this.renderTag(item.type, "Item Type: ") }
+                    { this.renderTag(item.creative_story_name, "Story: ") }
+                    { this.renderTag(item.shot_name, "Shot: ") }
+                    { this.renderTag(item.department, "Department: ") }
                   </Grid>
                 </Grid>
                 <Grid item md={1}>
