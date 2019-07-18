@@ -100,18 +100,29 @@ class Filter extends Component {
       alert("Invalid format, use xls or xlsx instead");
     } else {
       const {
-        filter: { divisionId, cycleId }
+        filter: { divisionId, cycleId, subdivisionId }
       } = this.props;
+      const { totalItems, cycleSubDivisionItemsLimit } = this.props;
+
+      if (totalItems === cycleSubDivisionItemsLimit) {
+        alert(
+          "Item count limit has already been reached for this subdivision. Import cannot proceed."
+        );
+        return;
+      }
+
       const formData = new FormData();
 
       formData.append("file", file);
       formData.append("_fk_division", divisionId);
       formData.append("_fk_cycle", cycleId);
+      formData.append("_fk_subdivision", subdivisionId);
+      formData.append("totalItems", totalItems);
+
       uploadExcelApi(formData).then(res => {
         if (res.code === 200) {
-          //this.setItemsAsCreatedInLog(res.data)
           this.props.onRefreshItems(); //Refresh list for getting all new items
-          alert("Items imported successfully");
+          alert(res.message);
         } else {
           console.error(res);
           alert(res.message || "oops a problem has occurred");
@@ -132,6 +143,7 @@ class Filter extends Component {
       onRemoveCannedFilter,
       subdivisions
     } = this.props;
+
     return (
       <Grid className={classes.root}>
         <Grid item>

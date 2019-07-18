@@ -5,6 +5,7 @@ const ItemTransformer = require('../transformers/ItemTrasformer');
 const { hasEmptyField } = require('../Utils');
 const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
+const cycleSubDivisionModel = require("../models/CycleSubDivision");
 
 class ItemController {
     
@@ -269,7 +270,6 @@ class ItemController {
     }
     
     getLastItem(){
-        var item
         this.connection.query('select __pk_item from item_editorial order by __pk_item DESC limit 1', (error,result) => {
             if (error) throw error;
             console.log(result)
@@ -346,9 +346,7 @@ class ItemController {
 
     async import(req, res, next){
         let exceltojson;
-        console.log(req.file)
-        console.log(req.body)
-        const {_fk_cycle, _fk_division } = req.body
+        const {_fk_cycle, _fk_division, _fk_subdivision, totalItems } = req.body
 
         if (!req.file) {
             return res.json({
@@ -370,50 +368,62 @@ class ItemController {
                 output: null, //since we don't need output.json
                 lowerCaseHeaders: true
             }, (err, result) => {
-                if (err) {
-                    return res.json({ code: 400, message: err });
-                }
+                let totalRows = result.length;
+                cycleSubDivisionModel.getCycleSubDivision(_fk_cycle, _fk_subdivision).then((response) => {
+                    let submissionsLimit = response[0].submissions_limit; 
+                    let totalAllowed = submissionsLimit - totalItems; 
+                    console.log(totalAllowed);
+                    console.log(totalRows);
+                    if (totalAllowed < totalRows) {
+                        res.json({ 
+                            code: 200, 
+                            message: `Import failed due to item count limit. Reduce the number of rows to be imported to ${totalAllowed} items.` 
+                        });
+                    } 
 
                 const data = []
-              //  const before_import_count_rows = this.getCantRows();
+                //  const before_import_count_rows = this.getCantRows();
                 for (let i in result) {
-                    const element = result[i];
-
-                    const row = {
-                        'nmg_priority': element['priority'] || null,
-                        'department_number': element['dept. no'] || null,
-                        'vpn': element['vpn'] || "",
-                        'brand': element['brand'] || "",
-                        'color': element['color'] || "",
-                        'size': element['size'] || "",
-                        'description': element['description'] || "",
-                        'style_group_number': element['sgn'] || "",
-                        'retail_price': element['retail_price'] || null,
-                        'in_stock_week': element['in_stock'] || 0,
-                        _fk_cycle,
-                        _fk_division
-                    };
-                    
-                    this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
-                        if(res.status(200)){
-                            if(process.env.NA_BYPASS){
-                                this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
-                            }else{
-                                this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
-                            }
-                        }
-                        if (err) throw err;
-                    });
-
-                    data.push(row);
-                }
-                res.json({ code: 200, data });
-                
+                      const element = result[i];
+  
+                      const row = {
+                          'nmg_priority': element['priority'] || null,
+                          'department_number': element['dept. no'] || null,
+                          'vpn': element['vpn'] || "",
+                          'brand': element['brand'] || "",
+                          'color': element['color'] || "",
+                          'size': element['size'] || "",
+                          'description': element['description'] || "",
+                          'style_group_number': element['sgn'] || "",
+                          'retail_price': element['retail_price'] || null,
+                          'in_stock_week': element['in_stock'] || 0,
+                          _fk_cycle,
+                          _fk_division,
+                          _fk_subdivision
+                      };
+                      
+                      this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
+                          if(res.status(200)){
+                              if(process.env.NA_BYPASS){
+                                  this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                              }else{
+                                  this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
+                              }
+                          }
+                          if (err) throw err;
+                      });
+  
+                      data.push(row);
+                  }
+                  
+                  res.json({ code: 200, data });
+                }).catch((error) => {
+                    return res.json({ code: 400, message: error });
+                }); 
             });
         }
         catch (e) {
-            24
-            return res.json({ code: 400, message: "Corupted excel file" });
+            return res.json({ code: 400, message: "Corrupted excel file" });
         }
     }
     

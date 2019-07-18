@@ -115,6 +115,8 @@ const Layaout = props => {
           onRemoveCannedFilter={onRemoveCannedFilter}
           onRefreshItems={onRefreshItems}
           subdivisions={subdivisions}
+          totalItems={total}
+          cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
         />
         <Grid container spacing={0}>
           {cannedFilters.map((filter, i) => (
