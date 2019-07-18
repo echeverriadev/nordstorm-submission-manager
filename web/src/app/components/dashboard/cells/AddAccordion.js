@@ -228,30 +228,6 @@ const Accordion = (props) => {
                         <div></div>
                     }
                     </Grid>
-                    <Grid style={{marginTop: "4px", marginLeft: "-4%"}} item md={3}>
-                    {
-                        (item._fk_cycle && item._fk_cycle != -1)?
-                            <div>
-                              <TextField
-                                InputProps={{
-                                  className: classes.inputFont,
-                                }}
-                                InputLabelProps= {{
-                                  className: classes.labelFont,
-                                  disableAnimation: true,
-                                }}
-                                label="Product Priority"
-                                margin="none"
-                                value={item.is_priority === null ? "" : item.is_priority}
-                                onChange={e => onChange("is_priority", e.target.value)}
-                                type="number"
-                            />
-                            </div>
-                        :
-                        <div></div>
-                    }
-                        
-                    </Grid>
                 </Grid>
                 <Divider/>
                 <Grid className={classes.gridContainer} container>

@@ -232,33 +232,7 @@ const Accordion = (props) => {
                         <div></div>
                     }
                     </Grid>
-                    <Grid style={{marginTop: "4px", marginLeft: "-4%"}} item md={3}>
-                    {
-                        (item._fk_cycle && item._fk_cycle != -1)?
-                            <div>
-                              <TextField
-                                  InputProps={{
-                                    className: classes.inputFont,
-                                  }}
-                                  InputLabelProps= {{
-                                    className: classes.labelFont,
-                                    disableAnimation: true,
-                                  }}
-                                  id={"pp"+index}
-                                  label="Product Priority"
-                                  margin="none"
-                                  defaultValue={item.is_priority === null ? 0 : item.is_priority}
-                                  onBlur={onBlurInput}
-                                  onChange={e => onChange(index, "is_priority", e.target.value)}
-                                  onKeyPress={e => onKeyPressItem(index, "is_priority", e)}
-                                  type="number"
-                              />
-                            </div>
-                        :
-                        <div></div>
-                    }
-                        
-                    </Grid>
+                    
                 </Grid>
                 <Divider/>
                 <Grid className={classes.gridContainer} container>
