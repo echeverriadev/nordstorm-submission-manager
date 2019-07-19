@@ -243,7 +243,11 @@ class ItemController {
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         } else {
-            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial  WHERE ${where}`
+            sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
+            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
+            INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number WHERE ${where}`
             sqlItems = `SELECT item_editorial.*, department.name_display as department,
             department.department_number as d_department_number,  shot.name as shot_name, 
             creative_story.name as creative_story_name FROM item_editorial
@@ -255,6 +259,8 @@ class ItemController {
         }
         sqlCount = mysql.format(sqlCount, values);
         sqlItems = mysql.format(sqlItems, allValues);
+        console.log("QUERY", sqlItems)
+        console.log("COUNT", sqlCount)
         this.connection.query(`${sqlItems}; ${sqlCount}`, (err, result) => {
             if (err) {
                 return res.status(500).json({
