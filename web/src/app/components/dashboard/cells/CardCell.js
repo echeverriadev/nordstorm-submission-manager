@@ -196,7 +196,7 @@ class CardCell extends React.Component {
     const { classes } = this.props;
     if (data !== null && data !== "") {
       return (
-        <div key={1} className={classes.tagLabel}>
+        <div className={classes.tagLabel}>
           <p className={classes.tagField}>
             {tagName + data.toLowerCase()}
           </p>

@@ -89,18 +89,18 @@ class ItemController {
     buildWhere(filter = {}) {
         const fieldsLikeForSearch = {
             "dept": "item_editorial.department_number",
-            "vpn": "vpn",
-            "sgn": "style_group_number",
-            "brand": "brand",
-            "color": "color",
-            "size": "size",
-            "description": "description",
-            "product_priority": "nmg_priority",
-            "in_stock_week": "in_stock_week",
-            "country_of_origin": "country_of_origin",
-            "specify_country": "country_of_origin_other",
-            "extension_reason": "request_extension_note",
-            "cancelation_reason": "request_cancellation_notes"
+            "vpn": "item_editorial.vpn",
+            "sgn": "item_editorial.style_group_number",
+            "brand": "item_editorial.brand",
+            "color": "item_editorial.color",
+            "size": "item_editorial.size",
+            "description": "item_editorial.description",
+            "product_priority": "item_editorial.nmg_priority",
+            "in_stock_week": "item_editorial.in_stock_week",
+            "country_of_origin": "item_editorial.country_of_origin",
+            "specify_country": "item_editorial.country_of_origin_other",
+            "extension_reason": "item_editorial.request_extension_note",
+            "cancelation_reason": "item_editorial.request_cancellation_notes"
         }
 
         const fieldsJoinForSearch = {
