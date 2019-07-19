@@ -23,7 +23,11 @@ class CycleSubDivisionController {
         let data = this.cycleSubDivisionTransformer.transform(response);
         if (data.length === 0) {
           return knex("cycle_subdivision")
-            .insert({ _fk_cycle: cycleId, _fk_subdivision: subdivisionId })
+            .insert({
+              _fk_cycle: cycleId,
+              _fk_subdivision: subdivisionId,
+              submissions_limit: process.env.ND_SUBMISSIONS_LIMIT
+            })
             .then(response => {
               let cycleSubDivisionId = response;
 

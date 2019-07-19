@@ -371,8 +371,7 @@ class ItemController {
                 cycleSubDivisionModel.getCycleSubDivision(_fk_cycle, _fk_subdivision).then((response) => {
                     let submissionsLimit = response[0].submissions_limit; 
                     let totalAllowed = submissionsLimit - totalItems; 
-                    console.log(totalAllowed);
-                    console.log(totalRows);
+                    
                     if (totalAllowed < totalRows) {
                         res.json({ 
                             code: 200, 
