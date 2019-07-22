@@ -383,43 +383,43 @@ class ItemController {
                             code: 200, 
                             message: `Import failed due to item count limit. Reduce the number of rows to be imported to ${totalAllowed} items.` 
                         });
-                    } 
-
-                const data = []
-                //  const before_import_count_rows = this.getCantRows();
-                for (let i in result) {
-                      const element = result[i];
-                      const row = {
-                          'nmg_priority': element['priority'] || null,
-                          'department_number': element['dept. no'] || null,
-                          'vpn': element['vpn'] || "",
-                          'brand': element['brand'] || "",
-                          'color': element['color'] || "",
-                          'size': element['size'] || "",
-                          'description': element['description'] || "",
-                          'style_group_number': element['sgn'] || "",
-                          'retail_price': element['retail_price'] || null,
-                          'in_stock_week': element['in_stock'] || 0,
-                          _fk_cycle,
-                          _fk_division,
-                          _fk_subdivision
-                      };
-                      
-                      this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
-                          if(res.status(200)){
-                              if(process.env.NA_BYPASS){
-                                  this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
-                              }else{
-                                  this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
-                              }
+                    } else {
+                        const data = []
+                        //  const before_import_count_rows = this.getCantRows();
+                        for (let i in result) {
+                              const element = result[i];
+                              const row = {
+                                  'nmg_priority': element['priority'] || null,
+                                  'department_number': element['dept. no'] || null,
+                                  'vpn': element['vpn'] || "",
+                                  'brand': element['brand'] || "",
+                                  'color': element['color'] || "",
+                                  'size': element['size'] || "",
+                                  'description': element['description'] || "",
+                                  'style_group_number': element['sgn'] || "",
+                                  'retail_price': element['retail_price'] || null,
+                                  'in_stock_week': element['in_stock'] || 0,
+                                  _fk_cycle,
+                                  _fk_division,
+                                  _fk_subdivision
+                              };
+                              
+                              this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
+                                  if(res.status(200)){
+                                      if(process.env.NA_BYPASS){
+                                          this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
+                                      }else{
+                                          this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
+                                      }
+                                  }
+                                  if (err) throw err;
+                              });
+          
+                              data.push(row);
                           }
-                          if (err) throw err;
-                      });
-  
-                      data.push(row);
-                  }
-                  
-                  res.json({ code: 200, data, message: "Rows were imported successfully." });
+                          
+                          res.json({ code: 200, data, message: "Rows were imported successfully." });
+                    }
                 }).catch((error) => {
                     return res.json({ code: 400, message: error });
                 }); 

@@ -85,6 +85,13 @@ class Filter extends Component {
   };
 
   onClick = () => {
+    const { totalItems, cycleSubDivisionItemsLimit } = this.props;
+    if (totalItems >= cycleSubDivisionItemsLimit) {
+      alert(
+        "Item count limit has already been reached for this subdivision. Import cannot proceed."
+      );
+      return;
+    }
     this.refs.buttonFile.click();
   };
   /*
@@ -106,14 +113,8 @@ class Filter extends Component {
       const {
         filter: { divisionId, cycleId, subdivisionId }
       } = this.props;
-      const { totalItems, cycleSubDivisionItemsLimit } = this.props;
 
-      if (totalItems >= cycleSubDivisionItemsLimit) {
-        alert(
-          "Item count limit has already been reached for this subdivision. Import cannot proceed."
-        );
-        return;
-      }
+      const { totalItems } = this.props;
 
       const formData = new FormData();
 
