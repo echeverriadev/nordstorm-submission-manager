@@ -226,7 +226,13 @@ class Dashboard extends Component {
 
     if (target.name === "divisionId") {
       let divisionId = target.value;
+      filter.subdivisionId = "";
       this.fetchSubDivisions(divisionId);
+      this.setState({
+        isChangingFilter: false,
+        rows: [],
+        total: 0
+      });
     }
 
     const { cycleId, divisionId, subdivisionId } = filter;
@@ -349,7 +355,6 @@ class Dashboard extends Component {
               total: response.total
             });
           else this.setState({ isChangingFilter: false });
-          console.log(response.data.length);
         },
         err => {
           console.log(err);
