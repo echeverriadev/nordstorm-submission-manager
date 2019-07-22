@@ -108,7 +108,7 @@ class Filter extends Component {
       } = this.props;
       const { totalItems, cycleSubDivisionItemsLimit } = this.props;
 
-      if (totalItems === cycleSubDivisionItemsLimit) {
+      if (totalItems >= cycleSubDivisionItemsLimit) {
         alert(
           "Item count limit has already been reached for this subdivision. Import cannot proceed."
         );
