@@ -244,16 +244,16 @@ class ItemController {
             WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         } else {
             sqlCount = `SELECT COUNT( __pk_item ) as total FROM item_editorial 
-            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
-            INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
-            INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            LEFT JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            LEFT JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
+            LEFT JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number WHERE ${where}`
             sqlItems = `SELECT item_editorial.*, department.name_display as department,
             department.department_number as d_department_number,  shot.name as shot_name, 
             creative_story.name as creative_story_name FROM item_editorial
-            INNER JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
-            INNER JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
-            INNER JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
+            LEFT JOIN shot ON item_editorial._fk_shot = shot.__pk_shot 
+            LEFT JOIN campaign ON shot._fk_campaign = campaign.__pk_campaign 
+            LEFT JOIN creative_story ON campaign._fk_creative_story = creative_story.__pk_creative_story 
             LEFT OUTER JOIN department ON item_editorial.department_number = department.department_number
             WHERE ${where} GROUP BY __pk_item ${orderBy} LIMIT ?, ?`
         }
@@ -419,7 +419,7 @@ class ItemController {
                       data.push(row);
                   }
                   
-                  res.json({ code: 200, data });
+                  res.json({ code: 200, data, message: "Rows were imported successfully." });
                 }).catch((error) => {
                     return res.json({ code: 400, message: error });
                 }); 
