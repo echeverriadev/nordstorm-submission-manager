@@ -84,7 +84,8 @@ class Dashboard extends Component {
       email: {
         address: "",
         subject: ""
-      }
+      },
+      counter: 1
     };
   }
 
@@ -268,16 +269,27 @@ class Dashboard extends Component {
   }
 
   fetchSubDivisions(divisionId) {
-    getSubDivisionsApi(divisionId).then(
-      response => {
-        if (response.status === 200) {
-          this.setState({ subdivisions: response.data });
+    let _this = this;
+    setTimeout(function() {
+      getSubDivisionsApi(divisionId).then(
+        response => {
+          if (response.status === 200) {
+            _this.setState({
+              filter: {
+                cycleId: _this.state.filter.cycleId,
+                divisionId: _this.state.filter.divisionId,
+                subdivisionId: "",
+                search: _this.state.filter.search
+              },
+              subdivisions: response.data
+            });
+          }
+        },
+        err => {
+          console.log(err);
         }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      );
+    }, 100);
   }
 
   changeOrder = fieldClicked => {

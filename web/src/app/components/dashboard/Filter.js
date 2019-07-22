@@ -55,6 +55,10 @@ const styles = theme => ({
 });
 
 class Filter extends Component {
+  state = {
+    counter: 0
+  };
+
   handleConfirm = e => {
     const file = Array.from(e.target.files)[0];
     if (file) {
@@ -131,6 +135,18 @@ class Filter extends Component {
     }
   };
 
+  renderSubdivisions() {
+    const { subdivisions } = this.props;
+
+    return subdivisions.map((subdivision, index) => {
+      return (
+        <MenuItem value={subdivision.id} key={index} name={subdivision.name}>
+          {subdivision.name}
+        </MenuItem>
+      );
+    });
+  }
+
   render = () => {
     const {
       classes,
@@ -140,8 +156,7 @@ class Filter extends Component {
       onChangeFilter,
       cannedFilters,
       onAddCannedFilter,
-      onRemoveCannedFilter,
-      subdivisions
+      onRemoveCannedFilter
     } = this.props;
 
     return (
@@ -156,9 +171,7 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel>
-                Cycle / Month
-              </InputLabel>
+              <InputLabel>Cycle / Month</InputLabel>
             </MenuItem>
             {cycles.map(option => (
               <MenuItem key={option.id} value={option.id}>
@@ -177,9 +190,7 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel>
-                Division
-              </InputLabel>
+              <InputLabel>Division</InputLabel>
             </MenuItem>
             {divisions.map((option, index) => (
               <MenuItem key={index} value={option.id}>
@@ -198,15 +209,9 @@ class Filter extends Component {
             displayEmpty={true}
           >
             <MenuItem value="" disabled>
-              <InputLabel>
-                Subdivision
-              </InputLabel>
+              <InputLabel>Subdivision</InputLabel>
             </MenuItem>
-            {subdivisions.map((option, index) => (
-              <MenuItem key={index} value={option.id}>
-                {option.name}
-              </MenuItem>
-            ))}
+            {this.renderSubdivisions()}
           </Select>
         </Grid>
         <Grid item>
