@@ -9,6 +9,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Search from "./Search";
 import { uploadExcelApi } from "../../../api";
 import { confirmAlert } from "react-confirm-alert"; // Import
+import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "../Utils/dashboardCustom.css";
 
@@ -55,15 +56,36 @@ const styles = theme => ({
 });
 
 class Filter extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      cols: [],
+      rows: []
+    }
+  }
+
   handleConfirm = e => {
     const file = Array.from(e.target.files)[0];
     if (file) {
+      ExcelRenderer(file, (err, resp) => {
+        if(err){
+          console.log(err);            
+        }
+        else{
+          this.setState({
+            rows: resp.rows,
+            cols: resp.cols
+          })
+        }
+      });    
       //If there is a file selected}
       this.refs.buttonFile.value = "";
       return (
         <div>
           {confirmAlert({
             title: "Import items",
+            customUI: () => {return(<OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />)},
             message: "Do you really want to continue with the Import?",
             buttons: [
               {
