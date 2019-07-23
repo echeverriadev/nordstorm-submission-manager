@@ -379,18 +379,17 @@ class ItemController {
 
                 for (let i in result) {
                     const element = result[i];
-
                     const row = {
-                        'nmg_priority': element['nmg_priority'] || element['NMG Priority'] || null,
-                        'department_number': element['department_number'] || element['Dept.#'] || null,
-                        'vpn': element['vpn'] || element['VPN'] || "",
-                        'brand': element['brand'] || element['Brand'] || "",
-                        'color': element['color'] || element['Color'] || "",
-                        'size': element['size'] || element['Sample Size'] || "",
-                        'description': element['description'] || element['Item Description'] || "",
-                        'style_group_number': element['style_group_number'] || element['SG#'] || "",
-                        'retail_price': element['retail_price'] || element['Retail Price'] || null,
-                        'in_stock_week': element['in_stock_week'] || element['In Stock Week'] || 0,
+                        'nmg_priority': element['nmg_priority'] || element['nmg priority'] || null,
+                        'department_number': element['department_number'] || element['dept.#'] || null,
+                        'vpn': element['vpn'] || "",
+                        'brand': element['brand'] ||  "",
+                        'color': element['color'] ||  "",
+                        'size': element['size'] || element['sample size'] || "",
+                        'description': element['description'] || element['item description'] || "",
+                        'style_group_number': element['style_group_number'] || element['sg#'] || element['sgn'] || "",
+                        'retail_price': element['retail_price'] || element['retail price'] || null,
+                        'in_stock_week': element['in_stock_week'] || element['in stock week'] || 0,
                         _fk_cycle,
                         _fk_division
                     };
