@@ -9,9 +9,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Search from "./Search";
 import { uploadExcelApi } from "../../../api";
 import { confirmAlert } from "react-confirm-alert"; // Import
-import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "../Utils/dashboardCustom.css";
+import {ExcelRenderer} from 'react-excel-renderer';
+import './confirmAlert.css'
 
 const styles = theme => ({
   root: {
@@ -64,43 +65,81 @@ class Filter extends Component {
       rows: []
     }
   }
+  td(rows, index){
+    var elements = [];
+    for(var i=1; i<=rows.length-1; i++){
+      elements.push(<td key={i}>{rows[i][index]}</td>)
+    }
+    return elements
+  }
+
+  closeModal(){
+
+  }
 
   handleConfirm = e => {
     const file = Array.from(e.target.files)[0];
     if (file) {
+      //If there is a file selected}
+      this.refs.buttonFile.value = "";
       ExcelRenderer(file, (err, resp) => {
         if(err){
           console.log(err);            
         }
         else{
-          this.setState({
-            rows: resp.rows,
-            cols: resp.cols
-          })
+          const cols_name = resp.rows[0]
+          const rows_value = resp.rows.filter(index => index != 0)
+          return (
+            <div>
+              {confirmAlert({
+                customUI: () => { return(
+                  <div style={{ maxHeight: "420px", backgroundColor: "#ededed", paddingBottom: "59px", paddingRight: "15px", borderRadius: "15px", maxWidth: "1120px"}}>
+                  <div style={{paddingTop: "34px"}}>
+                    <label style= {{marginLeft: "50px", fontWeight: "bold", fontSize: "x-large", color: "#888484"}}> Import items </label>
+                  </div> 
+                    <div>
+                      <div className="custom-rows">
+                        <label> Showing the first {rows_value.length - 1} rows from file </label>
+                      </div>
+                      <div className="table-custom">
+                        <table style={{whiteSpace: "nowrap"}}> 
+                          <tbody>
+                              {
+                                (cols_name && cols_name.length > 0)?
+                                  cols_name.map((column_name, index) => (
+                                    <tr>
+                                      <th align="left" style={{position: "sticky", left: "0", backgroundColor: "#c1c1c1"}}>{column_name}</th>
+                                      {
+                                        this.td(rows_value, index).map((element) => (
+                                          element
+                                        ))
+                                      }
+                                    </tr>
+                                  ))
+                                :
+                                  <tr> </tr>
+                              }
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <label style={{float: "right", marginTop: "10px", fontWeight: "bold", marginTop:"14px", marginRight: "34px"}}>Complete Import?</label>
+                    <div style={{marginTop: "46px", marginLeft: "999px"}}>
+                      <button style={{borderRadius: "15px", backgroundColor: "black", color: "white", paddingLeft: "21px", paddingRight: "20px"}} onClick={() => this.onSubmit(file)}> YES </button>
+                    </div>
+                    <div style={{marginTop: "-21px", marginLeft: "910px"}}>
+                      <button style={{borderRadius: "15px", backgroundColor: "black", color: "white", paddingLeft: "24px", paddingRight: "23px"}} onClick={() => this.closeModal()}> NO </button>
+                    </div>
+                  </div>
+                )}
+              })}
+            </div>
+          );
         }
-      });    
-      //If there is a file selected}
-      this.refs.buttonFile.value = "";
-      return (
-        <div>
-          {confirmAlert({
-            title: "Import items",
-            customUI: () => {return(<OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />)},
-            message: "Do you really want to continue with the Import?",
-            buttons: [
-              {
-                label: "Ok",
-                onClick: () => this.onSubmit(file)
-              },
-              {
-                label: "Cancel"
-              }
-            ]
-          })}
-        </div>
-      );
+      });                 
     }
   };
+
 
   onClick = () => {
     this.refs.buttonFile.click();
