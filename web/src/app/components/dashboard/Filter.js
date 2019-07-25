@@ -77,7 +77,10 @@ class Filter extends Component {
   }
 
   closeModal(){
-
+    let modal = document.getElementsByClassName('react-confirm-alert');
+    if(modal!=null){
+      modal[0].style.visibility = 'hidden'
+    } 
   }
 
   handleConfirm = e => {
@@ -95,9 +98,9 @@ class Filter extends Component {
           return (
             <div>
               {confirmAlert({
-                customUI: () => { return(
+                customUI: ({onClose}) => { return(
                   <div>
-                    <div style={{backgroundColor:"#ededed", maxWidth: "1120px", maxHeight: "420px", borderRadius:"10px", padding:"15px", paddingBottom:"25px"}}>
+                    <div style={{backgroundColor:"#ededed", maxWidth: "1120px", maxHeight: "510px", borderRadius:"10px", padding:"15px", paddingBottom:"25px"}}>
                       <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
                       <div style= {{ marginLeft: "21px" }}>
                         <label> You are going to import {rows_value.length - 1} items </label>
@@ -127,8 +130,11 @@ class Filter extends Component {
                         {/* <label style={{marginTop: "10px", fontWeight: "bold", display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>Do you want continue?</label> */}
                         
                         <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
-                            <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => this.onSubmit(file)}> Import </button>
-                            <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => this.closeModal() }> Cancel </button>
+                            <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => {
+                             this.onSubmit(file)
+                             onClose() 
+                            }}> Import </button>
+                            <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> Cancel </button>
                         </div>
                       </div>
                       </div>
