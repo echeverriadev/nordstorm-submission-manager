@@ -96,44 +96,44 @@ class Filter extends Component {
             <div>
               {confirmAlert({
                 customUI: () => { return(
-                  <div style={{ maxHeight: "420px", backgroundColor: "#ededed", paddingBottom: "59px", paddingRight: "15px", borderRadius: "15px", maxWidth: "1120px"}}>
-                  <div style={{paddingTop: "34px"}}>
-                    <label style= {{marginLeft: "50px", fontWeight: "bold", fontSize: "x-large", color: "#888484"}}> Import items </label>
-                  </div> 
-                    <div>
-                      <div className="custom-rows">
-                        <label> Showing the first {rows_value.length - 1} rows from file </label>
+                  <div>
+                    <div style={{backgroundColor:"#ededed", maxWidth: "1120px", maxHeight: "420px", borderRadius:"10px", padding:"15px", paddingBottom:"25px"}}>
+                      <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
+                      <div style= {{ marginLeft: "21px" }}>
+                        <label> You are going to import {rows_value.length - 1} items </label>
                       </div>
                       <div className="table-custom">
                         <table style={{whiteSpace: "nowrap"}}> 
                           <tbody>
-                              {
-                                (cols_name && cols_name.length > 0)?
-                                  cols_name.map((column_name, index) => (
-                                    <tr>
-                                      <th align="left" style={{position: "sticky", left: "0", backgroundColor: "#c1c1c1"}}>{column_name}</th>
-                                      {
-                                        this.td(rows_value, index).map((element) => (
-                                          element
-                                        ))
-                                      }
-                                    </tr>
-                                  ))
-                                :
-                                  <tr> </tr>
-                              }
+                                {
+                                  (cols_name && cols_name.length > 0)?
+                                    cols_name.map((column_name, index) => (
+                                      <tr>
+                                        <th align="left" style={{position: "sticky", left: "0", backgroundColor: "#c1c1c1",borderBottom: "1px #ededed solid"}}>{column_name}</th>
+                                        {
+                                          this.td(rows_value, index).map((element) => (
+                                            element
+                                          ))
+                                        }
+                                      </tr>
+                                    ))
+                                  :
+                                    <tr> </tr>
+                                }
                           </tbody>
                         </table>
                       </div>
-                    </div>
-                    <label style={{float: "right", marginTop: "10px", fontWeight: "bold", marginTop:"14px", marginRight: "34px"}}>Complete Import?</label>
-                    <div style={{marginTop: "46px", marginLeft: "999px"}}>
-                      <button style={{borderRadius: "15px", backgroundColor: "black", color: "white", paddingLeft: "21px", paddingRight: "20px"}} onClick={() => this.onSubmit(file)}> YES </button>
-                    </div>
-                    <div style={{marginTop: "-21px", marginLeft: "910px"}}>
-                      <button style={{borderRadius: "15px", backgroundColor: "black", color: "white", paddingLeft: "24px", paddingRight: "23px"}} onClick={() => this.closeModal()}> NO </button>
-                    </div>
+                      <div>
+                        {/* <label style={{marginTop: "10px", fontWeight: "bold", display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>Do you want continue?</label> */}
+                        
+                        <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
+                            <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => this.onSubmit(file)}> Import </button>
+                            <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => this.closeModal() }> Cancel </button>
+                        </div>
+                      </div>
+                      </div>
                   </div>
+                
                 )}
               })}
             </div>

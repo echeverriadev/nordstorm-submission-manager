@@ -27,12 +27,10 @@
     padding: 0px !important;
     position: relative;
     background: #fff;
-    margin-top: 32px;
     overflow-x: auto;
     overflow-y: auto;
-    margin-left: 50px;
     max-height: 213px;
-    margin-right: 34px;
+    margin: 30px 40px 30px 40px;
 }
 
 .custom-rows {
