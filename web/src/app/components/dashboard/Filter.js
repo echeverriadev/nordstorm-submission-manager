@@ -214,6 +214,10 @@ class Filter extends Component {
     });
   }
 
+  attachToStories = () => {
+    alert("attaching..");
+  };
+
   render = () => {
     const {
       classes,
@@ -303,6 +307,21 @@ class Filter extends Component {
             type="file"
             onChange={this.handleConfirm}
           />
+        </Grid>
+        <Grid item>
+          {filter.cycleId !== "" &&
+            filter.divisionId !== "" &&
+            filter.divisionId !== "ALL" && (
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.button}
+                onClick={this.attachToStories}
+                style={{ width: 200 }}
+              >
+                Attach to Stories
+              </Button>
+            )}
         </Grid>
         <Grid item md>
           <Search

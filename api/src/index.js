@@ -9,17 +9,21 @@ let app = express();
 
 const port = process.env.PORT;
 app.use(cookieParser());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: `http://localhost:${port}`,
+    credentials: true
+  })
+);
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.use(logRequest);
 app = RouteLoader.load(app);
 
-app.listen(port, () => {
+let nodeHost = process.env.NODE_HOST;
+
+app.listen(port, nodeHost, () => {
   console.log(`Server running on port ${port}`);
 });
 
