@@ -70,8 +70,15 @@ class Filter extends Component {
   }
   td(rows, index){
     var elements = [];
-    for(var i=1; i<=rows.length-1; i++){
-      elements.push(<td key={i}>{rows[i][index]}</td>)
+    if(rows.length <= 100){
+      for(var i=1; i<=rows.length-1; i++){
+        
+        elements.push(<td key={index}>{rows[i][index]}</td>)
+      }
+    }else{
+      for(var i=1; i<=100; i++){
+        elements.push(<td key={index}>{rows[i][index]}</td>)
+      }
     }
     return elements
   }
@@ -95,60 +102,63 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          return (
-            <div>
-              {confirmAlert({
-                customUI: ({onClose}) => { return(
-                  <div>
-                    <div style={{backgroundColor:"#ededed", maxWidth: "1120px", maxHeight: "510px", borderRadius:"10px", padding:"15px", paddingBottom:"25px"}}>
-                      <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
-                      <div style= {{ marginLeft: "21px" }}>
-                        <label> You are going to import {rows_value.length - 1} items </label>
-                      </div>
-                      <div className="table-custom">
-                        <table style={{whiteSpace: "nowrap"}}> 
-                          <tbody>
-                                {
-                                  (cols_name && cols_name.length > 0)?
-                                    cols_name.map((column_name, index) => (
-                                      <tr>
-                                        <th align="left" style={{position: "sticky", left: "0", backgroundColor: "#c1c1c1",borderBottom: "1px #ededed solid"}}>{column_name}</th>
-                                        {
-                                          this.td(rows_value, index).map((element) => (
-                                            element
-                                          ))
-                                        }
-                                      </tr>
-                                    ))
-                                  :
-                                    <tr> </tr>
-                                }
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        {/* <label style={{marginTop: "10px", fontWeight: "bold", display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>Do you want continue?</label> */}
-                        
-                        <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
-                            <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => {
-                             this.onSubmit(file)
-                             onClose() 
-                            }}> Import </button>
-                            <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> Cancel </button>
+          if(rows_value.length < process.env.REACT_APP_ND_SUBMISSIONS_LIMIT){
+            return (
+              <div>
+                {confirmAlert({
+                  customUI: ({onClose}) => { return(
+                    <div>
+                      <div style={{backgroundColor:"#ededed", maxWidth: "1120px", maxHeight: "540px", borderRadius:"10px", padding:"15px", paddingBottom:"25px"}}>
+                        <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
+                        <label  onClick={() => onClose()} style= {{ cursor:"pointer", fontWeight: "bold", fontSize: "large", color: "#888484", marginRight: "22px", float:"right"}} > X </label>
+                        <div style= {{ marginLeft: "21px" }}>
+                          <label>Showing the first 100 rows from the import document.</label>
                         </div>
-                      </div>
-                      </div>
-                  </div>
-                
-                )}
-              })}
-            </div>
-          );
+                        <div className="table-custom">
+                          <table style={{whiteSpace: "nowrap"}}> 
+                            <tbody>
+                                  {
+                                    (cols_name && cols_name.length > 0)?
+                                      cols_name.map((column_name, index) => (
+                                        <tr>
+                                          <th align="left" style={{position: "sticky", left: "0", backgroundColor: "#c1c1c1",borderBottom: "1px #ededed solid"}}>{column_name}</th>
+                                          {
+                                            this.td(rows_value, index, column_name).map((element) => (
+                                              element
+                                            ))
+                                          }
+                                        </tr>
+                                      ))
+                                    :
+                                      <tr> </tr>
+                                  }
+                            </tbody>
+                          </table>
+                        </div>
+                        <div>
+                          <label style={{fontWeight: "bold", display:"flex", justifyContent:"flex-end",marginBottom:"5px", marginRight: "45px" }}>Complete import?</label>
+                          <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
+                              <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => {
+                               this.onSubmit(file)
+                               onClose() 
+                              }}> Yes </button>
+                              <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> No </button>
+                          </div>
+                        </div>
+                        </div>
+                    </div>
+                  
+                  )}
+                })}
+              </div>
+            );
+          }else{
+            alert(`Import failed due to item count limit. Reduce the number of rows to be imported to ${process.env.REACT_APP_ND_SUBMISSIONS_LIMIT} items`)
+          }
         }
       });                 
     }
   };
-
 
   onClick = () => {
     const { totalItems, cycleSubDivisionItemsLimit } = this.props;
@@ -160,46 +170,87 @@ class Filter extends Component {
     }
     this.refs.buttonFile.click();
   };
-  /*
-    setItemsAsCreatedInLog = (items) => {
-      (items && items.length > 0)? 
-        items.map((item))
-      :
-      ""
-    }
-    */
+
   onSubmit = file => {
-    if (
-      ["xls", "xlsx"].indexOf(
-        file.name.split(".")[file.name.split(".").length - 1]
-      ) === -1
-    ) {
-      alert("Invalid format, use xls or xlsx instead");
-    } else {
-      const {
-        filter: { divisionId, cycleId, subdivisionId }
-      } = this.props;
+    ExcelRenderer(file, (err, result) => {
 
-      const { totalItems } = this.props;
+      if (
+        ["xls", "xlsx"].indexOf(
+          file.name.split(".")[file.name.split(".").length - 1]
+        ) === -1
+      ) {
+        alert("Invalid format, use xls or xlsx instead");
+      } else {
+          var is_valid = true;
+          if(err){
+            console.log(err); 
+            result = false;           
+          }else{
+            let rows = result.rows
+            let headers = result.rows[0]
+            for(var c=0; c<headers.length; c++){
+              for(var j=1; j< rows.length; j++){
+                let fieldName = headers[c];
+                console.log(fieldName.toLowerCase())
+                switch(fieldName.toLowerCase()){
 
-      const formData = new FormData();
+                  case ("nmg priority"):
+                  case ("nmg_priority"):
+                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
+                      is_valid = false;
+                      console.log("Hooooolaaaaaaaaa")
+                    } 
+                    break;
 
-      formData.append("file", file);
-      formData.append("_fk_division", divisionId);
-      formData.append("_fk_cycle", cycleId);
-      formData.append("_fk_subdivision", subdivisionId);
-      formData.append("totalItems", totalItems);
+                  case ("in stock week"):
+                  case ("in_stock_week"):
+                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 )
+                      is_valid = false;
+                    break;
 
-      uploadExcelApi(formData).then(res => {
-        if (res.code === 200) {
-          this.props.onRefreshItems(); //Refresh list for getting all new items
-          alert(res.message);
-        } else {
-          console.error(res);
-          alert(res.message || "oops a problem has occurred");
-        }
-      });
-    }
+                  case ("retail_price"):
+                  case ("retail price"):
+                    if(typeof rows[j][c] != 'number' || rows[j][c] < 0)
+                      is_valid = false;
+                    break;
+                  
+                  default: 
+                    break;
+                }
+              }
+            }
+          }
+
+          if(is_valid){
+            const {
+              filter: { divisionId, cycleId, subdivisionId }
+            } = this.props;
+      
+            const { totalItems } = this.props;
+      
+            const formData = new FormData();
+      
+            formData.append("file", file);
+            formData.append("_fk_division", divisionId);
+            formData.append("_fk_cycle", cycleId);
+            formData.append("_fk_subdivision", subdivisionId);
+            formData.append("totalItems", totalItems);
+      
+            uploadExcelApi(formData).then(res => {
+              if (res.code === 200) {
+                this.props.onRefreshItems(); //Refresh list for getting all new items
+                alert(res.message);
+              } else {
+                console.error(res);
+                alert(res.message || "oops a problem has occurred");
+              }
+            });
+          }else{
+            alert("Some(s) data(s) from import file is(are) wrong");
+          }
+      }
+    })
+
   };
 
   renderSubdivisions() {
