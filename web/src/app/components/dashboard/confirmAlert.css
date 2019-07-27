@@ -23,13 +23,12 @@
 
 
 .table-custom{
-    height: calc(90vh - 150px - 97px - -35px);
+    height: 90% !important;
     padding: 0px !important;
     position: relative;
     background: #fff;
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 213px;
     margin: 30px 40px 30px 40px;
 }
 
