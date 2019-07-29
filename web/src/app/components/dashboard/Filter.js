@@ -157,7 +157,10 @@ class Filter extends Component {
               </div>
             );
           }else{
-            alert(`Import failed due to item count limit. Reduce the number of rows to be imported to ${this.props.cycleSubDivisionItemsLimit} items`)
+            this.handleSnackbarOpen(
+              "error",
+              `Import failed due to item count limit. Reduce the number of rows to be imported to ${this.props.cycleSubDivisionItemsLimit} items`
+            );
           }
         }
       });                 
