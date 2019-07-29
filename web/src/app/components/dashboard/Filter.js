@@ -94,6 +94,7 @@ class Filter extends Component {
   }
 
   handleConfirm = e => {
+    
     const file = Array.from(e.target.files)[0];
     if (file) {
       //If there is a file selected}
@@ -105,7 +106,7 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          if(rows_value.length < process.env.REACT_APP_ND_SUBMISSIONS_LIMIT){
+          if(rows_value.length < this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
                 {confirmAlert({
@@ -115,7 +116,7 @@ class Filter extends Component {
                         <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
                         <label  onClick={() => onClose()} style= {{ cursor:"pointer", fontWeight: "bold", fontSize: "large", color: "#888484", marginRight: "22px", float:"right"}} > X </label>
                         <div style= {{ marginLeft: "21px" }}>
-                          <label>Showing the first 100 rows from the import document.</label>
+                          <label>{`Showing the first ${rows_value.length} rows from the import document.`}</label>
                         </div>
                         <div className="table-custom">
                           <table style={{whiteSpace: "nowrap"}}> 
@@ -151,12 +152,13 @@ class Filter extends Component {
                         </div>
                     </div>
                   
-                  )}
+                  )},
+                  closeOnClickOutside: false
                 })}
               </div>
             );
           }else{
-            alert(`Import failed due to item count limit. Reduce the number of rows to be imported to ${process.env.REACT_APP_ND_SUBMISSIONS_LIMIT} items`)
+            alert(`Import failed due to item count limit. Reduce the number of rows to be imported to ${this.props.cycleSubDivisionItemsLimit} items`)
           }
         }
       });                 
@@ -349,7 +351,6 @@ class Filter extends Component {
     } = this.props;
 
     const { snackbar } = this.state;
-    
     return (
       <React.Fragment>
         <SnackbarBase
