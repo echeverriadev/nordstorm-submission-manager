@@ -93,8 +93,7 @@ class Filter extends Component {
     } 
   }
 
-  handleConfirm = e => {
-    
+  handleConfirm = e => { 
     const file = Array.from(e.target.files)[0];
     if (file) {
       //If there is a file selected}
@@ -187,6 +186,11 @@ class Filter extends Component {
         alert("Invalid format, use xls or xlsx instead");
       } else {
           var is_valid = true;
+          var input_wrong = {
+            'nmg_priority': false,
+            'in_stock_week': false,
+            'retail_price': false
+          };
           if(err){
             console.log(err); 
             result = false;           
@@ -196,27 +200,37 @@ class Filter extends Component {
             for(var c=0; c<headers.length; c++){
               for(var j=1; j< rows.length; j++){
                 let fieldName = headers[c];
-                console.log(fieldName.toLowerCase())
-                switch(fieldName.toLowerCase()){
+                console.log(fieldName.toString().toLowerCase())
+                switch(fieldName.toString().toLowerCase()){
 
                   case ("nmg priority"):
                   case ("nmg_priority"):
                     if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
                       is_valid = false;
-                      console.log("Hooooolaaaaaaaaa")
+                      input_wrong = Object.assign({}, input_wrong, {
+                        'nmg_priority': true
+                      })
                     } 
                     break;
 
                   case ("in stock week"):
                   case ("in_stock_week"):
-                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 )
+                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
                       is_valid = false;
+                      input_wrong = Object.assign({}, input_wrong, {
+                        'in_stock_week': true
+                      })
+                    }
                     break;
 
                   case ("retail_price"):
                   case ("retail price"):
-                    if(typeof rows[j][c] != 'number' || rows[j][c] < 0)
+                    if(typeof rows[j][c] != 'number' || rows[j][c] < 0){
                       is_valid = false;
+                      input_wrong = Object.assign({}, input_wrong, {
+                        'retail_price': true
+                      })
+                    }
                     break;
                   
                   default: 
@@ -244,14 +258,38 @@ class Filter extends Component {
             uploadExcelApi(formData).then(res => {
               if (res.code === 200) {
                 this.props.onRefreshItems(); //Refresh list for getting all new items
-                alert(res.message);
+                this.handleSnackbarOpen(
+                  "success",
+                  res.message
+                );
               } else {
                 console.error(res);
                 alert(res.message || "oops a problem has occurred");
               }
             });
           }else{
-            alert("Some(s) data(s) from import file is(are) wrong");
+            let inputs = "";
+            for(var i in input_wrong){
+              console.log("VALUE", i,   input_wrong[i])
+              if(input_wrong[i])
+                inputs += i + ", "
+            }
+            inputs = inputs.substring(0, inputs.length - 2)
+            console.log("inpust wrong", )
+            if(inputs.indexOf(",").toString() === "-1"){
+              this.handleSnackbarOpen(
+                "error",
+                `The input ${inputs} of some items from import file is wrong`
+              );
+              return;
+            }else{
+              this.handleSnackbarOpen(
+                "error",
+                `The inputs ${inputs} of some items from import file are wrong`
+              );
+              return;
+            }
+            
           }
       }
     })
