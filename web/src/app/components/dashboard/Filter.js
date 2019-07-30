@@ -105,6 +105,7 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
+          console.log("ROWS LEGTH", rows_value.length)
           if(rows_value.length <= this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
@@ -141,8 +142,8 @@ class Filter extends Component {
                         <div>
                           <label style={{fontWeight: "bold", display:"flex", justifyContent:"flex-end",marginBottom:"5px", marginRight: "45px" }}>Complete import?</label>
                           <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
-                              <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> No </button>
-                              <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => {
+                              <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px",  marginRight:"15px",height:"30px"}}  onClick={() => onClose() }> No </button>
+                              <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px"}} onClick={() => {
                                this.onSubmit(file)
                                onClose() 
                               }}> Yes </button>
