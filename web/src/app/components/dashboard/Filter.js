@@ -106,7 +106,7 @@ class Filter extends Component {
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
           console.log("ROWS LEGTH", rows_value.length)
-          if(rows_value.length <= this.props.cycleSubDivisionItemsLimit){
+          if(rows_value.length -1 <= this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
                 {confirmAlert({
