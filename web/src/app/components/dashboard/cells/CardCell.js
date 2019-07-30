@@ -74,7 +74,7 @@ const styles = theme => ({
   },
   selectNGM: {
     marginBottom: theme.spacing(1),
-    paddingBottom:'2px',
+    paddingBottom: 0,
     fontSize: '13px'
   },
   tagLabel: {
