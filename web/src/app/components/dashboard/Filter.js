@@ -105,7 +105,7 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          if(rows_value.length < this.props.cycleSubDivisionItemsLimit){
+          if(rows_value.length <= this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
                 {confirmAlert({
@@ -115,7 +115,7 @@ class Filter extends Component {
                         <label style= {{fontWeight: "bold", fontSize: "x-large", color: "#888484", marginLeft: "22px"}}> Import items </label>
                         <label  onClick={() => onClose()} style= {{ cursor:"pointer", fontWeight: "bold", fontSize: "large", color: "#888484", marginRight: "22px", float:"right"}} > X </label>
                         <div style= {{ marginLeft: "21px" }}>
-                          <label>{`Showing the first ${rows_value.length} rows from the import document.`}</label>
+                          <label>{`Showing the first ${rows_value.length-1} rows from the import document.`}</label>
                         </div>
                         <div className="table-custom">
                           <table style={{whiteSpace: "nowrap"}}> 
@@ -141,11 +141,11 @@ class Filter extends Component {
                         <div>
                           <label style={{fontWeight: "bold", display:"flex", justifyContent:"flex-end",marginBottom:"5px", marginRight: "45px" }}>Complete import?</label>
                           <div style={{ display:"flex", justifyContent:"flex-end", marginRight: "45px" }}>
+                              <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> No </button>
                               <button style={{border:"none", backgroundColor: "#00838c", color: "white", width:"70px", height:"30px", marginRight:"15px"}} onClick={() => {
                                this.onSubmit(file)
                                onClose() 
                               }}> Yes </button>
-                              <button style={{border:"none",  backgroundColor: "rgb(136, 132, 132)", color: "white",width:"70px", height:"30px"}}  onClick={() => onClose() }> No </button>
                           </div>
                         </div>
                         </div>
