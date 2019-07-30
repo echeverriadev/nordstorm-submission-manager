@@ -31,6 +31,9 @@ const styles = theme => ({
     '&:hover': {
       cursor: "pointer"
     }
+  },
+  sortIcon: {
+    position: 'absolute',
   }
 });
 
@@ -102,16 +105,16 @@ const CenteredGrid = (props) => {
                       md={field.grids}
                       className={classes.headCell}
                     >
-                        <div>
-                            {order.field === field.name && 
-                              <Icon fontSize="small">{iconCriterion[order.criterion]}</Icon>
-                            }
-                        </div>
                     <div style={{paddingLeft:field.paddingLeft}}>
                       <Typography align="left" className={classes.title} variant="body2">
                         {field.label}
                       </Typography>
                     </div>
+                        <div>
+                            {order.field === field.name &&
+                              <Icon fontSize="small" className={classes.sortIcon}>{iconCriterion[order.criterion]}</Icon>
+                            }
+                        </div>
                     </Grid>
                   )}
                   <Grid item md={1}/>
