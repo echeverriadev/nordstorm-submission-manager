@@ -105,7 +105,6 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          console.log("ROWS LEGTH", rows_value.length)
           if(rows_value.length -1 <= this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
@@ -204,38 +203,48 @@ class Filter extends Component {
             for(var c=0; c<headers.length; c++){
               for(var j=1; j< rows.length; j++){
                 let fieldName = headers[c];
-                console.log(fieldName.toString().toLowerCase())
                 switch(fieldName.toString().toLowerCase()){
 
                   case ("nmg priority"):
                   case ("nmg_priority"):
-                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
-                      is_valid = false;
-                      input_wrong = Object.assign({}, input_wrong, {
-                        'nmg_priority': true
-                      })
-                    } 
-                    break;
+                    if(rows[j][c] !== "" && rows[j][c] !== null && rows[j][c] !== undefined){
+                      if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
+                        is_valid = false;
+                        input_wrong = Object.assign({}, input_wrong, {
+                          'nmg_priority': true
+                        })
+                      } 
+                      break;
+                    }else
+                      break;
+
 
                   case ("in stock week"):
                   case ("in_stock_week"):
-                    if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
-                      is_valid = false;
-                      input_wrong = Object.assign({}, input_wrong, {
+                    if(rows[j][c] !== "" && rows[j][c] !== null && rows[j][c] !== undefined){
+                      if(typeof rows[j][c] != 'number' || rows[j][c] <= 0 || rows[j][c] > 5 ){
+                        is_valid = false;
+                        input_wrong = Object.assign({}, input_wrong, {
                         'in_stock_week': true
-                      })
-                    }
-                    break;
-
+                        })
+                      }
+                      break;
+                    }else
+                      break;
+      
                   case ("retail_price"):
                   case ("retail price"):
-                    if(typeof rows[j][c] != 'number' || rows[j][c] < 0){
-                      is_valid = false;
-                      input_wrong = Object.assign({}, input_wrong, {
+                    if(rows[j][c] !== "" && rows[j][c] !== null && rows[j][c] !== undefined){
+                      if(typeof rows[j][c] != 'number' || rows[j][c] < 0){
+                        is_valid = false;
+                        input_wrong = Object.assign({}, input_wrong, {
                         'retail_price': true
-                      })
-                    }
-                    break;
+                        })
+                      }
+                      break;
+                    }else
+                      break;
+
                   
                   default: 
                     break;
@@ -274,22 +283,20 @@ class Filter extends Component {
           }else{
             let inputs = "";
             for(var i in input_wrong){
-              console.log("VALUE", i,   input_wrong[i])
               if(input_wrong[i])
                 inputs += i + ", "
             }
             inputs = inputs.substring(0, inputs.length - 2)
-            console.log("inpust wrong", )
             if(inputs.indexOf(",").toString() === "-1"){
               this.handleSnackbarOpen(
                 "error",
-                `The input ${inputs} of some items from import file is wrong`
+                `The ${inputs} values for one or more items in the import file is invalid`
               );
               return;
             }else{
               this.handleSnackbarOpen(
                 "error",
-                `The inputs ${inputs} of some items from import file are wrong`
+                `The ${inputs} values for one or more items in the import file are invalid`
               );
               return;
             }

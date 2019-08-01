@@ -313,6 +313,7 @@ class ItemController {
             'tagged_missy': req.body.tagged_missy || 0,
             'tagged_encore': req.body.tagged_encore || 0,
             'tagged_extended': req.body.tagged_extended || 0,
+            '_fk_subdivision': req.body._fk_subdivision || null
         }
 
         dbConnection().query('INSERT INTO item_editorial SET ?', data, (error, result) => {
