@@ -142,6 +142,9 @@ const styles = theme => ({
     height: 13,
     marginBottom: -2,
     marginRight: 1,
+  },
+  selectPadding: {
+    padding: '6px  0 6px',
   }
 });
 
@@ -289,7 +292,7 @@ const Accordion = (props) => {
                                 <InputLabel htmlFor="country-of-origin-placeholder" style={{fontSize:"13px"}}>Country of Origin</InputLabel>
                                 <Select
                                     inputProps= {{
-                                      className: classes.inputFont,
+                                      className: classNames([classes.inputFont, classes.selectPadding]),
                                       id: 'country-of-origin-placeholder'
                                     }}
                                     className={classes.selectCountry}
@@ -310,7 +313,7 @@ const Accordion = (props) => {
                         
                     }
                     </Grid>
-                    <Grid style={{marginTop: "3px", marginLeft: "3%"}} item md={3}>
+                    <Grid style={{marginLeft: "3%"}} item md={3}>
                         {
                             (item.country_of_origin === "Imported - Specify Country") ?
                                (item.available_in_canada && item.available_in_canada === 1)?
@@ -320,7 +323,8 @@ const Accordion = (props) => {
                                             className: classes.inputFont
                                           }}
                                           InputLabelProps= {{
-                                            className: classes.labelFont
+                                            className: classes.labelFont,
+                                            disableAnimation: true,
                                           }}
                                           id={"specifycountry"+index}
                                           label="Specify Country"
