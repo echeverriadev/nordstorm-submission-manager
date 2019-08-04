@@ -150,8 +150,8 @@ class Dashboard extends Component {
             addItem: initialNewItem
           });
           this.fetchItemsApi();
-          this.handleSnackbarOpen("success", "Item saved successfully");
           this.setState({ stored: true });
+          this.handleSnackbarOpen("success", "Item saved successfully");
         } else {
           console.error(response.message);
           this.handleSnackbarOpen("error", "Error saving item");
