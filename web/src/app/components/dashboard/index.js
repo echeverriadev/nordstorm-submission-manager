@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import PrimaryAppBar from "../../components/shared/PrimaryAppBar";
 import TabMenu from "./TabMenu";
 import Layaout from "./Layaout";
+import SnackbarBase from "../common/Snackbar/SnackbarBase";
 
 import {
   getItemsApi,
@@ -85,7 +86,17 @@ class Dashboard extends Component {
         address: "",
         subject: ""
       },
-      counter: 1
+      counter: 1,
+      snackbar: {
+        open: false,
+        snackbarType: "info",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right"
+        },
+        duration: 2000,
+        message: "Attaching items or this cycle and division to stories"
+      }
     };
   }
 
@@ -139,9 +150,11 @@ class Dashboard extends Component {
             addItem: initialNewItem
           });
           this.fetchItemsApi();
+          this.handleSnackbarOpen("success", "Item saved successfully");
           this.setState({ stored: true });
         } else {
           console.error(response.message);
+          this.handleSnackbarOpen("error", "Error saving item");
         }
         console.log(response);
       },
@@ -434,6 +447,38 @@ class Dashboard extends Component {
     );
   };
 
+  handleSnackbarOpen = (
+    type = "info",
+    message = "Attaching items or this cycle and division to stories"
+  ) => {
+    this.setState({
+      snackbar: {
+        open: true,
+        snackbarType: type,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right"
+        },
+        duration: 2000,
+        message: message
+      }
+    });
+  };
+
+  handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    let snackbar = Object.assign({}, this.state.snackbar, {
+      open: false
+    });
+
+    this.setState({
+      snackbar
+    });
+  };
+
   render() {
     const {
       value,
@@ -449,13 +494,22 @@ class Dashboard extends Component {
       isChangingFilter,
       subdivisions,
       cycleSubDivisionItemsLimit,
-      email
+      email,
+      snackbar
     } = this.state;
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
         <PrimaryAppBar />
+        <SnackbarBase
+          anchorOrigin={snackbar.anchorOrigin}
+          duration={snackbar.duration}
+          message={snackbar.message}
+          snackbarType={snackbar.snackbarType}
+          onClose={this.handleSnackbarClose}
+          open={snackbar.open}
+        />
         <TabMenu value={value} handleChange={this.handleTabChange} />
         {value === 0 && (
           <Layaout
