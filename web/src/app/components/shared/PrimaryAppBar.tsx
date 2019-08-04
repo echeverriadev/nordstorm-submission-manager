@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
+import clsx from "clsx"
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -91,6 +92,9 @@ const styles = (theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         display: 'none',
       },
+    },
+    customInput: {
+      minWidth: '34px',
     }
   });
 
@@ -192,7 +196,7 @@ class PrimaryAppBar extends React.Component<Props, State> {
           <Toolbar>
             <IconButton className="menuButton buttonHeader" color="inherit" aria-label="Open drawer">
               {/* <MenuIcon /> */}
-              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              <Typography className={clsx(classes.title, classes.customInput)} variant="h6" color="inherit" noWrap display="block">
                 FIS
              </Typography>
             </IconButton>
