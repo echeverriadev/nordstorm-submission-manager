@@ -94,6 +94,22 @@ class Dashboard extends Component {
     this.fetchDivisionsApi();
   };
 
+  componentDidUpdate(_, prevProps) {
+    if (
+      prevProps.rows &&
+      this.state.stored &&
+      prevProps.rows.length != this.state.rows.length
+    ) {
+      this.updateScroll();
+      this.setState({ stored: false });
+    }
+  }
+
+  updateScroll() {
+    let value = document.body.scrollHeight + 100;
+    window.scrollTo(0, value);
+  }
+
   handleTabChange = (event, value) => {
     this.setState({ value });
   };
@@ -123,6 +139,7 @@ class Dashboard extends Component {
             addItem: initialNewItem
           });
           this.fetchItemsApi();
+          this.setState({ stored: true });
         } else {
           console.error(response.message);
         }
