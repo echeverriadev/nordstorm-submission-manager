@@ -25,6 +25,15 @@ const styles = theme => ({
     margin: theme.spacing(0.5),
     backgroundColor: "#4daff2"
   },
+  clickable: {
+    cursor: "pointer",
+    "&:hover, &:focus": {
+      backgroundColor: "#4daff2"
+    },
+    "&:active": {
+      backgroundColor: "#4daff2"
+    }
+  },
   head: {
     position: "sticky",
     top: "0px",
@@ -125,7 +134,7 @@ const Layaout = props => {
               label={filter.label}
               color="primary"
               onDelete={() => onRemoveCannedFilter(i)}
-              className={classes.chip}
+              className={[classes.chip, classes.clickable]}
             />
           ))}
           <Head order={order} onChangeOrder={onChangeOrder} />
