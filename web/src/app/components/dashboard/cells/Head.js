@@ -76,7 +76,7 @@ const fieldsHeader = [
    name: "description",
    grids: 2
   },{
-   label: "In Stock Week",
+   label: "In Stock\n Week",
    name: "in_stock_week",
    grids: 1
   },{
