@@ -182,11 +182,13 @@ class Dashboard extends Component {
     ];
     var row = rows[index];
     row[key] = value;
-    row = Object.assign({}, row, {
-      fieldModified: Object.assign({}, row.fieldModified, {
-        [key]: value
-      })
-    });
+    if (key !== "image") {
+      row = Object.assign({}, row, {
+        fieldModified: Object.assign({}, row.fieldModified, {
+          [key]: value
+        })
+      });
+    }
     rows.splice(index, 1, row);
     this.setState({ rows });
     if (noKeyPressed.indexOf(key) !== -1) {
