@@ -296,7 +296,7 @@ const Accordion = (props) => {
                                       id: 'country-of-origin-placeholder'
                                     }}
                                     className={classes.selectCountry}
-                                    value={item.country_of_origin === null ? 0 : item.country_of_origin}
+                                    value={item.country_of_origin === null ? null : item.country_of_origin}
                                     onChange={e => onChange(index, "country_of_origin", e.target.value)}
                                     name="Country of Origin"
                                 >
