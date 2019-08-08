@@ -18,6 +18,7 @@ class ItemController {
         this.updatePatch = this.updatePatch.bind(this);
         this.import = this.import.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
+        this.uploadImagePatch = this.uploadImagePatch.bind(this);
         this.buildWhere = this.buildWhere.bind(this);
         this.buildOrder = this.buildOrder.bind(this);
         this.escapeSansQuotes = this.escapeSansQuotes.bind(this);
@@ -452,6 +453,52 @@ class ItemController {
                 url
             }
         });
+    }
+
+    async uploadImagePatch(req, res, next) {
+
+        const {id} = req.params
+       
+
+        if (!req.file) {
+            return res.status(404).json({
+                code: 404,
+                message: "file not found"
+            });
+        } else{
+            const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
+
+        this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`,(err, result) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    error: err
+                })
+            }
+
+            if (result.affectedRows) {
+                let image = {
+                    'image': req.file.filename
+                }
+
+                console.log(image)
+                if (process.env.NA_BYPASS) {
+                    this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
+                } else {
+                    this.addItemLog([id], image, null, null, "Edited", null, "GENERIC USER", "LAN TEST")
+                }
+            }
+            
+        })
+
+            return res.json({
+                code: 200,
+                message: "Image uploaded",
+                data: {
+                    url
+                }
+            });
+        }
     }
 
     convertDateYMD(date) {

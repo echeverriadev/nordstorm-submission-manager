@@ -1,8 +1,9 @@
+//(item_editorial._fk_department_t = '' OR item_editorial._fk_department_t is NULL OR item_editorial.vpn = '' OR item_editorial.vpn is NULL OR item_editorial.brand = '' OR item_editorial.brand is NULL)
 export const cannedFiltersAll = [
   {
     label: "Incomplete",
     where:
-      "(COALESCE(_fk_department_t, '') = '' OR COALESCE(vpn, '')  = '' OR COALESCE(brand, '')  = '')",
+      "(item_editorial.brand = '' OR item_editorial.brand IS NULL OR item_editorial.vpn = '' OR item_editorial.vpn IS NULL OR item_editorial.department_number = '' OR item_editorial.department_number IS NULL)",
     id: 1
   },
   {

@@ -18,7 +18,7 @@ import Accordion from './Accordion';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
-import { uploadImageApi } from '../../../../api';
+import { uploadImagePatchApi } from '../../../../api';
 import NumberFormat from 'react-number-format';
 import ItemLogModal from '../ItemLogModal';
 import ItemDeleteDialog from '../ItemDeleteDialog';
@@ -160,7 +160,7 @@ class CardCell extends React.Component {
       formData.append('file', file);
 
       this.setState({preview: URL.createObjectURL(files[0])});
-      uploadImageApi(formData).then().then(res => {
+      uploadImagePatchApi(formData, this.props.item.id).then().then(res => {
         if(res.code === 200)
           this.props.onChange(this.props.index, "image", res.data.url);
         else{

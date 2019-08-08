@@ -19,6 +19,8 @@ export const patchItemApi = (id, item) =>
   apiFetch(`/items/${id}`, { method: "PATCH", body: { item } });
 export const storeItemApi = body =>
   apiFetch(`/items`, { method: "POST", body });
+export const uploadImagePatchApi = (body, id) =>
+  apiFetch(`/items/uploadPatch/${id}`, { method: "POST", body, headers: {} });
 export const uploadImageApi = body =>
   apiFetch(`/items/upload`, { method: "POST", body, headers: {} }); //Let empty the content-type
 export const uploadExcelApi = body =>
