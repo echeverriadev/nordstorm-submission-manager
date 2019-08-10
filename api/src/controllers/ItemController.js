@@ -333,7 +333,7 @@ class ItemController {
             }
 
             console.log("CREATE ITEM LOG", json_details)
-            var json_details_string = String(json_details)
+            var json_details_string = JSON.stringify(json_details)
             if (process.env.NA_BYPASS) {
                 dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' ' + process.env.BYPASS_USER_NAME + ' \')', (err, result2) => {
                     if (err) {

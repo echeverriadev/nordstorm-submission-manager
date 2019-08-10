@@ -143,25 +143,8 @@ class ItemLogModal extends React.Component {
     console.log(this.state.itemLogs[index].event == " Edited");
     console.log("ITEM_LOG", this.state.itemLogs[index]);
     var details;
-    if (
-      this.state.itemLogs[index].event.replace(" ", "") == "duplicated" ||
-      String(this.state.itemLogs[index].event) == " Created" ||
-      String(this.state.itemLogs[index].event) == " Created "
-    ) {
-      details = {
-        brand: this.props.itemLog.brand,
-        live_date:
-          this.props.itemLog.live_date != " " &&
-          this.props.itemLog.live_date != "NULL" &&
-          this.props.itemLog.live_date != null
-            ? this.props.itemLog.live_date
-            : " "
-      };
-    } else {
-      if (String(this.state.itemLogs[index].event) == " Edited") {
-        details = JSON.parse(this.state.itemLogs[index].details);
-      }
-    }
+    details = JSON.parse(this.state.itemLogs[index].details);
+
     this.setState({
       selected: index,
       details: details ? details : this.state.itemLogs[index].details
