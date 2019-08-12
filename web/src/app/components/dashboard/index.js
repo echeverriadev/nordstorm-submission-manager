@@ -100,6 +100,21 @@ class Dashboard extends Component {
     };
   }
 
+  showCustomSnackbar = (type, duration, message) => {
+    this.setState({
+      snackbar: {
+        open: true,
+        snackbarType: type,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right"
+        },
+        duration,
+        message,
+      }
+    })
+  }
+
   componentWillMount = () => {
     this.fetchCyclesApi();
     this.fetchDivisionsApi();
@@ -439,11 +454,13 @@ class Dashboard extends Component {
   handleDuplicateItemApi = id => {
     duplicateItemApi(id).then(
       response => {
+        this.showCustomSnackbar('success', 2500, 'Item duplicated successfully.');
         if (response.status === 200) {
           this.fetchItemsApi();
         }
       },
       err => {
+        this.showCustomSnackbar('error', 2500, 'Item duplication failed.');
         console.log(err);
       }
     );
