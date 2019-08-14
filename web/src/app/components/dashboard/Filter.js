@@ -161,7 +161,7 @@ class Filter extends Component {
           }else{
             this.handleSnackbarOpen(
               "error",
-              `Import failed due to item count limit. Reduce the number of rows to be imported to ${this.props.cycleSubDivisionItemsLimit} items`
+              `Import failed due to item count limit. Reduce the number of rows to be imported to ${total_allowed} items`
             );
           }
         }
