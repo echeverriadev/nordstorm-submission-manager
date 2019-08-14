@@ -383,7 +383,7 @@ class ItemController {
                     if (totalAllowed < totalRows) {
                         res.json({ 
                             code: 500, 
-                            message: `Import failed due to item count limit. Reduce the number of rows to be imported to ${totalAllowed} items.` 
+                            message: `There are too many items in this document to import. Please reduce the number of items to ${totalAllowed}.` 
                         });
                     } else {
                         const data = []

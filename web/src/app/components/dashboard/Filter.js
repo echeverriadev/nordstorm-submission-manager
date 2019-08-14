@@ -161,7 +161,7 @@ class Filter extends Component {
           }else{
             this.handleSnackbarOpen(
               "error",
-              `Import failed due to item count limit. Reduce the number of rows to be imported to ${total_allowed} items`
+              `There are too many items in this document to import. Please reduce the number of items to ${total_allowed}.`
             );
           }
         }
@@ -367,7 +367,7 @@ class Filter extends Component {
           vertical: "top",
           horizontal: "right"
         },
-        duration: 5000,
+        duration: 10000,
         message: message
       }
     });
