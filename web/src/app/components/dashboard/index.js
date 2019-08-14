@@ -110,10 +110,10 @@ class Dashboard extends Component {
           horizontal: "right"
         },
         duration,
-        message,
+        message
       }
-    })
-  }
+    });
+  };
 
   componentWillMount = () => {
     this.fetchCyclesApi();
@@ -454,13 +454,17 @@ class Dashboard extends Component {
   handleDuplicateItemApi = id => {
     duplicateItemApi(id).then(
       response => {
-        this.showCustomSnackbar('success', 2500, 'Item duplicated successfully.');
+        this.showCustomSnackbar(
+          "success",
+          5000,
+          "Item duplicated successfully."
+        );
         if (response.status === 200) {
           this.fetchItemsApi();
         }
       },
       err => {
-        this.showCustomSnackbar('error', 2500, 'Item duplication failed.');
+        this.showCustomSnackbar("error", 5000, "Item duplication failed.");
         console.log(err);
       }
     );
@@ -478,7 +482,7 @@ class Dashboard extends Component {
           vertical: "top",
           horizontal: "right"
         },
-        duration: 2000,
+        duration: 5000,
         message: message
       }
     });

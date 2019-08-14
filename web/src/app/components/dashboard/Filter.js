@@ -105,7 +105,8 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          if(rows_value.length -1 <= this.props.cycleSubDivisionItemsLimit){
+          let value_limit = parseInt(rows_value.length) - 1 
+          if( value_limit <= this.props.cycleSubDivisionItemsLimit){
             return (
               <div>
                 {confirmAlert({
@@ -362,7 +363,7 @@ class Filter extends Component {
           vertical: "top",
           horizontal: "right"
         },
-        duration: 2000,
+        duration: 5000,
         message: message
       }
     });
@@ -373,17 +374,12 @@ class Filter extends Component {
       return;
     }
 
+    let snackbar = Object.assign({}, this.state.snackbar, {
+      open: false
+    });
+
     this.setState({
-      snackbar: {
-        open: false,
-        snackbarType: "info",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right"
-        },
-        duration: 2000,
-        message: "Attaching items or this cycle and division to stories"
-      }
+      snackbar
     });
   };
 
