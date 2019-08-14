@@ -105,8 +105,9 @@ class Filter extends Component {
         else{
           const cols_name = resp.rows[0]
           const rows_value = resp.rows.filter(index => index != 0)
-          let value_limit = parseInt(rows_value.length) - 1 
-          if( value_limit <= this.props.cycleSubDivisionItemsLimit){
+          let total_rows = parseInt(rows_value.length) - 1
+          let total_allowed = this.props.cycleSubDivisionItemsLimit - this.props.totalItems 
+          if( total_rows <= total_allowed){
             return (
               <div>
                 {confirmAlert({
@@ -278,7 +279,10 @@ class Filter extends Component {
                 );
               } else {
                 console.error(res);
-                alert(res.message || "oops a problem has occurred");
+                this.handleSnackbarOpen(
+                  "error",
+                  res.message
+                );
               }
             });
           }else{

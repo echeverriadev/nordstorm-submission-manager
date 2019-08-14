@@ -2,7 +2,7 @@ const format = data => {
   return {
     id: data.id,
     idCycle: data._fk_cycle,
-    submissions_limit: process.env.ND_SUBMISSIONS_LIMIT
+    submissions_limit: data.submissions_limit
   };
 };
 
