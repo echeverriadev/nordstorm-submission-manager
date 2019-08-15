@@ -94,7 +94,7 @@ class Dashboard extends Component {
           vertical: "top",
           horizontal: "right"
         },
-        duration: 2000,
+        duration: 5000,
         message: "Attaching items or this cycle and division to stories"
       }
     };

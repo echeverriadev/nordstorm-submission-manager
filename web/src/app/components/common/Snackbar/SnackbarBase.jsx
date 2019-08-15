@@ -21,7 +21,6 @@ class SnackbarBase extends React.Component {
       message, // message
       onClose // handles the close method
     } = this.props;
-
     return (
       <React.Fragment>
         <Snackbar
@@ -30,6 +29,8 @@ class SnackbarBase extends React.Component {
             horizontal: anchorOrigin.horizontal
           }}
           autoHideDuration={duration}
+          resumeHideDuration={duration}
+          disableWindowBlurListener={true}
           open={open}
           onClose={onClose}
         >
