@@ -335,18 +335,20 @@ class Filter extends Component {
       .attachItemsToStories(pkCycle, pkDivision)
       .then(response => {
         let data = response.data;
-        _this.handleSnackbarClose();
+        setTimeout(function () {
+          _this.handleSnackbarClose();
+        }, 200); 
+        
+        if (data.success && data.items.length === 0) {
+          setTimeout(function () {
+            _this.handleSnackbarOpen("warning", data.message);
+          }, 200); 
+        }
 
-        if (data.result) {
-          _this.handleSnackbarOpen(
-            "success",
-            "Completed attaching items to stories"
-          );
-        } else {
-          _this.handleSnackbarOpen(
-            "error",
-            `Error attaching Items to stories: ${data.message}`
-          );
+        if (data.success && data.items.length > 0) {
+          setTimeout(function () {
+            _this.handleSnackbarOpen("success", "Completed attaching items to stories");
+          }, 200); 
         }
       })
       .catch(error => {
