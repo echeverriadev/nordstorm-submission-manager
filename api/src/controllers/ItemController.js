@@ -8,6 +8,7 @@ const {
 const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 const cycleSubDivisionModel = require("../models/CycleSubDivision");
+const moment = require("moment");
 
 class ItemController {
 
@@ -458,38 +459,42 @@ class ItemController {
     async uploadImagePatch(req, res, next) {
 
         const {id} = req.params
-       
 
         if (!req.file) {
             return res.status(404).json({
                 code: 404,
                 message: "file not found"
             });
-        } else{
-            const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
+        } else {
+            let timestamp = moment().unix(); 
+            let fileName = req.file.filename;  
+            let extension = fileName.split('.')[1];
+            let imageName = `${timestamp}_${id}.${extension}`;
 
-        this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`,(err, result) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    error: err
-                })
-            }
+            const url = imageName;
 
-            if (result.affectedRows) {
-                let image = {
-                    'image': req.file.filename
+            this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`,(err, result) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(500).json({
+                        error: err
+                    })
                 }
 
-                console.log(image)
-                if (process.env.NA_BYPASS) {
-                    this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
-                } else {
-                    this.addItemLog([id], image, null, null, "Edited", null, "GENERIC USER", "LAN TEST")
+                if (result.affectedRows) {
+                    let image = {
+                        'image': req.file.filename
+                    }
+
+                    console.log(image)
+                    if (process.env.NA_BYPASS) {
+                        this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
+                    } else {
+                        this.addItemLog([id], image, null, null, "Edited", null, "GENERIC USER", "LAN TEST")
+                    }
                 }
-            }
-            
-        })
+                
+            })
 
             return res.json({
                 code: 200,

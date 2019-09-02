@@ -49,6 +49,9 @@ DB_USER=DBUSER
 DB_PASS=SECRETPASSWORD
 DB_NAME=DATABASENAME
 ```
+- Images are stored into /api/public/uploads/images folder
+
+
 **Don't forget to configure the /home/nord_submissions/web/.env file, example:**
 ```sh
 REACT_APP_API_URL=https://ndsm.rjakes.com/api
