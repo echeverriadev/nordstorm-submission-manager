@@ -1,28 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
-import classnames from 'classnames';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Accordion from './Accordion';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/styles";
+import classnames from "classnames";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import PopupState, {
+  bindTrigger,
+  bindMenu
+} from "material-ui-popup-state/index";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import Accordion from "./Accordion";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import Dropzone from "react-dropzone";
-import { uploadImagePatchApi } from '../../../../api';
-import NumberFormat from 'react-number-format';
-import ItemLogModal from '../ItemLogModal';
-import ItemDeleteDialog from '../ItemDeleteDialog';
-
+import { uploadImagePatchApi } from "../../../../api";
+import NumberFormat from "react-number-format";
+import ItemLogModal from "../ItemLogModal";
+import ItemDeleteDialog from "../ItemDeleteDialog";
 
 const styles = theme => ({
   card: {
@@ -34,26 +36,26 @@ const styles = theme => ({
     margin: 0,
     padding: 0,
     maxHeight: 110,
-    marginTop: '20px'
+    marginTop: "20px"
   },
   expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest
+    })
   },
   expandOpen: {
-    transform: 'rotate(180deg)',
+    transform: "rotate(180deg)"
   },
   img: {
-    margin: 'auto',
-    display: 'block',
+    margin: "auto",
+    display: "block",
     maxWidth: theme.spacing(12),
-    Maxheight: theme.spacing(13),
+    Maxheight: theme.spacing(13)
   },
   row: {
-    maxHeight: "50%",
+    maxHeight: "50%"
   },
   botton: {
     padding: 0,
@@ -64,23 +66,23 @@ const styles = theme => ({
     marginRight: theme.spacing(1),
     paddingBottom: theme.spacing(4),
     width: "80%",
-    marginTop: 32,
+    marginTop: 32
   },
   selectStock: {
     marginBottom: theme.spacing(1),
-    width:'81px',
-    paddingBottom:'2px',
-    fontSize: '13px'
+    width: "81px",
+    paddingBottom: "2px",
+    fontSize: "13px"
   },
   selectNGM: {
     marginBottom: theme.spacing(1),
     paddingBottom: 0,
-    fontSize: '13px'
+    fontSize: "13px"
   },
   tagLabel: {
     padding: 1,
     margin: 0,
-    display: 'inline',
+    display: "inline"
   },
   tagField: {
     padding: "2px 7px",
@@ -88,33 +90,31 @@ const styles = theme => ({
     backgroundColor: "#EFEFEF",
     color: "#85aed5",
     borderRadius: 3,
-    textTransform: "capitalize",
+    textTransform: "capitalize"
   },
   inputFont: {
-    fontSize: '13px',
+    fontSize: "13px"
   },
   input: {
-    '&::placeholder': {
-      color: 'red',
+    "&::placeholder": {
+      color: "red",
       opacity: 0.75
     }
   },
   labelFont: {
-    fontSize: '13px',
+    fontSize: "13px"
   },
   IconButton: {
-    color: 'rgba(0, 0, 0, 0.9)',
+    color: "rgba(0, 0, 0, 0.9)"
   },
   cardCellCustom: {
     width: "100%",
     marginTop: "1%",
     marginBottom: "1%"
   },
-  extPadding:{
-    paddingLeft:"21px"
-
-  },
-
+  extPadding: {
+    paddingLeft: "21px"
+  }
 });
 
 function NumberFormatCustom(props) {
@@ -125,368 +125,436 @@ function NumberFormatCustom(props) {
       {...other}
       getInputRef={inputRef}
       onValueChange={values => {
-        if(values.value==="")
-           values.value=""
+        if (values.value === "") values.value = "";
         onChange({
           target: {
-            value: values.value,
-          },
+            value: values.value
+          }
         });
       }}
-      
     />
   );
 }
 
 NumberFormatCustom.propTypes = {
   inputRef: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 class CardCell extends React.Component {
+  state = {
+    expanded: false,
+    isOpen: false,
+    preview: null
+  };
 
-  state = { expanded: false, isOpen: false, preview: null };
-
-  duplicate = (close) => {
+  duplicate = close => {
     alert("Hola Mundo");
     close();
-  }
+  };
 
-  onDrop = (files) => {
-    const file = files[0]
-    if(file.type.split('/')[0]==="image"){
+  onDrop = files => {
+    const file = files[0];
+    if (file.type.split("/")[0] === "image") {
       const formData = new FormData();
 
-      formData.append('file', file);
+      formData.append("file", file);
 
-      this.setState({preview: URL.createObjectURL(files[0])});
-      uploadImagePatchApi(formData, this.props.item.id).then().then(res => {
-        if(res.code === 200)
-          this.props.onChange(this.props.index, "image", res.data.url);
-        else{
-            console.error(res)
-            alert(res.message || 'oops a problem has occurred')
-        }
-      })
-    }else{
-      alert('Invalid Format');
+      this.setState({ preview: URL.createObjectURL(files[0]) });
+      uploadImagePatchApi(formData, this.props.item.id)
+        .then()
+        .then(res => {
+          if (res.code === 200)
+            this.props.onChange(this.props.index, "image", res.data.url);
+          else {
+            console.error(res);
+            alert(res.message || "oops a problem has occurred");
+          }
+        });
+    } else {
+      alert("Invalid Format");
     }
-  }
+  };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  handleDuplicateItem = (id, popupState)  => {
+  handleDuplicateItem = (id, popupState) => {
     const { onDuplicateItem } = this.props;
     popupState.close();
     onDuplicateItem(id);
-  }
+  };
 
-  onHandleOpenModal = (popupState) => {
+  onHandleOpenModal = popupState => {
     popupState.close();
-  }
+  };
 
   onBlurInput = () => {
-    console.log(this.props.index)
-    this.props.onBlurItem(this.props.index)
-  }
+    console.log(this.props.index);
+    this.props.onBlurItem(this.props.index);
+  };
 
   renderTag(data, tagName = "") {
     const { classes } = this.props;
     if (data !== null && data !== "") {
       return (
         <div className={classes.tagLabel}>
-          <p className={classes.tagField}>
-            {tagName + data.toLowerCase()}
-          </p>
+          <p className={classes.tagField}>{tagName + data.toLowerCase()}</p>
         </div>
-      )
+      );
     } else {
-      return ( <div /> )
+      return <div />;
     }
   }
-  
+
   render() {
-    
-  
-    const { classes, item, index, onChange, onKeyPressItem, cycles, onDeleteItem, isChangingFilter} = this.props;
+    const {
+      classes,
+      item,
+      index,
+      onChange,
+      onKeyPressItem,
+      cycles,
+      onDeleteItem,
+      isChangingFilter
+    } = this.props;
+
     return (
       <Card className={classes.cardCellCustom}>
         <CardContent className={classes.cardContent}>
-
           <Grid container>
             <Grid item md={1}>
-                {
-                  !this.state.expanded ?
-
-                  this.state.isOpen ? (
-                      <Lightbox
-                        mainSrc={item.image}
-                        onCloseRequest={() => this.setState({ isOpen: false })}
-                      />
-                    )
-                    :
-                    (
-                    <img
-                      className={classes.img}
-                      alt="complex1"
-                      src={item.image}
-                      onClick={() => this.setState({ isOpen: true })}
-                    />
-                    // <MyModal/>
-                    // <SimpleModal/>
-                    )
-                  :
-                  <Dropzone
-                    onDrop={this.onDrop}
-                  >
-                    {({getRootProps, getInputProps}) => (
-                      <section>
-                        <div {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          <img
-                            className={classes.img}
-                            alt="complex"
-                            src={this.state.preview ? this.state.preview : item.image}
-                          />
-                        </div>
-                      </section>
-                    )}
-
-                  </Dropzone>
-                }
-
-
+              {!this.state.expanded ? (
+                this.state.isOpen ? (
+                  <Lightbox
+                    mainSrc={item.image}
+                    onCloseRequest={() => this.setState({ isOpen: false })}
+                  />
+                ) : (
+                  <img
+                    className={classes.img}
+                    alt="complex1"
+                    src={item.image}
+                    onClick={() => this.setState({ isOpen: true })}
+                  />
+                  // <MyModal/>
+                  // <SimpleModal/>
+                )
+              ) : (
+                <Dropzone onDrop={this.onDrop}>
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <img
+                          className={classes.img}
+                          alt="complex"
+                          src={
+                            this.state.preview ? this.state.preview : item.image
+                          }
+                        />
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+              )}
             </Grid>
             <Grid item md={11}>
-              <Grid className={classes.row} container direction="row" alignContent='center' alignItems='center'>
-                  <Grid item md={1} className={classes.extPadding}>
-                    <Select
-                      inputProps= {{
-                        className: classes.inputFont
-                      }}
-                      className={classes.selectNGM}
-                      value={item.nmg_priority === null ? 0 : item.nmg_priority}
-                      onChange={(!isChangingFilter)? e => onChange(index, "nmg_priority", e.target.value) : null}
-                      name="Priority"
-                      displayEmpty
-                    >
-                      <MenuItem value={0} disabled>
-                        
-                       Priority
-                      </MenuItem>
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                    </Select>
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont,
-                        classes: {input: classes.input }
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"department_number"+index}
-                      placeholder="Dept #*"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.department_number}
-                      onChange={(!isChangingFilter)? e => onChange(index, "department_number", e.target.value) : null}
-                      onBlur={this.onBlurInput}
-                      required
-                      error={!item.department_number}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont,
-                        classes: {input: classes.input }
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"vpn"+index}
-                      placeholder="VPN*"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.vpn}
-                      onChange={(!isChangingFilter)? e => onChange(index, "vpn", e.target.value) : null}
-                      onBlur={this.onBlurInput}
-                      required
-                      error={!item.vpn}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"style_group_number"+index}
-                      placeholder="SG#"
-                      className={classes.textField}
-                      color="primary"
-                      margin="normal"
-                      value={item.style_group_number}
-                      onBlur={this.onBlurInput}
-                      onChange={(!isChangingFilter)? e => onChange(index, "style_group_number", e.target.value) : null}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont,
-                        classes: {input: classes.input }
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont,
-                        
-                      }}
-                      id={"brand"+index}
-                      placeholder="Brand*"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.brand}
-                      onBlur={this.onBlurInput}
-                      onChange={(!isChangingFilter)? e => onChange(index, "brand", e.target.value) : null}
-                      required
-                      error={!item.brand}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"color"+index}
-                      placeholder="Color"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.color}
-                      onBlur={this.onBlurInput}
-                      onChange={(!isChangingFilter)? e => onChange(index, "color", e.target.value) : null}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"size"+index}
-                      placeholder="Size"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.size}
-                      onBlur={this.onBlurInput}
-                      onChange={(!isChangingFilter)? e => onChange(index, "size", e.target.value) : null}
-                    />
-                  </Grid>
-                  <Grid item md={2}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"description"+index}
-                      placeholder="Item Description"
-                      className={classes.textField}
-                      margin="normal"
-                      //multiline
-                      //rows={2}
-                      value={item.description}
-                      onBlur={this.onBlurInput}
-                      onChange={(!isChangingFilter)? e => onChange(index, "description", e.target.value) : null}
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <Select
-                        inputProps= {{
-                          className: classes.inputFont
-                        }}
-                        className={classes.selectStock}
-                        value={item.in_stock_week === null ? 0 : item.in_stock_week}
-                        onChange={(!isChangingFilter)? e => onChange(index, "in_stock_week", e.target.value) : null}
-                        name="in_stock_week"
-                        displayEmpty
-                      >
-                        <MenuItem value={""} disabled>
-                          In Stock
+              <Grid
+                className={classes.row}
+                container
+                direction="row"
+                alignContent="center"
+                alignItems="center"
+              >
+                <Grid item md={1} className={classes.extPadding}>
+                  <Select
+                    inputProps={{
+                      className: classes.inputFont
+                    }}
+                    className={classes.selectNGM}
+                    value={item.nmg_priority === null ? 0 : item.nmg_priority}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "nmg_priority", e.target.value)
+                        : null
+                    }
+                    name="Priority"
+                    displayEmpty
+                  >
+                    <MenuItem value={0} disabled>
+                      Priority
+                    </MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                  </Select>
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont,
+                      classes: { input: classes.input }
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"department_number" + index}
+                    placeholder="Dept #*"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.department_number}
+                    onChange={
+                      !isChangingFilter
+                        ? e =>
+                            onChange(index, "department_number", e.target.value)
+                        : null
+                    }
+                    onBlur={this.onBlurInput}
+                    required
+                    error={!item.department_number}
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont,
+                      classes: { input: classes.input }
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"vpn" + index}
+                    placeholder="VPN*"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.vpn}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "vpn", e.target.value)
+                        : null
+                    }
+                    onBlur={this.onBlurInput}
+                    required
+                    error={!item.vpn}
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"style_group_number" + index}
+                    placeholder="SG#"
+                    className={classes.textField}
+                    color="primary"
+                    margin="normal"
+                    value={item.style_group_number}
+                    onBlur={this.onBlurInput}
+                    onChange={
+                      !isChangingFilter
+                        ? e =>
+                            onChange(
+                              index,
+                              "style_group_number",
+                              e.target.value
+                            )
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont,
+                      classes: { input: classes.input }
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"brand" + index}
+                    placeholder="Brand*"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.brand}
+                    onBlur={this.onBlurInput}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "brand", e.target.value)
+                        : null
+                    }
+                    required
+                    error={!item.brand}
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"color" + index}
+                    placeholder="Color"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.color}
+                    onBlur={this.onBlurInput}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "color", e.target.value)
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"size" + index}
+                    placeholder="Size"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.size}
+                    onBlur={this.onBlurInput}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "size", e.target.value)
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid item md={2}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"description" + index}
+                    placeholder="Item Description"
+                    className={classes.textField}
+                    margin="normal"
+                    //multiline
+                    //rows={2}
+                    value={item.description}
+                    onBlur={this.onBlurInput}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "description", e.target.value)
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <Select
+                    inputProps={{
+                      className: classes.inputFont
+                    }}
+                    className={classes.selectStock}
+                    value={item.in_stock_week === null ? 0 : item.in_stock_week}
+                    onChange={
+                      !isChangingFilter
+                        ? e => onChange(index, "in_stock_week", e.target.value)
+                        : null
+                    }
+                    name="in_stock_week"
+                    displayEmpty
+                  >
+                    <MenuItem value={""} disabled>
+                      In Stock
+                    </MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                  </Select>
+                </Grid>
+                <Grid item md={1}>
+                  <TextField
+                    InputProps={{
+                      className: classes.inputFont,
+                      inputComponent: NumberFormatCustom
+                    }}
+                    InputLabelProps={{
+                      className: classes.labelFont
+                    }}
+                    id={"retail_price" + index}
+                    placeholder="Price"
+                    className={classes.textField}
+                    margin="normal"
+                    value={item.retail_price}
+                    onBlur={this.onBlurInput}
+                    onChange={e =>
+                      onChange(index, "retail_price", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item md={1}>
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+                    {popupState => (
+                      <React.Fragment>
+                        <IconButton
+                          variant="contained"
+                          {...bindTrigger(popupState)}
+                        >
+                          <MoreVertIcon className={classes.IconButton} />
+                        </IconButton>
+                        <Menu {...bindMenu(popupState)}>
+                          <MenuItem
+                            onClick={e =>
+                              this.handleDuplicateItem(item.id, popupState)
+                            }
+                          >
+                            Duplicate
                           </MenuItem>
-                          <MenuItem value={1}>1</MenuItem>
-                          <MenuItem value={2}>2</MenuItem>
-                          <MenuItem value={3}>3</MenuItem>
-                          <MenuItem value={4}>4</MenuItem>
-                          <MenuItem value={5}>5</MenuItem>
-                    </Select>
-                  </Grid>
-                  <Grid item md={1}>
-                    <TextField
-                      InputProps={{
-                        className: classes.inputFont,
-                        inputComponent: NumberFormatCustom,
-                      }}
-                      InputLabelProps= {{
-                        className: classes.labelFont
-                      }}
-                      id={"retail_price"+index}
-                      placeholder="Price"
-                      className={classes.textField}
-                      margin="normal"
-                      value={item.retail_price}
-                      onBlur={this.onBlurInput}
-                      onChange={e => onChange(index, "retail_price", e.target.value)}
-                     
-                    />
-                  </Grid>
-                  <Grid item md={1}>
-                    <PopupState variant="popover" popupId="demo-popup-menu">
-                      {popupState => (
-                        <React.Fragment>
-                          <IconButton variant="contained" {...bindTrigger(popupState)}>
-                            <MoreVertIcon className={classes.IconButton}/>
-                          </IconButton>
-                          <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={(e) => this.handleDuplicateItem(item.id, popupState)}>Duplicate</MenuItem>
-                            <ItemLogModal itemId={item.id} itemLog={item} popupState={popupState}/>
-                            <ItemDeleteDialog itemId={item.id} popupState={popupState} onDeleteItem={onDeleteItem} />
-                          </Menu>
-                        </React.Fragment>
-                      )}
-                    </PopupState>
-
-                  </Grid>
+                          <ItemLogModal
+                            itemId={item.id}
+                            itemLog={item}
+                            popupState={popupState}
+                          />
+                          <ItemDeleteDialog
+                            itemId={item.id}
+                            popupState={popupState}
+                            onDeleteItem={onDeleteItem}
+                          />
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </Grid>
               </Grid>
               <Grid container>
                 <Grid item md={11}>
-                  <Grid container >
-                    { this.renderTag(item.type, "Item Type: ") }
-                    { this.renderTag(item.creative_story_name, "Story: ") }
-                    { this.renderTag(item.shot_name, "Shot: ") }
-                    { this.renderTag(item.department, "Department: ") }
+                  <Grid container>
+                    {this.renderTag(item.type, "Item Type: ")}
+                    {this.renderTag(item.creative_story_name, "Story: ")}
+                    {this.renderTag(item.shot_name, "Shot: ")}
+                    {this.renderTag(item.department, "Department: ")}
                   </Grid>
                 </Grid>
                 <Grid item md={1}>
                   <IconButton
-                    className={classnames(classes.expand, {
-                      [classes.expandOpen]: this.state.expanded,
-                    }, classes.IconButton)}
+                    className={classnames(
+                      classes.expand,
+                      {
+                        [classes.expandOpen]: this.state.expanded
+                      },
+                      classes.IconButton
+                    )}
                     onClick={this.handleExpandClick}
                     aria-expanded={this.state.expanded}
                     aria-label="Show more"
@@ -497,10 +565,21 @@ class CardCell extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-
         </CardContent>
-        <Collapse className={classes.collapse} in={this.state.expanded} timeout="auto" unmountOnExit>
-          <Accordion index={index} item={item} onBlurInput={this.onBlurInput} onKeyPressItem={onKeyPressItem} onChange={onChange} cycles={cycles}/>
+        <Collapse
+          className={classes.collapse}
+          in={this.state.expanded}
+          timeout="auto"
+          unmountOnExit
+        >
+          <Accordion
+            index={index}
+            item={item}
+            onBlurInput={this.onBlurInput}
+            onKeyPressItem={onKeyPressItem}
+            onChange={onChange}
+            cycles={cycles}
+          />
         </Collapse>
       </Card>
     );
@@ -508,7 +587,7 @@ class CardCell extends React.Component {
 }
 
 CardCell.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(CardCell);

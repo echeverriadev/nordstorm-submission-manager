@@ -8,7 +8,6 @@ const {
 const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 const cycleSubDivisionModel = require("../models/CycleSubDivision");
-const moment = require("moment");
 
 class ItemController {
 
@@ -445,7 +444,7 @@ class ItemController {
             });
         }
 
-        const url = `${process.env.API_URL}/uploads/images/${req.file.filename}`
+        const url = req.file.filename;
 
         return res.json({
             code: 200,
@@ -466,13 +465,8 @@ class ItemController {
                 message: "file not found"
             });
         } else {
-            let timestamp = moment().unix(); 
-            let fileName = req.file.filename;  
-            let extension = fileName.split('.')[1];
-            let imageName = `${timestamp}_${id}.${extension}`;
-
-            const url = imageName;
-
+            const url = req.file.filename;
+            
             this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`,(err, result) => {
                 if (err) {
                     console.log(err)
@@ -483,10 +477,9 @@ class ItemController {
 
                 if (result.affectedRows) {
                     let image = {
-                        'image': req.file.filename
+                        'image': url
                     }
 
-                    console.log(image)
                     if (process.env.NA_BYPASS) {
                         this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
                     } else {
@@ -494,7 +487,7 @@ class ItemController {
                     }
                 }
                 
-            })
+            }); 
 
             return res.json({
                 code: 200,

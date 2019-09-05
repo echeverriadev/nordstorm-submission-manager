@@ -1,6 +1,7 @@
 const express = require("express");
 const ItemController = require("../controllers/ItemController");
 const multer = require("multer");
+const moment = require("moment");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -24,12 +25,13 @@ const storage2 = multer.diskStorage({
     cb(null, "./public/uploads/images");
   },
   filename: function(req, file, cb) {
-    var datetimestamp = Date.now();
+    let timestamp = moment().unix();
+    const { id } = req.params;
     cb(
       null,
-      file.fieldname +
-        "-" +
-        datetimestamp +
+      timestamp +
+        "_" +
+        id +
         "." +
         file.originalname.split(".")[file.originalname.split(".").length - 1]
     );
