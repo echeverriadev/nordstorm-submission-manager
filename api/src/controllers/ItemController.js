@@ -387,6 +387,8 @@ class ItemController {
         } else {
             exceltojson = xlstojson;
         }
+        
+        let _this = this; 
 
         try {
             exceltojson({
@@ -395,7 +397,7 @@ class ItemController {
                 lowerCaseHeaders: true
             }, (err, result) => {
                 let totalRows = result.length;
-                cycleSubDivisionModel.getCycleSubDivision(_fk_cycle, _fk_subdivision).then((response) => {
+                cycleSubDivisionModel.getCycleSubDivision(_fk_cycle, _fk_subdivision).then(async (response) => {
                     let submissionsLimit = response[0].submissions_limit; 
                     let totalAllowed = submissionsLimit - totalItems; 
                     
@@ -423,7 +425,7 @@ class ItemController {
                                 _fk_cycle,
                                 _fk_division,
                                 _fk_subdivision,
-                                '_fk_department_t': await this.getDepartmentId(element['department_number'] || element['dept.#'] || "")
+                                '_fk_department_t': await _this.getDepartmentId(element['department_number'] || element['dept.#'] || "")
                             };
                               
                               this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
