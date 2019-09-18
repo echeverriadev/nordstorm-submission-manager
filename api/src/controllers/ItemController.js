@@ -1,4 +1,5 @@
 'use strict'
+
 const dbConnection = require('../../config/mysql');
 const mysql = require('mysql');
 const ItemTransformer = require('../transformers/ItemTrasformer');
@@ -8,6 +9,7 @@ const {
 const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 const cycleSubDivisionModel = require("../models/CycleSubDivision");
+const departmentModel = require("../models/Department");
 
 class ItemController {
 
@@ -25,6 +27,7 @@ class ItemController {
         this.deleteRecord = this.deleteRecord.bind(this);
         this.duplicateItem = this.duplicateItem.bind(this);
         this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
+        this.store = this.store.bind(this);
     }
 
     addItemLog(id_editorial, fields, fieldEdited, valueEdited, reason, details, user, lan_id) {
@@ -286,6 +289,21 @@ class ItemController {
         });
     }
 
+    /**
+     * Gets department id by department number 
+     * @param string departmentNumber Department Number 
+     * @return string Department id
+     */
+    async getDepartmentId(departmentNumber) {
+        let department = await departmentModel.getDepartmentByDepartmentNumber(departmentNumber);
+        let departmentId = "";
+        if (department.length > 0) {
+            departmentId = department[0].id; 
+        }
+
+        return departmentId; 
+    }
+
     async store(req, res, next) {
         const data = {
             'nmg_priority': req.body.nmg_priority || null,
@@ -314,7 +332,8 @@ class ItemController {
             'tagged_missy': req.body.tagged_missy || 0,
             'tagged_encore': req.body.tagged_encore || 0,
             'tagged_extended': req.body.tagged_extended || 0,
-            '_fk_subdivision': req.body._fk_subdivision || null
+            '_fk_subdivision': req.body._fk_subdivision || null,
+            "_fk_department_t": await this.getDepartmentId(req.body.department_number || "")
         }
 
         dbConnection().query('INSERT INTO item_editorial SET ?', data, (error, result) => {
@@ -403,7 +422,8 @@ class ItemController {
                                 'in_stock_week': element['in_stock_week'] || element['in stock week'] || 0,
                                 _fk_cycle,
                                 _fk_division,
-                                _fk_subdivision
+                                _fk_subdivision,
+                                '_fk_department_t': await this.getDepartmentId(element['department_number'] || element['dept.#'] || "")
                             };
                               
                               this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
