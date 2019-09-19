@@ -52,7 +52,9 @@ const initialNewItem = {
   tagged_missy: 0,
   tagged_encore: 0,
   tagged_petite: 0,
-  tagged_extended: 0
+  tagged_extended: 0,
+  imageExtension: "",
+  newItemImage: process.env.REACT_APP_BASE_IMAGE
 };
 
 class Dashboard extends Component {
@@ -158,6 +160,11 @@ class Dashboard extends Component {
       _fk_cycle: cycleId,
       _fk_subdivision: subdivisionId
     };
+
+    if (addItem.image !== null) {
+      initialNewItem.image = null;
+    }
+
     storeItemApi(addItemApi).then(
       response => {
         if (response.code === 200) {
@@ -180,6 +187,7 @@ class Dashboard extends Component {
   };
 
   onChange = (index, key, value) => {
+    console.log("changing ...");
     const rows = this.state.rows;
     const noKeyPressed = [
       "nmg_priority",
@@ -206,18 +214,51 @@ class Dashboard extends Component {
     }
     rows.splice(index, 1, row);
     this.setState({ rows });
+    /*
     if (noKeyPressed.indexOf(key) !== -1) {
       this.fetchPatchItemApi(row.id, row, index);
     }
+    */
   };
 
-  onBlurItem = index => {
+  onBlurItem = (e, index, localItem, item) => {
+    console.log(localItem);
+    console.log(item);
+    console.log("bluring item...");
+    /*
+    const rows = this.state.rows;
+    const noKeyPressed = [
+      "nmg_priority",
+      "in_stock_week",
+      "_fk_cycle",
+      "tagged_missy",
+      "tagged_encore",
+      "country_of_origin",
+      "tagged_encore",
+      "tagged_petite",
+      "tagged_extended",
+      "available_in_canada",
+      "request_extension",
+      "request_cancellation"
+    ];
+    var row = rows[index];
+    row[key] = value;
+    if (key !== "image") {
+      row = Object.assign({}, row, {
+        fieldModified: Object.assign({}, row.fieldModified, {
+          [key]: value
+        })
+      });
+    }
+    rows.splice(index, 1, row);
+    this.setState({ rows });
     if (index != null && index != undefined) {
       const rows = this.state.rows;
       const row = rows[index];
       console.log("ITEM", row);
       this.fetchPatchItemApi(row.id, row, index);
     }
+    */
   };
 
   onKeyPressItem = (index, key, event) => {
@@ -557,8 +598,8 @@ class Dashboard extends Component {
             onAddCannedFilter={this.addCannedFilter}
             onRemoveCannedFilter={this.removeCannedFilter}
             onRefreshItems={this.fetchItemsApi}
-            onDeleteItem={this.handleDeleteItemApi}
-            onDuplicateItem={this.handleDuplicateItemApi}
+            onSeleteItem={this.handleDeleteItemApi}
+            onSuplicateItem={this.handleDuplicateItemApi}
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
           />

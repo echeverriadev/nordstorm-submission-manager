@@ -145,7 +145,8 @@ class CardCell extends React.Component {
   state = {
     expanded: false,
     isOpen: false,
-    preview: null
+    preview: null,
+    localItem: null
   };
 
   duplicate = close => {
@@ -190,9 +191,14 @@ class CardCell extends React.Component {
     popupState.close();
   };
 
-  onBlurInput = () => {
-    console.log(this.props.index);
-    this.props.onBlurItem(this.props.index);
+  onBlurInput = (e, index, item) => {
+    if (this.state.localItem === null) {
+      this.setState({
+        localItem: item
+      });
+    }
+
+    this.props.onBlurItem(e, index, this.state.localItem, item);
   };
 
   renderTag(data, tagName = "") {
@@ -208,6 +214,18 @@ class CardCell extends React.Component {
     }
   }
 
+  handlerTest = (event, item) => {
+    console.log(event, item);
+    console.log(item.vpn);
+  };
+
+  handlerItemChange = (event, localItem) => {
+    localItem.vpn = event.target.value;
+    this.setState({
+      localItem
+    });
+  };
+
   render() {
     const {
       classes,
@@ -217,8 +235,11 @@ class CardCell extends React.Component {
       onKeyPressItem,
       cycles,
       onDeleteItem,
-      isChangingFilter
+      isChangingFilter,
+      onBlurItem
     } = this.props;
+
+    const localItem = item;
 
     return (
       <Card className={classes.cardCellCustom}>
@@ -331,15 +352,13 @@ class CardCell extends React.Component {
                     placeholder="VPN*"
                     className={classes.textField}
                     margin="normal"
-                    value={item.vpn}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "vpn", e.target.value)
-                        : null
+                    value={localItem.vpn}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) =>
+                      this.onBlurInput(e, index, this.props.item)
                     }
-                    onBlur={this.onBlurInput}
                     required
-                    error={!item.vpn}
+                    error={!localItem.vpn}
                   />
                 </Grid>
                 <Grid item md={1}>

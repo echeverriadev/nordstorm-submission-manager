@@ -27,14 +27,16 @@ const storage2 = multer.diskStorage({
   filename: function(req, file, cb) {
     let timestamp = moment().unix();
     const { id } = req.params;
-    cb(
-      null,
-      timestamp +
-        "_" +
-        id +
-        "." +
-        file.originalname.split(".")[file.originalname.split(".").length - 1]
-    );
+    if (id !== undefined) {
+      cb(
+        null,
+        timestamp +
+          "_" +
+          id +
+          "." +
+          file.originalname.split(".")[file.originalname.split(".").length - 1]
+      );
+    }
   }
 });
 

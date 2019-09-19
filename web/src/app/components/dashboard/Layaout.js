@@ -106,9 +106,7 @@ const Layaout = props => {
     filterTextValues.subdivision =
       filteredSubDivision[0] !== undefined ? filteredSubDivision[0].name : "";
 
-    email.body = `FIT item limit increase request.\n${
-      filterTextValues.cycle
-    }\n${filterTextValues.division}\n${filterTextValues.subdivision}`;
+    email.body = `FIT item limit increase request.\n${filterTextValues.cycle}\n${filterTextValues.division}\n${filterTextValues.subdivision}`;
   }
 
   return (

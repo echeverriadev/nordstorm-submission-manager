@@ -11,11 +11,12 @@ const port = process.env.PORT;
 app.use(cookieParser());
 app.use(
   cors({
-    origin: `http://localhost:3005`,
+    origin: process.env.FIS_WEB_BASE_URL,
     credentials: true
   })
 );
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 app.use(express.static("public"));
 
 app.use(logRequest);

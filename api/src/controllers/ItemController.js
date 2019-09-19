@@ -10,6 +10,9 @@ const xlstojson = require("xls-to-json-lc");
 const xlsxtojson = require("xlsx-to-json-lc");
 const cycleSubDivisionModel = require("../models/CycleSubDivision");
 const departmentModel = require("../models/Department");
+const moment = require("moment");
+const itemModel = require("../models/Item");
+const fs = require("fs");
 
 class ItemController {
 
@@ -304,7 +307,24 @@ class ItemController {
         return departmentId; 
     }
 
+    /**
+     * Gets image name
+     * @param {string} imageBase64
+     * @return string Image name 
+     */
+    async getImageName(imageBase64, itemId, imageExtension) {
+        let imageName = ""; 
+        
+        if (imageBase64 !== "") {
+            let timestamp = moment().unix();
+            imageName = `${timestamp}_${itemId}.${imageExtension}`; 
+        }
+
+        return imageName;
+    }   
+
     async store(req, res, next) {
+        let _this = this; 
         const data = {
             'nmg_priority': req.body.nmg_priority || null,
             'department_number': req.body.department_number || "",
@@ -313,7 +333,6 @@ class ItemController {
             'color': req.body.color || "",
             'size': req.body.size || 0,
             'description': req.body.description || "",
-            'image': req.body.image || null,
             'style_group_number': req.body.style_group_number || 0,
             'in_stock_week': req.body.in_stock_week || null,
             'sale_price': req.body.sale_price || 0,
@@ -333,11 +352,32 @@ class ItemController {
             'tagged_encore': req.body.tagged_encore || 0,
             'tagged_extended': req.body.tagged_extended || 0,
             '_fk_subdivision': req.body._fk_subdivision || null,
-            "_fk_department_t": await this.getDepartmentId(req.body.department_number || "")
+            "_fk_department_t": await this.getDepartmentId(req.body.department_number || ""),
+            "image": null 
         }
-
-        dbConnection().query('INSERT INTO item_editorial SET ?', data, (error, result) => {
+    
+        dbConnection().query('INSERT INTO item_editorial SET ?', data, async (error, result) => {
             if (error) throw error;
+            
+            // We save in image in disk if user selects one 
+            if (req.body.image !== null) {
+                let imageName = await _this.getImageName(req.body.image, result.insertId, req.body.imageExtension);
+                // Updating image 
+                let data = {
+                    image: imageName 
+                };
+                let updateResponse = await itemModel.update(result.insertId, data);
+                
+                // Saving image in disk
+                if (updateResponse > 0) {
+                    let path = `${__dirname}/../../public${process.env.FIS_IMAGES_PATH}${imageName}`; 
+                    let imageBase64 = req.body.image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+                    fs.writeFile(path, imageBase64, 'base64', (error) => {
+                        console.error(error);
+                    });
+                }
+            }
+
             res.json({
                 code: 200,
                 message: "Item save",
@@ -352,7 +392,9 @@ class ItemController {
             }
 
             console.log("CREATE ITEM LOG", json_details)
+
             var json_details_string = JSON.stringify(json_details)
+            
             if (process.env.NA_BYPASS) {
                 dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' ' + process.env.BYPASS_USER_NAME + ' \')', (err, result2) => {
                     if (err) {
