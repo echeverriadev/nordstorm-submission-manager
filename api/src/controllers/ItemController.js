@@ -544,7 +544,7 @@ class ItemController {
             const url = req.file.filename;
 
             let previousImage =  await _this.getPreviousImageName(id);
-            console.log(previousImage);
+          
             this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`, async (err, result) => {
                 if (err) {
                     console.log(err)
