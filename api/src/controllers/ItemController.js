@@ -14,8 +14,7 @@ const moment = require("moment");
 const itemModel = require("../models/Item");
 const fs = require("fs");
 const fit = require("../helpers/Fit");
-const helper = require("../helpers/Helper");
-
+const request = require("request");
 class ItemController {
 
     constructor() {
@@ -534,6 +533,7 @@ class ItemController {
     async uploadImagePatch(req, res, next) {
 
         const {id} = req.params
+        let _this = this; 
 
         if (!req.file) {
             return res.status(404).json({
@@ -543,8 +543,8 @@ class ItemController {
         } else {
             const url = req.file.filename;
 
-          
-
+            let previousImage =  await _this.getPreviousImageName(id);
+            console.log(previousImage);
             this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`, async (err, result) => {
                 if (err) {
                     console.log(err)
@@ -559,8 +559,14 @@ class ItemController {
                     let isItemAttachedToStory = this.isItemAttachedToStory(id);
 
                     if (isItemAttachedToStory !== undefined) {
-                        let previousImage = await this.getPreviousImageName(id);
+                        let imagesPath = `${__dirname}/../../public/uploads/images/`;
                         let response = await fit.pushItemImageToFit(req.file.filename, id, previousImage);
+                        if (previousImage !== null && previousImage !== "") {
+                            let previousImagePath = `${imagesPath}${previousImage}`;
+                            if (fs.existsSync(previousImagePath)) {
+                                fs.unlinkSync(previousImagePath);
+                            }
+                        }
                         console.log(response);
                     }
                     
@@ -788,8 +794,26 @@ class ItemController {
         })
     }
 
-
-
+    storeItemImageFromFIT = async (req, res, next) => {
+        const { imageName, previousImage } = req.body; 
+        let fitImagePath = `${process.env.FIT_BASE_URL}${process.env.FIT_IMAGES_PATH}${imageName}`;
+        let imagesPath = `${__dirname}/../../public/uploads/images/`;
+        let image = `${imagesPath}${imageName}`;
+        let previousImagePath = ""; 
+        request(fitImagePath).pipe(fs.createWriteStream(image))
+        
+        if (previousImage !== null && previousImage !== "") {
+            previousImagePath = `${imagesPath}${previousImage}`;
+            if (fs.existsSync(previousImagePath)) {
+                fs.unlinkSync(previousImagePath);
+            }
+        }
+         
+        return res.status(200).json({
+            status: 200,
+            message: image
+        });
+    }
 }
 
 module.exports = new ItemController();

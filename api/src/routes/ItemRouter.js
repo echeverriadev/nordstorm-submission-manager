@@ -2,8 +2,6 @@ const express = require("express");
 const ItemController = require("../controllers/ItemController");
 const multer = require("multer");
 const moment = require("moment");
-const request = require("request");
-const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -70,5 +68,6 @@ router.post("/uploadPatch/:id", uploadImage, ItemController.uploadImagePatch);
 router.post("/upload", uploadImage, ItemController.uploadImage);
 router.get("/delete/:id", ItemController.deleteRecord);
 router.get("/duplicate/:id", ItemController.duplicateItem);
+router.post("/storeItemImageFromFIT", ItemController.storeItemImageFromFIT);
 
 module.exports = router;
