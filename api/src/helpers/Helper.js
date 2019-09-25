@@ -7,6 +7,11 @@ let getEmailData = () => {
   return email;
 };
 
+let getImagesPath = async () => {
+  return `${__dirname}/../../public/${process.env.FIS_IMAGES_PATH}`;
+};
+
 module.exports = {
-  getEmailData
+  getEmailData,
+  getImagesPath
 };

@@ -13,6 +13,8 @@ const departmentModel = require("../models/Department");
 const moment = require("moment");
 const itemModel = require("../models/Item");
 const fs = require("fs");
+const fit = require("../helpers/Fit");
+const helper = require("../helpers/Helper");
 
 class ItemController {
 
@@ -519,6 +521,16 @@ class ItemController {
         });
     }
 
+    async isItemAttachedToStory(id) {
+        let item = await itemModel.getItemImageName(id);
+        return item._fk_shot; 
+    }
+
+    async getPreviousImageName(id) {
+        let item = await itemModel.getItemImageName(id);
+        return item.image; 
+    }
+
     async uploadImagePatch(req, res, next) {
 
         const {id} = req.params
@@ -530,8 +542,10 @@ class ItemController {
             });
         } else {
             const url = req.file.filename;
-            
-            this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`,(err, result) => {
+
+          
+
+            this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`, async (err, result) => {
                 if (err) {
                     console.log(err)
                     return res.status(500).json({
@@ -540,6 +554,16 @@ class ItemController {
                 }
 
                 if (result.affectedRows) {
+                    // If row was upated successfully, we need to sync that image with FIT
+                    // - We check if the item has been attached to story, if not, we don't need to try to copy item image to FIT
+                    let isItemAttachedToStory = this.isItemAttachedToStory(id);
+
+                    if (isItemAttachedToStory !== undefined) {
+                        let previousImage = await this.getPreviousImageName(id);
+                        let response = await fit.pushItemImageToFit(req.file.filename, id, previousImage);
+                        console.log(response);
+                    }
+                    
                     let image = {
                         'image': url
                     }
