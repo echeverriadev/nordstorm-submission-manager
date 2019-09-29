@@ -5,6 +5,7 @@ const ItemLogRouter = require("./ItemLogRouter");
 const NAuthRouter = require("./NAuthRouter");
 const SubDivisionRouter = require("./SubDivisionRouter");
 const CycleSubDivisionRouter = require("./CycleSubDivisionRouter");
+const RmsRouter = require("./RmsRouter");
 
 exports.load = app => {
   app.use("/api/items", ItemRouter);
@@ -14,6 +15,7 @@ exports.load = app => {
   app.use("/api/nauth", NAuthRouter);
   app.use("/api/subdivisions", SubDivisionRouter);
   app.use("/api/cyclesubdivision", CycleSubDivisionRouter);
+  app.use("/api/rms", RmsRouter);
 
   return app;
 };

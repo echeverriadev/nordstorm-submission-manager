@@ -42,3 +42,9 @@ export const postCycleSubDivisionApi = body =>
     method: "POST",
     body
   });
+
+// RMS
+export const getItemDataByVpnDepartmentApi = (vpn, departmentNumber) =>
+  apiFetch(
+    `/rms/getItemDataByVpnDepartment?vpn=${vpn}&departmentNumber=${departmentNumber}`
+  );

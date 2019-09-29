@@ -25,6 +25,8 @@ import { uploadImagePatchApi } from "../../../../api";
 import NumberFormat from "react-number-format";
 import ItemLogModal from "../ItemLogModal";
 import ItemDeleteDialog from "../ItemDeleteDialog";
+import * as fisHelper from "../../../../helpers/Fis";
+import _ from "lodash";
 
 const styles = theme => ({
   card: {
@@ -118,7 +120,7 @@ const styles = theme => ({
 });
 
 function NumberFormatCustom(props) {
-  const { inputRef, onChange, ...other } = props;
+  const { inputRef, onChange, name, ...other } = props;
 
   return (
     <NumberFormat
@@ -128,10 +130,12 @@ function NumberFormatCustom(props) {
         if (values.value === "") values.value = "";
         onChange({
           target: {
-            value: values.value
+            value: values.value,
+            name
           }
         });
       }}
+      name={name}
     />
   );
 }
@@ -141,12 +145,14 @@ NumberFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
+const itemSelects = fisHelper.getItemSelects();
+
 class CardCell extends React.Component {
   state = {
     expanded: false,
     isOpen: false,
     preview: null,
-    localItem: null
+    localItem: { ...this.props.item }
   };
 
   duplicate = close => {
@@ -187,6 +193,15 @@ class CardCell extends React.Component {
     onDuplicateItem(id);
   };
 
+  handleVpnLookup = (localItem, item, popupState) => {
+    const { onVpnLookup } = this.props;
+    popupState.close();
+
+    if (localItem.department_number !== "" && localItem.vpn !== "") {
+      onVpnLookup(localItem, item);
+    }
+  };
+
   onHandleOpenModal = popupState => {
     popupState.close();
   };
@@ -214,16 +229,19 @@ class CardCell extends React.Component {
     }
   }
 
-  handlerTest = (event, item) => {
-    console.log(event, item);
-    console.log(item.vpn);
-  };
-
-  handlerItemChange = (event, localItem) => {
-    localItem.vpn = event.target.value;
+  handlerItemChange = (event, localItem, item) => {
+    localItem[event.target.name] = event.target.value;
     this.setState({
-      localItem
+      localItem: localItem
     });
+
+    let selectIndex = _.findIndex(itemSelects, function(o) {
+      return event.target.name === o;
+    });
+
+    if (selectIndex !== -1) {
+      this.props.onChange(event.target.name, localItem, item);
+    }
   };
 
   render() {
@@ -239,7 +257,7 @@ class CardCell extends React.Component {
       onBlurItem
     } = this.props;
 
-    const localItem = item;
+    const { localItem } = this.state;
 
     return (
       <Card className={classes.cardCellCustom}>
@@ -295,13 +313,13 @@ class CardCell extends React.Component {
                       className: classes.inputFont
                     }}
                     className={classes.selectNGM}
-                    value={item.nmg_priority === null ? 0 : item.nmg_priority}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "nmg_priority", e.target.value)
-                        : null
+                    value={
+                      localItem.nmg_priority === null
+                        ? 0
+                        : localItem.nmg_priority
                     }
-                    name="Priority"
+                    onChange={e => this.handlerItemChange(e, localItem, item)}
+                    name="nmg_priority"
                     displayEmpty
                   >
                     <MenuItem value={0} disabled>
@@ -326,17 +344,13 @@ class CardCell extends React.Component {
                     id={"department_number" + index}
                     placeholder="Dept #*"
                     className={classes.textField}
+                    name="department_number"
                     margin="normal"
-                    value={item.department_number}
-                    onChange={
-                      !isChangingFilter
-                        ? e =>
-                            onChange(index, "department_number", e.target.value)
-                        : null
-                    }
-                    onBlur={this.onBlurInput}
+                    value={localItem.department_number}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                     required
-                    error={!item.department_number}
+                    error={!localItem.department_number}
                   />
                 </Grid>
                 <Grid item md={1}>
@@ -349,14 +363,13 @@ class CardCell extends React.Component {
                       className: classes.labelFont
                     }}
                     id={"vpn" + index}
+                    name={"vpn"}
                     placeholder="VPN*"
                     className={classes.textField}
                     margin="normal"
                     value={localItem.vpn}
                     onChange={e => this.handlerItemChange(e, localItem)}
-                    onBlur={(e, index) =>
-                      this.onBlurInput(e, index, this.props.item)
-                    }
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                     required
                     error={!localItem.vpn}
                   />
@@ -374,18 +387,10 @@ class CardCell extends React.Component {
                     className={classes.textField}
                     color="primary"
                     margin="normal"
-                    value={item.style_group_number}
-                    onBlur={this.onBlurInput}
-                    onChange={
-                      !isChangingFilter
-                        ? e =>
-                            onChange(
-                              index,
-                              "style_group_number",
-                              e.target.value
-                            )
-                        : null
-                    }
+                    name="style_group_number"
+                    value={localItem.style_group_number}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                   />
                 </Grid>
                 <Grid item md={1}>
@@ -401,13 +406,10 @@ class CardCell extends React.Component {
                     placeholder="Brand*"
                     className={classes.textField}
                     margin="normal"
-                    value={item.brand}
-                    onBlur={this.onBlurInput}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "brand", e.target.value)
-                        : null
-                    }
+                    name="brand"
+                    value={localItem.brand}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                     required
                     error={!item.brand}
                   />
@@ -424,13 +426,10 @@ class CardCell extends React.Component {
                     placeholder="Color"
                     className={classes.textField}
                     margin="normal"
-                    value={item.color}
-                    onBlur={this.onBlurInput}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "color", e.target.value)
-                        : null
-                    }
+                    value={localItem.color}
+                    name="color"
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                   />
                 </Grid>
                 <Grid item md={1}>
@@ -445,13 +444,10 @@ class CardCell extends React.Component {
                     placeholder="Size"
                     className={classes.textField}
                     margin="normal"
-                    value={item.size}
-                    onBlur={this.onBlurInput}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "size", e.target.value)
-                        : null
-                    }
+                    value={localItem.size}
+                    name="size"
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                   />
                 </Grid>
                 <Grid item md={2}>
@@ -468,13 +464,10 @@ class CardCell extends React.Component {
                     margin="normal"
                     //multiline
                     //rows={2}
-                    value={item.description}
-                    onBlur={this.onBlurInput}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "description", e.target.value)
-                        : null
-                    }
+                    name="description"
+                    value={localItem.description}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                   />
                 </Grid>
                 <Grid item md={1}>
@@ -483,12 +476,12 @@ class CardCell extends React.Component {
                       className: classes.inputFont
                     }}
                     className={classes.selectStock}
-                    value={item.in_stock_week === null ? 0 : item.in_stock_week}
-                    onChange={
-                      !isChangingFilter
-                        ? e => onChange(index, "in_stock_week", e.target.value)
-                        : null
+                    value={
+                      localItem.in_stock_week === null
+                        ? 0
+                        : localItem.in_stock_week
                     }
+                    onChange={e => this.handlerItemChange(e, localItem, item)}
                     name="in_stock_week"
                     displayEmpty
                   >
@@ -515,11 +508,10 @@ class CardCell extends React.Component {
                     placeholder="Price"
                     className={classes.textField}
                     margin="normal"
-                    value={item.retail_price}
-                    onBlur={this.onBlurInput}
-                    onChange={e =>
-                      onChange(index, "retail_price", e.target.value)
-                    }
+                    name="retail_price"
+                    value={localItem.retail_price}
+                    onChange={e => this.handlerItemChange(e, localItem)}
+                    onBlur={(e, index) => this.onBlurInput(e, index, item)}
                   />
                 </Grid>
                 <Grid item md={1}>
@@ -550,6 +542,14 @@ class CardCell extends React.Component {
                             popupState={popupState}
                             onDeleteItem={onDeleteItem}
                           />
+                          <MenuItem
+                            {...bindMenu(popupState)}
+                            onClick={() =>
+                              this.handleVpnLookup(localItem, item, popupState)
+                            }
+                          >
+                            VPN Lookup
+                          </MenuItem>
                         </Menu>
                       </React.Fragment>
                     )}
@@ -559,10 +559,10 @@ class CardCell extends React.Component {
               <Grid container>
                 <Grid item md={11}>
                   <Grid container>
-                    {this.renderTag(item.type, "Item Type: ")}
-                    {this.renderTag(item.creative_story_name, "Story: ")}
-                    {this.renderTag(item.shot_name, "Shot: ")}
-                    {this.renderTag(item.department, "Department: ")}
+                    {this.renderTag(localItem.type, "Item Type: ")}
+                    {this.renderTag(localItem.creative_story_name, "Story: ")}
+                    {this.renderTag(localItem.shot_name, "Shot: ")}
+                    {this.renderTag(localItem.department, "Department: ")}
                   </Grid>
                 </Grid>
                 <Grid item md={1}>

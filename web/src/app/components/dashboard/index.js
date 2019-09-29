@@ -4,6 +4,8 @@ import PrimaryAppBar from "../../components/shared/PrimaryAppBar";
 import TabMenu from "./TabMenu";
 import Layaout from "./Layaout";
 import SnackbarBase from "../common/Snackbar/SnackbarBase";
+import * as fisHelper from "../../../helpers/Fis";
+import _ from "lodash";
 
 import {
   getItemsApi,
@@ -14,7 +16,8 @@ import {
   deleteItemApi,
   duplicateItemApi,
   getSubDivisionsApi,
-  postCycleSubDivisionApi
+  postCycleSubDivisionApi,
+  getItemDataByVpnDepartmentApi
 } from "../../../api";
 
 const styles = theme => ({
@@ -56,6 +59,8 @@ const initialNewItem = {
   imageExtension: "",
   newItemImage: process.env.REACT_APP_BASE_IMAGE
 };
+
+const fisColumns = fisHelper.getFisColumns();
 
 class Dashboard extends Component {
   constructor(props) {
@@ -186,79 +191,182 @@ class Dashboard extends Component {
     );
   };
 
-  onChange = (index, key, value) => {
-    console.log("changing ...");
-    const rows = this.state.rows;
-    const noKeyPressed = [
-      "nmg_priority",
-      "in_stock_week",
-      "_fk_cycle",
-      "tagged_missy",
-      "tagged_encore",
-      "country_of_origin",
-      "tagged_encore",
-      "tagged_petite",
-      "tagged_extended",
-      "available_in_canada",
-      "request_extension",
-      "request_cancellation"
-    ];
-    var row = rows[index];
-    row[key] = value;
-    if (key !== "image") {
-      row = Object.assign({}, row, {
-        fieldModified: Object.assign({}, row.fieldModified, {
-          [key]: value
-        })
-      });
-    }
-    rows.splice(index, 1, row);
-    this.setState({ rows });
-    /*
-    if (noKeyPressed.indexOf(key) !== -1) {
-      this.fetchPatchItemApi(row.id, row, index);
-    }
-    */
+  onChange = (itemField, localItem, item) => {
+    let itemPayload = JSON.parse(
+      `{ "id": ${localItem.id} , "${itemField}": "${localItem[itemField]}" }`
+    );
+
+    let row = Object.assign({}, itemPayload, {
+      fieldModified: itemPayload
+    });
+
+    this.fetchPatchItemApi(localItem.id, row).then(
+      response => {
+        if (response.status === 200) {
+          item[itemField] = localItem[itemField];
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    );
   };
 
-  onBlurItem = (e, index, localItem, item) => {
-    console.log(localItem);
-    console.log(item);
-    console.log("bluring item...");
-    /*
-    const rows = this.state.rows;
-    const noKeyPressed = [
-      "nmg_priority",
-      "in_stock_week",
-      "_fk_cycle",
-      "tagged_missy",
-      "tagged_encore",
-      "country_of_origin",
-      "tagged_encore",
-      "tagged_petite",
-      "tagged_extended",
-      "available_in_canada",
-      "request_extension",
-      "request_cancellation"
-    ];
-    var row = rows[index];
-    row[key] = value;
-    if (key !== "image") {
-      row = Object.assign({}, row, {
-        fieldModified: Object.assign({}, row.fieldModified, {
-          [key]: value
-        })
+  /**
+   * Vpn lookup method
+   */
+  onVpnLookup = async (localItem, item) => {
+    let itemAdditionalData = await this.getItemDataByVpnDepartment(
+      localItem.vpn,
+      localItem.department_number
+    );
+
+    let itemPayload = JSON.parse(`{ "id": ${localItem.id}  }`);
+
+    itemPayload = await this.getItemAdditionalDataPayload(
+      itemPayload,
+      itemAdditionalData,
+      localItem,
+      item
+    );
+
+    if (itemPayload.brand) {
+      let row = Object.assign({}, itemPayload, {
+        fieldModified: itemPayload
+      });
+
+      this.fetchPatchItemApi(localItem.id, row).then(
+        response => {
+          if (response.status === 200) {
+            let data = {
+              sgn: itemPayload.sgn,
+              description: itemPayload.description,
+              brand: itemPayload.brand
+            };
+
+            this.updateItemAdditionalData(localItem, item, data);
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+  };
+
+  /**
+   * Gets item additional data payload
+   */
+  getItemAdditionalDataPayload = async (itemPayload, itemAdditionalData) => {
+    if (
+      itemAdditionalData &&
+      (itemAdditionalData.row && itemAdditionalData.row.length === undefined)
+    ) {
+      let row = itemAdditionalData.row;
+      let sgn = row.sgn;
+      let description = row.description;
+      let brand = row.brand;
+      itemPayload = Object.assign(itemPayload, {
+        style_group_number: sgn,
+        description,
+        brand
       });
     }
-    rows.splice(index, 1, row);
-    this.setState({ rows });
-    if (index != null && index != undefined) {
-      const rows = this.state.rows;
-      const row = rows[index];
-      console.log("ITEM", row);
-      this.fetchPatchItemApi(row.id, row, index);
-    }
+
+    return itemPayload;
+  };
+
+  updateItemAdditionalData = (localItem, item, data) => {
+    const { sgn, description, brand } = data;
+
+    localItem.style_group_number = sgn;
+    localItem.description = description;
+    localItem.brand = brand;
+    item.style_group_number = sgn;
+    item.description = description;
+    item.brand = brand;
+  };
+
+  onBlurItem = async (e, index, localItem, item) => {
+    /* 
+      - Search the item field that has being changed in fisColumns array 
+      - Compare old value with new value, if they are different we proceed to make actions 
+      - Patch item value (only send in the payload field in question)
+      - Query in RMS database sgn, description and brand base on department number and vpn field 
     */
+
+    let itemField = e.target.name;
+    let fieldIndex = _.findIndex(fisColumns, function(o) {
+      return itemField === o;
+    });
+
+    if (fieldIndex !== -1) {
+      if (localItem[itemField] !== item[itemField]) {
+        let itemPayload = JSON.parse(
+          `{ "id": ${localItem.id} , "${itemField}": "${localItem[itemField]}" }`
+        );
+
+        let queryRMS = false;
+
+        // Query to RMS
+        if (itemField === "vpn" && localItem.department_number !== "") {
+          let vpn = localItem.vpn;
+          let departmentNumber = localItem.department_number;
+
+          let itemAdditionalData = await this.getItemDataByVpnDepartment(
+            vpn,
+            departmentNumber
+          );
+
+          itemPayload = await this.getItemAdditionalDataPayload(
+            itemPayload,
+            itemAdditionalData,
+            localItem,
+            item
+          );
+
+          queryRMS = true;
+        }
+
+        let row = Object.assign({}, itemPayload, {
+          fieldModified: itemPayload
+        });
+
+        this.fetchPatchItemApi(localItem.id, row).then(
+          response => {
+            if (response.status === 200) {
+              item[index] = itemPayload[index];
+              if (queryRMS) {
+                let data = {
+                  sgn: itemPayload.sgn,
+                  description: itemPayload.description,
+                  brand: itemPayload.brand
+                };
+
+                this.updateItemAdditionalData(localItem, item, data);
+              }
+
+              if (response.refresh) {
+                this.fetchItemsApi();
+              }
+            }
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
+    }
+  };
+
+  getItemDataByVpnDepartment = async (vpn, departmentNumber) => {
+    return await getItemDataByVpnDepartmentApi(vpn, departmentNumber)
+      .then(response => {
+        return response;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   onKeyPressItem = (index, key, event) => {
@@ -274,34 +382,26 @@ class Dashboard extends Component {
     this.setState({ rows });
 
     if (key === "is_priority") {
-      console.log(event.keyCode);
       var keycode = event.keyCode ? event.keyCode : event.which;
       if (keycode === 13) {
-        this.fetchPatchItemApi(row.id, row, index);
+        this.fetchPatchItemApi(row.id, row).then(
+          response => {
+            if (response.status === 200) {
+              if (response.refresh) {
+                this.fetchItemsApi();
+              }
+            }
+          },
+          err => {
+            console.log(err);
+          }
+        );
       }
     }
   };
 
-  fetchPatchItemApi = (id, item, index) => {
-    console.log("PATCH", item);
-    patchItemApi(id, item).then(
-      response => {
-        if (response.status === 200) {
-          const rows = this.state.rows;
-          const row = Object.assign({}, rows[index], {
-            fieldModified: null
-          });
-          rows.splice(index, 1, row);
-          this.setState({ rows });
-        }
-        if (response.refresh) {
-          this.fetchItemsApi();
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+  fetchPatchItemApi = (id, itemPayload) => {
+    return patchItemApi(id, itemPayload);
   };
 
   changePagination = offset => {
@@ -602,6 +702,7 @@ class Dashboard extends Component {
             onSuplicateItem={this.handleDuplicateItemApi}
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
+            onVpnLookup={this.onVpnLookup}
           />
         )}
         {value === 1 && <h1>SAMPLE</h1>}

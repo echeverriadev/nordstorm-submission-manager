@@ -71,7 +71,8 @@ const Layaout = props => {
     onDuplicateItem,
     subdivisions,
     cycleSubDivisionItemsLimit,
-    email
+    email,
+    onVpnLookup
   } = props;
 
   let filterTextValues = {
@@ -151,6 +152,7 @@ const Layaout = props => {
               cycles={cycles}
               onDeleteItem={onDeleteItem}
               onDuplicateItem={onDuplicateItem}
+              onVpnLookup={onVpnLookup}
             />
           ))}
           {filter.cycleId === "" ||

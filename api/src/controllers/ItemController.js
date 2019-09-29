@@ -32,6 +32,7 @@ class ItemController {
         this.duplicateItem = this.duplicateItem.bind(this);
         this.cleanCountryOfOriginOther = this.cleanCountryOfOriginOther.bind(this);
         this.store = this.store.bind(this);
+        this.storeItemImageFromFIT = this.storeItemImageFromFIT.bind(this);
     }
 
     addItemLog(id_editorial, fields, fieldEdited, valueEdited, reason, details, user, lan_id) {
@@ -615,8 +616,6 @@ class ItemController {
             item
         } = req.body
 
-        console.log("ITEM BY EDITING",item)
-
         const refresh = this.updateRelatedField(item.fieldModified);
         const fieldModified = ['fieldModified', 'category', , 'id', 'department'];
         const fieldString = ['request_cancellation_notes', 'request_extension_note', 'live_date', 'vpn', 'country_of_origin', 'country_of_origin_other', 'style_group_number', 'image', 'color', 'size', 'brand', 'description', 'department_number']
@@ -794,7 +793,7 @@ class ItemController {
         })
     }
 
-    storeItemImageFromFIT = async (req, res, next) => {
+    async storeItemImageFromFIT (req, res, next) {
         const { imageName, previousImage } = req.body; 
         let fitImagePath = `${process.env.FIT_BASE_URL}${process.env.FIT_IMAGES_PATH}${imageName}`;
         let imagesPath = `${__dirname}/../../public/uploads/images/`;

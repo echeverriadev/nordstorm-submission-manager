@@ -50,5 +50,16 @@ module.exports = {
     migrations: {
       tableName: "knex_migrations"
     }
+  },
+
+  rmsDevelopment: {
+    client: process.env.RMS_DB_CLIENT,
+    connection: {
+      host: process.env.RMS_DB_HOST,
+      database: process.env.RMS_DB_NAME,
+      user: process.env.RMS_DB_USER,
+      password: process.env.RMS_DB_PASS
+    },
+    acquireConnectionTimeout: process.env.KNEX_ACQUIRE_CONNECTION_TIME_OUT
   }
 };
