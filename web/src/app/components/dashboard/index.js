@@ -699,7 +699,7 @@ class Dashboard extends Component {
             onRemoveCannedFilter={this.removeCannedFilter}
             onRefreshItems={this.fetchItemsApi}
             onSeleteItem={this.handleDeleteItemApi}
-            onSuplicateItem={this.handleDuplicateItemApi}
+            onDuplicateItem={this.handleDuplicateItemApi}
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
             onVpnLookup={this.onVpnLookup}
