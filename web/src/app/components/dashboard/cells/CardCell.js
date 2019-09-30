@@ -171,8 +171,7 @@ class CardCell extends React.Component {
       uploadImagePatchApi(formData, this.props.item.id)
         .then()
         .then(res => {
-          if (res.code === 200)
-            this.props.onChange(this.props.index, "image", res.data.url);
+          if (res.code === 200) console.log(res.data.url);
           else {
             console.error(res);
             alert(res.message || "oops a problem has occurred");
