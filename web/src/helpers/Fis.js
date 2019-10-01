@@ -28,4 +28,8 @@ function getItemChecks() {
   return ["available_in_canada", "request_extension", "request_cancellation"];
 }
 
-export { getFisColumns, getItemSelects, getItemChecks };
+function getItemChips() {
+  return ["tagged_missy", "tagged_encore", "tagged_petite", "tagged_extended"];
+}
+
+export { getFisColumns, getItemSelects, getItemChecks, getItemChips };

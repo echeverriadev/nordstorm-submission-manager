@@ -176,6 +176,19 @@ NumberFormatCustom.propTypes = {
 const Accordion = (props) => {
   const { classes, localItem, item, onBlurInput, index, onChange, onKeyPressItem, cycles } = props;
 
+  // Handlers chip change 
+  let handlerChipChange = (name, value, localItem, item) =>  {
+      let e = {
+        target: {
+          name, 
+          value 
+        }
+      };
+      console.log(e);
+      onChange(e, localItem, item);
+  };
+
+
   return (
     <CardContent className={classes.root}>
         <Grid container>
@@ -456,22 +469,22 @@ const Accordion = (props) => {
                         {
                             localItem.tagged_missy === 1 ?
                                 <Chip
-                                    avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
+                                    avatar={<Avatar className={classes.tagAvatarOn} name="tagged_missy">M</Avatar>}
                                     label="Missy"
                                     name="tagged_missy" 
-                                    className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    className={classNames(classes.tagItemOn,classes.tagWith, "tagged-missy")}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_missy", 0, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_missy", 0, localItem, item)}
                                 />
                             :
                                 <Chip
-                                    avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
+                                    avatar={<Avatar className={classes.tagAvatarOff} name="tagged_missy">M</Avatar>}
                                     label="Missy"
-                                    name="tagger_missy"
+                                    name="tagged_missy"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_missy", 1, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_missy", 1, localItem, item)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
@@ -484,8 +497,8 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     name="tagged_encore"
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_encore", 0, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_encore", 0, localItem, item)}
                                 />
                             :
                                 <Chip
@@ -493,8 +506,8 @@ const Accordion = (props) => {
                                     label="Encore"
                                     name="tagged_encore"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_encore", 1, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_encore", 1, localItem, item)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
@@ -507,8 +520,8 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     name="tagged_petite"
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e.localItem)}
+                                    onDelete={() => handlerChipChange("tagged_petite", 0, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_petite", 0, localItem, item)}
                                 />
                             :
                                 <Chip
@@ -516,8 +529,8 @@ const Accordion = (props) => {
                                     label="Petite"
                                     name="tagged_petite"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e.localItem)}
+                                    onDelete={() => handlerChipChange("tagged_petite", 1, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_petite", 1, localItem, item)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
@@ -530,8 +543,8 @@ const Accordion = (props) => {
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
                                     name="tagged_extended"
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_extended", 0, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_extended", 0, localItem, item)}
                                 />
                             :
                                 <Chip
@@ -539,8 +552,8 @@ const Accordion = (props) => {
                                     label="Extended"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
                                     name="tagged_extended"
-                                    onDelete={(e) => onChange(e, localItem)}
-                                    onClick={(e) => onChange(e, localItem)}
+                                    onDelete={() => handlerChipChange("tagged_extended", 1, localItem, item)}
+                                    onClick={() => handlerChipChange("tagged_extended", 1, localItem, item)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }

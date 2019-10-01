@@ -147,6 +147,7 @@ NumberFormatCustom.propTypes = {
 
 const itemSelects = fisHelper.getItemSelects();
 const itemChecks = fisHelper.getItemChecks();
+const itemChips = fisHelper.getItemChips();
 
 class CardCell extends React.Component {
   state = {
@@ -230,6 +231,7 @@ class CardCell extends React.Component {
   }
 
   handlerItemChange = (event, localItem, item) => {
+    console.log(event);
     localItem[event.target.name] = event.target.value;
     this.setState({
       localItem: localItem
@@ -250,6 +252,15 @@ class CardCell extends React.Component {
     if (checkIndex !== -1) {
       let checkValue = event.target.value === "false" ? 1 : 0;
       localItem[event.target.name] = checkValue;
+      this.props.onChange(event.target.name, localItem, item);
+    }
+
+    let chipIndex = _.findIndex(itemChips, function(o) {
+      return event.target.name === o;
+    });
+
+    if (chipIndex !== -1) {
+      localItem[event.target.name] = event.target.value;
       this.props.onChange(event.target.name, localItem, item);
     }
   };
