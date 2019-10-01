@@ -410,6 +410,7 @@ class Dashboard extends Component {
 
   changeFilter = ({ target }) => {
     const filter = { ...this.state.filter };
+
     filter[target.name] = target.value;
 
     if (target.name === "divisionId") {
@@ -426,7 +427,8 @@ class Dashboard extends Component {
     const { cycleId, divisionId, subdivisionId } = filter;
 
     // We check if the row for the chosen cycle and subdivision exists, if not, we created it
-    if (cycleId && divisionId && subdivisionId) {
+
+    if (cycleId && divisionId && subdivisionId && target.name !== "search") {
       this.addCycleSubDivisionRow(cycleId, subdivisionId);
     }
 
@@ -536,13 +538,14 @@ class Dashboard extends Component {
 
       getItemsApi(offset, end, parsedFilter, orderString).then(
         response => {
-          if (response.status === 200)
+          if (response.status === 200) {
+            this.setState({ rows: [] });
             this.setState({
               isChangingFilter: false,
               rows: response.data,
               total: response.total
             });
-          else this.setState({ isChangingFilter: false });
+          } else this.setState({ isChangingFilter: false });
         },
         err => {
           console.log(err);
