@@ -146,6 +146,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const itemSelects = fisHelper.getItemSelects();
+const itemChecks = fisHelper.getItemChecks();
 
 class CardCell extends React.Component {
   state = {
@@ -239,6 +240,16 @@ class CardCell extends React.Component {
     });
 
     if (selectIndex !== -1) {
+      this.props.onChange(event.target.name, localItem, item);
+    }
+
+    let checkIndex = _.findIndex(itemChecks, function(o) {
+      return event.target.name === o;
+    });
+
+    if (checkIndex !== -1) {
+      let checkValue = event.target.value === "false" ? 1 : 0;
+      localItem[event.target.name] = checkValue;
       this.props.onChange(event.target.name, localItem, item);
     }
   };
@@ -592,10 +603,11 @@ class CardCell extends React.Component {
         >
           <Accordion
             index={index}
+            localItem={localItem}
             item={item}
             onBlurInput={this.onBlurInput}
             onKeyPressItem={onKeyPressItem}
-            onChange={onChange}
+            onChange={this.handlerItemChange}
             cycles={cycles}
           />
         </Collapse>

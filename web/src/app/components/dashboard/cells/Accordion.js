@@ -149,7 +149,7 @@ const styles = theme => ({
 });
 
 function NumberFormatCustom(props) {
-  const { inputRef, onChange, ...other } = props;
+  const { inputRef, onChange, name, ...other } = props;
 
   return (
     <NumberFormat
@@ -159,10 +159,11 @@ function NumberFormatCustom(props) {
         onChange({
           target: {
             value: values.value,
+            name
           },
         });
       }}
-      
+      name={name}
     />
   );
 }
@@ -173,7 +174,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const Accordion = (props) => {
-  const { classes, item, onBlurInput, index, onChange, onKeyPressItem, cycles } = props;
+  const { classes, localItem, item, onBlurInput, index, onChange, onKeyPressItem, cycles } = props;
 
   return (
     <CardContent className={classes.root}>
@@ -193,9 +194,9 @@ const Accordion = (props) => {
                               className: classNames([classes.inputFont, classes.inputBold])
                             }}
                             className={classes.select}
-                            name="Cycles"
-                            value={item._fk_cycle === null ? 0 : item._fk_cycle}
-                            onChange={e => onChange(index, "_fk_cycle", e.target.value)}
+                            name="_fk_cycle"
+                            value={localItem._fk_cycle === null ? 0 : localItem._fk_cycle}
+                            onChange={e => onChange(e, localItem, item)}
                         >
                             <MenuItem value={-1} disabled>
                                 Cycles
@@ -211,7 +212,7 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid style={{marginTop: "4px"}} item md={3}>
                     {
-                        (item._fk_cycle && item._fk_cycle != -1)?
+                        (localItem._fk_cycle && localItem._fk_cycle != -1)?
                         <div>
                           <TextField
                               InputProps={{
@@ -226,9 +227,10 @@ const Accordion = (props) => {
                               id={"asp"+index}
                               label="Ann. Sale Price"
                               margin="none"
-                              value={item.sale_price}
-                              onBlur={onBlurInput}
-                              onChange={e => onChange(index, "sale_price", e.target.value)}
+                              name="sale_price"
+                              value={localItem.sale_price}
+                              onBlur={(e, index) => onBlurInput(e, index, item)}
+                              onChange={e => onChange(e, localItem, item)}
                           />
                         </div>
                         :
@@ -243,10 +245,11 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.available_in_canada === 1 ? true : false}
-                                    checked={item.available_in_canada === 1 ? true : false}
+                                    name="available_in_canada"
+                                    value={localItem.available_in_canada === 1 ? true : false}
+                                    checked={localItem.available_in_canada === 1 ? true : false}
                                     color='default'
-                                    onChange={e => onChange(index, "available_in_canada", e.target.checked ? 1 : 0)}
+                                    onChange={e => onChange(e, localItem, item)}
                                     classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
                                     root: classes.switchRoot}}
                                 />
@@ -259,7 +262,7 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                     {
-                        (item.available_in_canada && item.available_in_canada === 1)?
+                        (localItem.available_in_canada && localItem.available_in_canada === 1)?
                             <div>
                               <TextField
                                   InputProps={{
@@ -271,12 +274,13 @@ const Accordion = (props) => {
                                     disableAnimation: true,
                                   }}
                                   id={"canadaprice"+index}
-                                  disabled={!(item.available_in_canada === 1)}
+                                  disabled={!(localItem.available_in_canada === 1)}
                                   label="Canada Price"
                                   margin="none"
-                                  value={item.price_cad}
-                                  onBlur={onBlurInput}
-                                  onChange={e => onChange(index, "price_cad", e.target.value)}
+                                  name="price_cad"
+                                  value={localItem.price_cad}
+                                  onBlur={(e, index) => onBlurInput(e, index, item)}
+                                  onChange={e => onChange(e, localItem)}
                               />
                             </div>
                         :
@@ -286,7 +290,7 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid style={{marginLeft: "-4%"}} item md={3}>
                     {
-                        (item.available_in_canada && item.available_in_canada === 1)?
+                        (localItem.available_in_canada && localItem.available_in_canada === 1)?
                             <div>
                               <FormControl className={classes.formControl}>
                                 <InputLabel htmlFor="country-of-origin-placeholder" style={{fontSize:"13px"}}>Country of Origin</InputLabel>
@@ -296,9 +300,9 @@ const Accordion = (props) => {
                                       id: 'country-of-origin-placeholder'
                                     }}
                                     className={classes.selectCountry}
-                                    value={item.country_of_origin === null ? null : item.country_of_origin}
-                                    onChange={e => onChange(index, "country_of_origin", e.target.value)}
-                                    name="Country of Origin"
+                                    value={localItem.country_of_origin === null ? null : localItem.country_of_origin}
+                                    onChange={e => onChange(e, localItem, item)}
+                                    name="country_of_origin"
                                 >
                                     <MenuItem value={""} disabled style={{color:"#656565"}}>None</MenuItem>
                                     <MenuItem value={"USA"}>USA</MenuItem>
@@ -315,8 +319,8 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid style={{marginLeft: "3%"}} item md={3}>
                         {
-                            (item.country_of_origin === "Imported - Specify Country") ?
-                               (item.available_in_canada && item.available_in_canada === 1)?
+                            (localItem.country_of_origin === "Imported - Specify Country") ?
+                               (localItem.available_in_canada && localItem.available_in_canada === 1)?
                                     <div>
                                       <TextField
                                           InputProps={{
@@ -329,9 +333,10 @@ const Accordion = (props) => {
                                           id={"specifycountry"+index}
                                           label="Specify Country"
                                           margin="none"
-                                          value={item.country_of_origin_other}
-                                          onBlur={onBlurInput}
-                                          onChange={e => onChange(index, "country_of_origin_other", e.target.value)}
+                                          value={localItem.country_of_origin_other}
+                                          name="country_of_origin_other"
+                                          onBlur={(e, index) => onBlurInput(e, index, item)}
+                                          onChange={e => onChange(e, localItem, item)}
                                       />
                                     </div>
                                 :
@@ -348,10 +353,11 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.request_extension === 1 ? true : false}
-                                    checked={item.request_extension === 1 ? true : false}
+                                    value={localItem.request_extension === 1 ? true : false}
+                                    checked={localItem.request_extension === 1 ? true : false}
                                     color='default'
-                                    onChange={e => onChange(index, "request_extension", e.target.checked ? 1 : 0)}
+                                    name="request_extension"
+                                    onChange={e => onChange(e, localItem, item)}
                                     classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
                                     root: classes.switchRoot}}
                                 />
@@ -364,7 +370,7 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                         {
-                            (item.request_extension === 1)?
+                            (localItem.request_extension === 1)?
                                 <div>
                                   <TextField
                                       InputProps={{
@@ -375,12 +381,13 @@ const Accordion = (props) => {
                                         disableAnimation: true,
                                       }}
                                       id={"extensionreason"+index}
-                                      disabled={!(item.request_extension === 1)}
+                                      disabled={!(localItem.request_extension === 1)}
                                       label="Extension Reason"
                                       margin="none"
-                                      value={item.request_extension_note}
-                                      onBlur={onBlurInput}
-                                      onChange={e => onChange(index, "request_extension_note", e.target.value)}
+                                      value={localItem.request_extension_note}
+                                      name="request_extension_note"
+                                      onBlur={(e, index) => onBlurInput(e, index, item)}
+                                      onChange={e => onChange(e, localItem, item)}
                                   />
                                 </div>
                             :
@@ -395,10 +402,11 @@ const Accordion = (props) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    value={item.request_cancellation === 1 ? true : false}
-                                    checked={item.request_cancellation === 1 ? true : false}
+                                    value={localItem.request_cancellation === 1 ? true : false}
+                                    checked={localItem.request_cancellation === 1 ? true : false}
                                     color='default'
-                                    onChange={e => onChange(index, "request_cancellation", e.target.checked ? 1 : 0)}
+                                    name="request_cancellation"
+                                    onChange={e => onChange(e, localItem, item)}
                                     classes={{switchBase: classes.switchBase, checked: classes.switchChecked,
                                     root: classes.switchRoot}}
                                 />
@@ -411,7 +419,7 @@ const Accordion = (props) => {
                     </Grid>
                     <Grid item md={3}>
                      {
-                        (item.request_cancellation === 1)?
+                        (localItem.request_cancellation === 1)?
                             <div>
                               <TextField
                                   InputProps={{
@@ -422,12 +430,13 @@ const Accordion = (props) => {
                                     disableAnimation: true,
                                   }}
                                   id={"cancelationreason"+index}
-                                  disabled={!(item.request_cancellation === 1)}
+                                  disabled={!(localItem.request_cancellation === 1)}
                                   label="Cancelation Reason"
                                   margin="none"
-                                  value={item.request_cancellation_notes}
-                                  onBlur={onBlurInput}
-                                  onChange={e => onChange(index, "request_cancellation_notes", e.target.value)}
+                                  value={localItem.request_cancellation_notes}
+                                  name="request_cancellation_notes"
+                                  onBlur={(e, index) => onBlurInput(e, index, item)}
+                                  onChange={e => onChange(e, localItem, item)}
                               />
                             </div>
                         :
@@ -440,92 +449,98 @@ const Accordion = (props) => {
                 <Grid container direction="column">
                     <Grid item md>
                         <Typography variant="caption">Department name</Typography>
-                        <Typography variant="body1"><b>{item.department}</b></Typography>
+                        <Typography variant="body1"><b>{localItem.department}</b></Typography>
                     </Grid>
                     <Grid className={classes.tagsList} item md={9}>
                     <Typography className={classes.tagItem} variant="caption">Tags</Typography>
                         {
-                            item.tagged_missy === 1 ?
+                            localItem.tagged_missy === 1 ?
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>M</Avatar>}
                                     label="Missy"
-                                    
+                                    name="tagged_missy" 
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={() => onChange(index, "tagged_missy", 0)}
-                                    onClick={() => onChange(index, "tagged_missy", 0)}
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>M</Avatar>}
                                     label="Missy"
-                                    
+                                    name="tagger_missy"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={() => onChange(index, "tagged_missy", 1)}
-                                    onClick={() => onChange(index, "tagged_missy", 1)}
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
-                            item.tagged_encore === 1 ?
+                            localItem.tagged_encore === 1 ?
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
                                     label="Encore"
                                     clickable
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
+                                    name="tagged_encore"
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={() => onChange(index, "tagged_encore", 0)}
-                                    onClick={() => onChange(index, "tagged_encore", 0)}
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>E</Avatar>}
                                     label="Encore"
+                                    name="tagged_encore"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={() => onChange(index, "tagged_encore", 1)}
-                                    onClick={() => onChange(index, "tagged_encore", 1)}
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
-                            item.tagged_petite === 1 ?
+                            localItem.tagged_petite === 1 ?
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>P</Avatar>}
                                     label="Petite"
                                     clickable
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={() => onChange(index, "tagged_petite", 0)}
-                                    onClick={() => onChange(index, "tagged_petite", 0)}
+                                    name="tagged_petite"
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e.localItem)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>P</Avatar>}
                                     label="Petite"
+                                    name="tagged_petite"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={() => onChange(index, "tagged_petite", 1)}
-                                    onClick={() => onChange(index, "tagged_petite", 1)}
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e.localItem)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
                         {
-                            item.tagged_extended === 1 ?
+                            localItem.tagged_extended === 1 ?
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOn}>E</Avatar>}
                                     label="Extended"
                                     clickable
                                     className={classNames(classes.tagItemOn,classes.tagWith)}
                                     deleteIcon={<DoneIcon style={{color:'#fff'}} />}
-                                    onDelete={() => onChange(index, "tagged_extended", 0)}
-                                    onClick={() => onChange(index, "tagged_extended", 0)}
+                                    name="tagged_extended"
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                 />
                             :
                                 <Chip
                                     avatar={<Avatar className={classes.tagAvatarOff}>X</Avatar>}
                                     label="Extended"
                                     className={classNames(classes.tagItemOff,classes.tagWith)}
-                                    onDelete={() => onChange(index, "tagged_extended", 1)}
-                                    onClick={() => onChange(index, "tagged_extended", 1)}
+                                    name="tagged_extended"
+                                    onDelete={(e) => onChange(e, localItem)}
+                                    onClick={(e) => onChange(e, localItem)}
                                     deleteIcon={<div style={{width:'24px'}} />}
                                 />
                         }
