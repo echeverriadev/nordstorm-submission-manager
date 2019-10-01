@@ -701,7 +701,7 @@ class Dashboard extends Component {
             onAddCannedFilter={this.addCannedFilter}
             onRemoveCannedFilter={this.removeCannedFilter}
             onRefreshItems={this.fetchItemsApi}
-            onSeleteItem={this.handleDeleteItemApi}
+            onDeleteItem={this.handleDeleteItemApi}
             onDuplicateItem={this.handleDuplicateItemApi}
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
