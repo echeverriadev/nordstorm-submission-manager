@@ -546,7 +546,8 @@ class ItemController {
             const url = req.file.filename;
 
             let previousImage =  await _this.getPreviousImageName(id);
-          
+            let imageUrl = ""; 
+
             this.connection.query(`UPDATE item_editorial SET image =  \"${url}\" WHERE __pk_item = ${id}`, async (err, result) => {
                 if (err) {
                     console.log(err)
@@ -569,9 +570,11 @@ class ItemController {
                                 fs.unlinkSync(previousImagePath);
                             }
                         }
-                        console.log(response);
+                        
                     }
                     
+                    imageUrl = `${process.env.API_URL}${process.env.FIS_IMAGES_PATH}${url}`
+
                     let image = {
                         'image': url
                     }
@@ -583,15 +586,14 @@ class ItemController {
                     }
                 }
                 
+                return res.json({
+                    code: 200,
+                    message: "Image uploaded",
+                    data: {
+                        url: imageUrl
+                    }
+                });
             }); 
-
-            return res.json({
-                code: 200,
-                message: "Image uploaded",
-                data: {
-                    url
-                }
-            });
         }
     }
 
