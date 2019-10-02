@@ -398,7 +398,7 @@ class ItemController {
 
             var json_details_string = JSON.stringify(json_details)
             
-            if (process.env.NA_BYPASS) {
+            if (process.env.NA_BYPASS == true) {
                 dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + process.env.BYPASS_USER_LANID + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' ' + process.env.BYPASS_USER_NAME + ' \')', (err, result2) => {
                     if (err) {
                         console.log(result2)
@@ -475,7 +475,7 @@ class ItemController {
                               
                               this.connection.query('INSERT INTO item_editorial SET ?', row, (err, result) =>  {
                                   if(res.status(200)){
-                                      if(process.env.NA_BYPASS){
+                                      if(process.env.NA_BYPASS == true){
                                           this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
                                       }else{
                                           this.addItemLog(result.insertId, row, null, null, "Created", null, req.cookies.nauthFullName , req.cookies.nauthLanId)
@@ -579,7 +579,7 @@ class ItemController {
                         'image': url
                     }
 
-                    if (process.env.NA_BYPASS) {
+                    if (process.env.NA_BYPASS == true) {
                         this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID);
                     } else {
                         this.addItemLog([id], image, null, null, "Edited", null, req.cookies.nauthFullName , req.cookies.nauthLanId);
@@ -663,7 +663,7 @@ class ItemController {
 
             if (res.status(200)) {
                 if (item.fieldModified != null && item.fieldEdited != "") {
-                    if (process.env.NA_BYPASS) {
+                    if (process.env.NA_BYPASS == true) {
                         this.addItemLog([id], item.fieldModified, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID);
                     } else {
                         this.addItemLog([id], item.fieldModified, null, null, "Edited", null, req.cookies.nauthFullName , req.cookies.nauthLanId);
@@ -786,7 +786,7 @@ class ItemController {
                 if (error) throw error;
                 var id_new = parseInt(result[0].__pk_item)
 
-                if (process.env.NA_BYPASS) {
+                if (process.env.NA_BYPASS == true) {
                     this.addItemLog(id_new, null, null, null, "Created", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
                 } else {
                     this.addItemLog(id_new, null, null, null, "Created", null, req.cookies.nauthFullName , req.cookies.nauthLanId)
