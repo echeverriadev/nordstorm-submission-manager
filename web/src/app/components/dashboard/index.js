@@ -65,7 +65,7 @@ const fisColumns = fisHelper.getFisColumns();
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-
+    this.cardCellComponent = React.createRef();
     this.state = {
       value: 0,
       cycles: [],
@@ -133,8 +133,8 @@ class Dashboard extends Component {
       this.state.stored &&
       prevProps.rows.length != this.state.rows.length
     ) {
-      this.updateScroll();
-      this.setState({ stored: false });
+      //this.updateScroll();
+      //this.setState({ stored: false });
     }
   }
 
@@ -176,8 +176,8 @@ class Dashboard extends Component {
           this.setState({
             addItem: initialNewItem
           });
-          this.fetchItemsApi();
           this.setState({ stored: true });
+          this.fetchItemsApi();
           this.handleSnackbarOpen("success", "Item saved successfully");
         } else {
           console.error(response.message);
@@ -244,7 +244,7 @@ class Dashboard extends Component {
               brand: itemPayload.brand
             };
 
-            this.updateItemAdditionalData(localItem, item, data);
+            // this.updateItemAdditionalData(item, data);
           }
         },
         err => {
@@ -278,13 +278,15 @@ class Dashboard extends Component {
 
   updateItemAdditionalData = (localItem, item, data) => {
     const { sgn, description, brand } = data;
-
+    this.cardCellComponent.current.updateVpnData(data);
+    /*
     localItem.style_group_number = sgn;
     localItem.description = description;
     localItem.brand = brand;
     item.style_group_number = sgn;
     item.description = description;
     item.brand = brand;
+    */
   };
 
   onBlurItem = async (e, index, localItem, item) => {
@@ -335,7 +337,6 @@ class Dashboard extends Component {
         this.fetchPatchItemApi(localItem.id, row).then(
           response => {
             if (response.status === 200) {
-              item[index] = itemPayload[index];
               if (queryRMS) {
                 let data = {
                   sgn: itemPayload.sgn,
@@ -343,7 +344,7 @@ class Dashboard extends Component {
                   brand: itemPayload.brand
                 };
 
-                this.updateItemAdditionalData(localItem, item, data);
+                this.cardCellComponent.current.updateVpnData(data);
               }
 
               if (response.refresh) {
@@ -545,6 +546,10 @@ class Dashboard extends Component {
               rows: response.data,
               total: response.total
             });
+            if (this.state.stored) {
+              this.updateScroll();
+              this.setState({ stored: false });
+            }
           } else this.setState({ isChangingFilter: false });
         },
         err => {
@@ -706,6 +711,7 @@ class Dashboard extends Component {
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
             onVpnLookup={this.onVpnLookup}
+            cardCellComponent={this.cardCellComponent}
           />
         )}
         {value === 1 && <h1>SAMPLE</h1>}
