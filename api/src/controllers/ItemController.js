@@ -403,14 +403,14 @@ class ItemController {
                     if (err) {
                         console.log(result2)
                     }
-                    console.log("Resultado:", result2)
+                    console.log("Result:", result2)
                 })
             } else {
-                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' lan_test \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' GENERIC_USER \')', (err, result2) => {
+                dbConnection().query('INSERT INTO log(_fk_item_editorial, lan_id, time_stamp, event, details, user_name) VALUES(\' ' + result.insertId + ' \',\' ' + req.cookies.nauthLanId + ' \',DATE_FORMAT(NOW(), \'%Y-%m-%d %T\'),\' Created \',\' ' + json_details_string + '\',\' ' + req.cookies.nauthFullName +' \')', (err, result2) => {
                     if (err) {
                         console.log(result2)
                     }
-                    console.log("Resultado:", result2)
+                    console.log("Result:", result2)
                 })
             }
         });
@@ -478,7 +478,7 @@ class ItemController {
                                       if(process.env.NA_BYPASS){
                                           this.addItemLog(result.insertId, row, null, null, "Created", null, process.env.BYPASS_USER_NAME , process.env.BYPASS_USER_LANID)
                                       }else{
-                                          this.addItemLog(result.insertId, row, null, null, "Created", null, "GENERIC USER" , "LAN_TEST")
+                                          this.addItemLog(result.insertId, row, null, null, "Created", null, req.cookies.nauthFullName , req.cookies.nauthLanId)
                                       }
                                   }
                                   if (err) throw err;
@@ -560,7 +560,7 @@ class ItemController {
                     // If row was upated successfully, we need to sync that image with FIT
                     // - We check if the item has been attached to story, if not, we don't need to try to copy item image to FIT
                     let isItemAttachedToStory = this.isItemAttachedToStory(id);
-
+                    /*
                     if (isItemAttachedToStory !== undefined) {
                         let imagesPath = `${__dirname}/../../public/uploads/images/`;
                         let response = await fit.pushItemImageToFit(req.file.filename, id, previousImage);
@@ -572,7 +572,7 @@ class ItemController {
                         }
                         
                     }
-                    
+                    */
                     imageUrl = `${process.env.API_URL}${process.env.FIS_IMAGES_PATH}${url}`
 
                     let image = {
@@ -580,9 +580,9 @@ class ItemController {
                     }
 
                     if (process.env.NA_BYPASS) {
-                        this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
+                        this.addItemLog([id], image, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID);
                     } else {
-                        this.addItemLog([id], image, null, null, "Edited", null, "GENERIC USER", "LAN TEST")
+                        this.addItemLog([id], image, null, null, "Edited", null, req.cookies.nauthFullName , req.cookies.nauthLanId);
                     }
                 }
                 
@@ -664,9 +664,9 @@ class ItemController {
             if (res.status(200)) {
                 if (item.fieldModified != null && item.fieldEdited != "") {
                     if (process.env.NA_BYPASS) {
-                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
+                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID);
                     } else {
-                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, "GENERIC USER", "LAN TEST")
+                        this.addItemLog([id], item.fieldModified, null, null, "Edited", null, req.cookies.nauthFullName , req.cookies.nauthLanId);
                     }
                 }
             }
@@ -789,7 +789,7 @@ class ItemController {
                 if (process.env.NA_BYPASS) {
                     this.addItemLog(id_new, null, null, null, "Created", null, process.env.BYPASS_USER_NAME, process.env.BYPASS_USER_LANID)
                 } else {
-                    this.addItemLog(id_new, null, null, null, "Created", null, "GENERIC USER", "LAN TEST")
+                    this.addItemLog(id_new, null, null, null, "Created", null, req.cookies.nauthFullName , req.cookies.nauthLanId)
                 }
             });
         })
