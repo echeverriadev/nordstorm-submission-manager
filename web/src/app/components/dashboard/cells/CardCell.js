@@ -173,8 +173,13 @@ class CardCell extends React.Component {
       uploadImagePatchApi(formData, this.props.item.id)
         .then()
         .then(res => {
-          if (res.code === 200) console.log(res.data.url);
-          else {
+          if (res.code === 200) {
+            let currentItem = { ...this.state.localItem };
+            currentItem.image = res.data.url;
+            this.setState({
+              localItem: currentItem
+            });
+          } else {
             console.error(res);
             alert(res.message || "oops a problem has occurred");
           }
@@ -231,7 +236,6 @@ class CardCell extends React.Component {
   }
 
   handlerItemChange = (event, localItem, item) => {
-    console.log(event);
     localItem[event.target.name] = event.target.value;
     this.setState({
       localItem: localItem
@@ -265,6 +269,10 @@ class CardCell extends React.Component {
     }
   };
 
+  updateVpnData = data => {
+    let currentItem = { ...this.state.localItem };
+  };
+
   render() {
     const {
       classes,
@@ -288,14 +296,14 @@ class CardCell extends React.Component {
               {!this.state.expanded ? (
                 this.state.isOpen ? (
                   <Lightbox
-                    mainSrc={item.image}
+                    mainSrc={localItem.image}
                     onCloseRequest={() => this.setState({ isOpen: false })}
                   />
                 ) : (
                   <img
                     className={classes.img}
                     alt="complex1"
-                    src={item.image}
+                    src={localItem.image}
                     onClick={() => this.setState({ isOpen: true })}
                   />
                   // <MyModal/>
@@ -311,7 +319,9 @@ class CardCell extends React.Component {
                           className={classes.img}
                           alt="complex"
                           src={
-                            this.state.preview ? this.state.preview : item.image
+                            localItem.image !== null
+                              ? localItem.image
+                              : localItem.newItemImage
                           }
                         />
                       </div>
@@ -554,12 +564,12 @@ class CardCell extends React.Component {
                             Duplicate
                           </MenuItem>
                           <ItemLogModal
-                            itemId={item.id}
-                            itemLog={item}
+                            itemId={localItem.id}
+                            itemLog={localItem}
                             popupState={popupState}
                           />
                           <ItemDeleteDialog
-                            itemId={item.id}
+                            itemId={localItem.id}
                             popupState={popupState}
                             onDeleteItem={onDeleteItem}
                           />
