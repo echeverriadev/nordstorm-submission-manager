@@ -97,6 +97,7 @@ class ItemController {
 
     buildWhere(filter = {}) {
         const fieldsLikeForSearch = {
+            "id": "item_editorial.__pk_item",
             "dept": "item_editorial.department_number",
             "vpn": "item_editorial.vpn",
             "sgn": "item_editorial.style_group_number",
@@ -649,7 +650,6 @@ class ItemController {
                 this.cleanCountryOfOriginOther(id)
         }
 
-        
         console.log("REQUEST",'UPDATE item_editorial ' + set + ' WHERE __pk_item = ?', item.id )
         this.connection.query('UPDATE item_editorial ' + set + ' WHERE __pk_item = ?', item.id, (err, result) => {
             if (err) {
