@@ -15,6 +15,8 @@ import { ExcelRenderer } from "react-excel-renderer";
 import "./confirmAlert.css";
 import SnackbarBase from "../common/Snackbar/SnackbarBase";
 import fitService from "../../services/fit.service";
+import * as fisHelper from "../../../helpers/Fis";
+import _ from 'lodash';
 
 const styles = theme => ({
   root: {
@@ -58,6 +60,8 @@ const styles = theme => ({
   }
 });
 
+const importFileItemColumns = fisHelper.getImportFileItemColumns(); 
+
 class Filter extends Component {
   constructor(props) {
     super(props);
@@ -93,17 +97,47 @@ class Filter extends Component {
     } 
   }
 
+  /**
+   * Validates that the excel file to be imported is valid 
+   */
+  validFile = async (headers) => {
+    let isValid = true; 
+    
+    _.forEach(headers, (header, index) => {
+      let found = _.findIndex(importFileItemColumns, (o) => {
+        return header === o; 
+      }); 
+     
+      if (found === -1) {
+        isValid = false; 
+        return isValid; 
+      }
+    });
+
+    return isValid; 
+  };
+
   handleConfirm = e => { 
     const file = Array.from(e.target.files)[0];
     if (file) {
       //If there is a file selected}
       this.refs.buttonFile.value = "";
-      ExcelRenderer(file, (err, resp) => {
+      ExcelRenderer(file, async (err, resp) => {
         if(err){
           console.log(err);            
         }
-        else{
+        else {
           const cols_name = resp.rows[0]
+          let isValid = await this.validFile(cols_name);
+          
+          if (!isValid) {
+            this.handleSnackbarOpen(
+              "error",
+              `Invalid file. Please check columns.`
+            );
+            return; 
+          }
+
           const rows_value = resp.rows.filter(index => index != 0)
           let total_rows = parseInt(rows_value.length) - 1
           let total_allowed = this.props.cycleSubDivisionItemsLimit - this.props.totalItems 
