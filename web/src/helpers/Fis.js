@@ -32,4 +32,20 @@ function getItemChips() {
   return ["tagged_missy", "tagged_encore", "tagged_petite", "tagged_extended"];
 }
 
-export { getFisColumns, getItemSelects, getItemChecks, getItemChips };
+/**
+ * Gets import file item columns
+ */
+function getImportFileItemColumns() {
+  let columns = process.env.REACT_APP_IMPORT_FILE_ITEM_COLUMN;
+  let columnsArray = columns.split(",");
+
+  return columnsArray;
+}
+
+export {
+  getFisColumns,
+  getItemSelects,
+  getItemChecks,
+  getItemChips,
+  getImportFileItemColumns
+};
