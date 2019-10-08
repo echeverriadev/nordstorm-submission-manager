@@ -363,10 +363,11 @@ class Filter extends Component {
     this.handleSnackbarOpen();
     let pkCycle = filter.cycleId;
     let pkDivision = filter.divisionId;
+    let pkSubdivision = filter.subdivisionId; 
     let _this = this;
 
     fitService
-      .attachItemsToStories(pkCycle, pkDivision)
+      .attachItemsToStories(pkCycle, pkDivision, pkSubdivision)
       .then(response => {
         let data = response.data;
         setTimeout(function () {
@@ -526,7 +527,8 @@ class Filter extends Component {
           <Grid item>
             {filter.cycleId !== "" &&
               filter.divisionId !== "" &&
-              filter.divisionId !== "ALL" && (
+              filter.divisionId !== "ALL" && 
+              filter.subdivisionId !== "" && (
                 <Button
                   color="primary"
                   variant="contained"
