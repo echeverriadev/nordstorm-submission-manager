@@ -618,38 +618,35 @@ class Dashboard extends Component {
           open={snackbar.open}
         />
         <TabMenu value={value} handleChange={this.handleTabChange} />
-        {value === 0 && (
-          <Layaout
-            isChangingFilter={isChangingFilter}
-            items={rows}
-            cycles={cycles}
-            divisions={divisions}
-            subdivisions={subdivisions}
-            addItem={addItem}
-            total={total}
-            offset={offset}
-            cannedFilters={cannedFilters}
-            filter={filter}
-            order={order}
-            onChange={this.onChange}
-            onBlurItem={this.onBlurItem}
-            onAddChange={this.onAddChange}
-            onSubmit={this.onSubmit}
-            onChangePagination={this.changePagination}
-            onChangeFilter={this.changeFilter}
-            onChangeOrder={this.changeOrder}
-            onAddCannedFilter={this.addCannedFilter}
-            onRemoveCannedFilter={this.removeCannedFilter}
-            onRefreshItems={this.fetchItemsApi}
-            onDeleteItem={this.handleDeleteItemApi}
-            onDuplicateItem={this.handleDuplicateItemApi}
-            cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
-            email={email}
-            onVpnLookup={this.onVpnLookup}
-            onPatchItem={this.onPatchItem}
-          />
-        )}
-        {value === 1 && <h1>SAMPLE</h1>}
+        <Layaout
+          isChangingFilter={isChangingFilter}
+          items={rows}
+          cycles={cycles}
+          divisions={divisions}
+          subdivisions={subdivisions}
+          addItem={addItem}
+          total={total}
+          offset={offset}
+          cannedFilters={cannedFilters}
+          filter={filter}
+          order={order}
+          onChange={this.onChange}
+          onBlurItem={this.onBlurItem}
+          onAddChange={this.onAddChange}
+          onSubmit={this.onSubmit}
+          onChangePagination={this.changePagination}
+          onChangeFilter={this.changeFilter}
+          onChangeOrder={this.changeOrder}
+          onAddCannedFilter={this.addCannedFilter}
+          onRemoveCannedFilter={this.removeCannedFilter}
+          onRefreshItems={this.fetchItemsApi}
+          onDeleteItem={this.handleDeleteItemApi}
+          onDuplicateItem={this.handleDuplicateItemApi}
+          cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
+          email={email}
+          onVpnLookup={this.onVpnLookup}
+          onPatchItem={this.onPatchItem}
+        />
       </div>
     );
   }
