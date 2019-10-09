@@ -16,8 +16,7 @@ import {
   deleteItemApi,
   duplicateItemApi,
   getSubDivisionsApi,
-  postCycleSubDivisionApi,
-  getItemDataByVpnDepartmentApi
+  postCycleSubDivisionApi
 } from "../../../api";
 
 const styles = theme => ({
@@ -65,7 +64,7 @@ const fisColumns = fisHelper.getFisColumns();
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.cardCellComponent = React.createRef();
+
     this.state = {
       value: 0,
       cycles: [],
@@ -213,48 +212,6 @@ class Dashboard extends Component {
   };
 
   /**
-   * Vpn lookup method
-   */
-  onVpnLookup = async (localItem, item) => {
-    let itemAdditionalData = await this.getItemDataByVpnDepartment(
-      localItem.vpn,
-      localItem.department_number
-    );
-
-    let itemPayload = JSON.parse(`{ "id": ${localItem.id}  }`);
-
-    itemPayload = await this.getItemAdditionalDataPayload(
-      itemPayload,
-      itemAdditionalData,
-      localItem,
-      item
-    );
-
-    if (itemPayload.brand) {
-      let row = Object.assign({}, itemPayload, {
-        fieldModified: itemPayload
-      });
-
-      this.fetchPatchItemApi(localItem.id, row).then(
-        response => {
-          if (response.status === 200) {
-            let data = {
-              sgn: itemPayload.sgn,
-              description: itemPayload.description,
-              brand: itemPayload.brand
-            };
-
-            // this.updateItemAdditionalData(item, data);
-          }
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
-  };
-
-  /**
    * Gets item additional data payload
    */
   getItemAdditionalDataPayload = async (itemPayload, itemAdditionalData) => {
@@ -276,49 +233,29 @@ class Dashboard extends Component {
     return itemPayload;
   };
 
-  updateItemAdditionalData = (localItem, item, data) => {
-    const { sgn, description, brand } = data;
-    this.cardCellComponent.current.updateVpnData(data);
-    /*
-    localItem.style_group_number = sgn;
-    localItem.description = description;
-    localItem.brand = brand;
-    item.style_group_number = sgn;
-    item.description = description;
-    item.brand = brand;
-    */
-  };
+  onPatchItem = async (e, index, localItem, item) => {
+    let itemField = e.target.name.trim();
 
-  onBlurItem = async (e, index, localItem, item) => {
-    /* 
-      - Search the item field that has being changed in fisColumns array 
-      - Compare old value with new value, if they are different we proceed to make actions 
-      - Patch item value (only send in the payload field in question)
-      - Query in RMS database sgn, description and brand base on department number and vpn field 
-    */
-
-    let itemField = e.target.name;
     let fieldIndex = _.findIndex(fisColumns, function(o) {
       return itemField === o;
     });
 
     if (fieldIndex !== -1) {
+      console.log(localItem[itemField]);
+      console.log(item[itemField]);
       if (localItem[itemField] !== item[itemField]) {
         let itemPayload = JSON.parse(
           `{ "id": ${localItem.id} , "${itemField}": "${localItem[itemField]}" }`
         );
 
-        let queryRMS = false;
-
-        // Query to RMS
         if (itemField === "vpn" && localItem.department_number !== "") {
-          let vpn = localItem.vpn;
-          let departmentNumber = localItem.department_number;
-
-          let itemAdditionalData = await this.getItemDataByVpnDepartment(
-            vpn,
-            departmentNumber
-          );
+          let itemAdditionalData = {
+            row: {
+              sgn: localItem.style_group_number,
+              description: localItem.description,
+              brand: localItem.brand
+            }
+          };
 
           itemPayload = await this.getItemAdditionalDataPayload(
             itemPayload,
@@ -326,8 +263,6 @@ class Dashboard extends Component {
             localItem,
             item
           );
-
-          queryRMS = true;
         }
 
         let row = Object.assign({}, itemPayload, {
@@ -337,18 +272,18 @@ class Dashboard extends Component {
         this.fetchPatchItemApi(localItem.id, row).then(
           response => {
             if (response.status === 200) {
-              if (queryRMS) {
-                let data = {
-                  sgn: itemPayload.sgn,
-                  description: itemPayload.description,
-                  brand: itemPayload.brand
-                };
-
-                this.cardCellComponent.current.updateVpnData(data);
-              }
-
               if (response.refresh) {
                 this.fetchItemsApi();
+              } else {
+                let rows = this.state.rows;
+                let row = rows[index];
+                row = localItem;
+                rows.splice(index, 1, row);
+                this.setState({
+                  rows
+                });
+                console.log(localItem);
+                console.log(row);
               }
             }
           },
@@ -360,14 +295,14 @@ class Dashboard extends Component {
     }
   };
 
-  getItemDataByVpnDepartment = async (vpn, departmentNumber) => {
-    return await getItemDataByVpnDepartmentApi(vpn, departmentNumber)
-      .then(response => {
-        return response;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  onBlurItem = async (e, index, localItem, item) => {
+    /* 
+      - Search the item field that has being changed in fisColumns array 
+      - Compare old value with new value, if they are different we proceed to make actions 
+      - Patch item value (only send in the payload field in question)
+      - Query in RMS database sgn, description and brand base on department number and vpn field 
+    */
+    this.onPatchItem(e, index, localItem, item);
   };
 
   onKeyPressItem = (index, key, event) => {
@@ -711,7 +646,7 @@ class Dashboard extends Component {
             cycleSubDivisionItemsLimit={cycleSubDivisionItemsLimit}
             email={email}
             onVpnLookup={this.onVpnLookup}
-            cardCellComponent={this.cardCellComponent}
+            onPatchItem={this.onPatchItem}
           />
         )}
         {value === 1 && <h1>SAMPLE</h1>}

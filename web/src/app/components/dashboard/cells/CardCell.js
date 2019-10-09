@@ -27,6 +27,7 @@ import ItemLogModal from "../ItemLogModal";
 import ItemDeleteDialog from "../ItemDeleteDialog";
 import * as fisHelper from "../../../../helpers/Fis";
 import _ from "lodash";
+import { getItemDataByVpnDepartmentApi } from "../../../../api";
 
 const styles = theme => ({
   card: {
@@ -199,12 +200,57 @@ class CardCell extends React.Component {
     onDuplicateItem(id);
   };
 
-  handleVpnLookup = (localItem, item, popupState) => {
-    const { onVpnLookup } = this.props;
+  handleVpnLookup = async (index, localItem, item, popupState) => {
     popupState.close();
 
     if (localItem.department_number !== "" && localItem.vpn !== "") {
-      onVpnLookup(localItem, item);
+      await this.onVpnLookup(localItem.vpn, localItem.department_number);
+      let e = {
+        target: {
+          name: "vpn "
+        }
+      };
+
+      //  We hack item vpn
+      let currentItem = { ...item };
+      currentItem.vpn = "";
+      this.props.onPatchItem(e, index, this.state.localItem, currentItem);
+    }
+  };
+
+  onVpnLookup = async (vpn, department_number) => {
+    let itemAdditionalData = await this.getItemDataByVpnDepartment(
+      vpn,
+      department_number
+    );
+
+    if (
+      itemAdditionalData &&
+      (itemAdditionalData.row && itemAdditionalData.row.length === undefined)
+    ) {
+      let row = itemAdditionalData.row;
+      let sgn = row.sgn;
+      let description = row.description;
+      let brand = row.brand;
+      let currentLocalItem = { ...this.state.localItem };
+
+      if (sgn !== "") {
+        currentLocalItem.style_group_number = sgn;
+      }
+
+      if (description !== "") {
+        currentLocalItem.description = description;
+      }
+
+      if (brand !== "") {
+        currentLocalItem.brand = brand;
+      }
+
+      if (sgn !== "" || description !== "" || brand !== "") {
+        this.setState({
+          localItem: currentLocalItem
+        });
+      }
     }
   };
 
@@ -212,14 +258,37 @@ class CardCell extends React.Component {
     popupState.close();
   };
 
-  onBlurInput = (e, index, item) => {
+  onBlurInput = async (e, index, item) => {
     if (this.state.localItem === null) {
       this.setState({
         localItem: item
       });
     }
 
-    this.props.onBlurItem(e, index, this.state.localItem, item);
+    const { vpn, department_number } = this.state.localItem;
+    const event = { ...e };
+    // Before we patch item we check if we need to lookup additional data by vpn and department number
+    if (
+      vpn !== item.vpn &&
+      e.target.name === "vpn" &&
+      vpn !== "" &&
+      department_number !== ""
+    ) {
+      await this.onVpnLookup(vpn, department_number);
+      this.props.onBlurItem(event, index, this.state.localItem, item);
+    } else {
+      this.props.onBlurItem(event, index, this.state.localItem, item);
+    }
+  };
+
+  getItemDataByVpnDepartment = async (vpn, departmentNumber) => {
+    return await getItemDataByVpnDepartmentApi(vpn, departmentNumber)
+      .then(response => {
+        return response;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   renderTag(data, tagName = "") {
@@ -267,10 +336,6 @@ class CardCell extends React.Component {
       localItem[event.target.name] = event.target.value;
       this.props.onChange(event.target.name, localItem, item);
     }
-  };
-
-  updateVpnData = data => {
-    let currentItem = { ...this.state.localItem };
   };
 
   render() {
@@ -576,7 +641,12 @@ class CardCell extends React.Component {
                           <MenuItem
                             {...bindMenu(popupState)}
                             onClick={() =>
-                              this.handleVpnLookup(localItem, item, popupState)
+                              this.handleVpnLookup(
+                                index,
+                                localItem,
+                                item,
+                                popupState
+                              )
                             }
                           >
                             VPN Lookup
