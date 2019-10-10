@@ -619,7 +619,7 @@ class ItemController {
             item
         } = req.body
 
-        const refresh = this.updateRelatedField(item.fieldModified);
+        const refresh = false; 
         const fieldModified = ['fieldModified', 'category', , 'id', 'department'];
         const fieldString = ['request_cancellation_notes', 'request_extension_note', 'live_date', 'vpn', 'country_of_origin', 'country_of_origin_other', 'style_group_number', 'image', 'color', 'size', 'brand', 'description', 'department_number']
         var set = 'SET ';

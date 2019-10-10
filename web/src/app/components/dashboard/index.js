@@ -179,7 +179,6 @@ class Dashboard extends Component {
           this.fetchItemsApi();
           this.handleSnackbarOpen("success", "Item saved successfully");
         } else {
-          console.error(response.message);
           this.handleSnackbarOpen("error", "Error saving item");
         }
         console.log(response);
